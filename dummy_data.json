@@ -1,0 +1,240 @@
+{
+  "student": {
+    "student_id": "STU-2026",
+    "completed_courses": ["CS101", "MATH101"],
+    "preferred_study_location": "University",
+    "daily_study_hours": {
+      "Sunday": 3,
+      "Monday": 2,
+      "Tuesday": 4,
+      "Wednesday": 3,
+      "Thursday": 2,
+      "Friday": 0,
+      "Saturday": 0
+    },
+    "free_days": ["Friday", "Saturday"],
+    "points": 0
+  },
+  "courses": [
+    {
+      "course_id": "CS201",
+      "name": "Data Structures",
+      "difficulty_level": 3,
+      "prerequisites": ["CS101"],
+      "sessions": [
+        {
+          "session_id": "LEC-001",
+          "course_id": "CS201",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Sunday",
+            "start_time": "09:00",
+            "end_time": "10:30"
+          }
+        },
+        {
+          "session_id": "SEC-001",
+          "course_id": "CS201",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Tuesday",
+            "start_time": "10:00",
+            "end_time": "11:00"
+          }
+        }
+      ]
+    },
+    {
+      "course_id": "CS301",
+      "name": "Algorithms",
+      "difficulty_level": 4,
+      "prerequisites": ["CS201"],
+      "sessions": [
+        {
+          "session_id": "LEC-002",
+          "course_id": "CS301",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Monday",
+            "start_time": "09:00",
+            "end_time": "10:30"
+          }
+        },
+        {
+          "session_id": "LEC-003",
+          "course_id": "CS301",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Wednesday",
+            "start_time": "09:00",
+            "end_time": "10:30"
+          }
+        },
+        {
+          "session_id": "SEC-002",
+          "course_id": "CS301",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Sunday",
+            "start_time": "13:00",
+            "end_time": "14:00"
+          }
+        }
+      ]
+    },
+    {
+      "course_id": "MATH201",
+      "name": "Calculus II",
+      "difficulty_level": 3,
+      "prerequisites": ["MATH101"],
+      "sessions": [
+        {
+          "session_id": "LEC-004",
+          "course_id": "MATH201",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Sunday",
+            "start_time": "11:00",
+            "end_time": "12:30"
+          }
+        },
+        {
+          "session_id": "SEC-003",
+          "course_id": "MATH201",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Wednesday",
+            "start_time": "10:00",
+            "end_time": "11:00"
+          }
+        }
+      ]
+    },
+    {
+      "course_id": "PHYS101",
+      "name": "Physics I",
+      "difficulty_level": 2,
+      "prerequisites": [],
+      "sessions": [
+        {
+          "session_id": "LEC-005",
+          "course_id": "PHYS101",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Monday",
+            "start_time": "12:00",
+            "end_time": "13:30"
+          }
+        },
+        {
+          "session_id": "SEC-004",
+          "course_id": "PHYS101",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Tuesday",
+            "start_time": "14:00",
+            "end_time": "15:00"
+          }
+        },
+        {
+          "session_id": "SEC-005",
+          "course_id": "PHYS101",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Thursday",
+            "start_time": "09:00",
+            "end_time": "10:00"
+          }
+        }
+      ]
+    },
+    {
+      "course_id": "CS401",
+      "name": "Machine Learning",
+      "difficulty_level": 5,
+      "prerequisites": ["CS201", "MATH201"],
+      "sessions": [
+        {
+          "session_id": "LEC-006",
+          "course_id": "CS401",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Tuesday",
+            "start_time": "16:00",
+            "end_time": "17:30"
+          }
+        },
+        {
+          "session_id": "SEC-006",
+          "course_id": "CS401",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Wednesday",
+            "start_time": "15:00",
+            "end_time": "16:00"
+          }
+        }
+      ]
+    },
+    {
+      "course_id": "ENG102",
+      "name": "Academic Writing",
+      "difficulty_level": 1,
+      "prerequisites": ["ENG101"],
+      "sessions": [
+        {
+          "session_id": "LEC-007",
+          "course_id": "ENG102",
+          "session_type": "Lecture",
+          "time_slot": {
+            "day": "Monday",
+            "start_time": "08:00",
+            "end_time": "09:00"
+          }
+        },
+        {
+          "session_id": "SEC-007",
+          "course_id": "ENG102",
+          "session_type": "Section",
+          "time_slot": {
+            "day": "Sunday",
+            "start_time": "14:00",
+            "end_time": "15:00"
+          }
+        }
+      ]
+    }
+  ],
+  "academic_events": [
+    {
+      "event_name": "Quiz 1",
+      "week_number": 3,
+      "course_id": "CS201"
+    },
+    {
+      "event_name": "Essay Draft Due",
+      "week_number": 5,
+      "course_id": "ENG102"
+    },
+    {
+      "event_name": "Midterm Exam",
+      "week_number": 7,
+      "course_id": "MATH201"
+    },
+    {
+      "event_name": "Project Submission",
+      "week_number": 10,
+      "course_id": "CS301"
+    },
+    {
+      "event_name": "Quiz 2",
+      "week_number": 12,
+      "course_id": "CS401"
+    },
+    {
+      "event_name": "Final Exam",
+      "week_number": 15,
+      "course_id": "PHYS101"
+    }
+  ]
+}
