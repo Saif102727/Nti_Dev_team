@@ -1,10 +1,24 @@
 import sys
-import os
-import streamlit as st
-import json
 from pathlib import Path
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import streamlit as st
+
+
+# ==========================================
+# Project Path
+# ==========================================
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+
+# ==========================================
+# Imports
+# ==========================================
+
+from loader import load_all_data
 from Main.Timer.Timer import render_timer
 
 
@@ -20,35 +34,57 @@ st.set_page_config(
 
 
 # ==========================================
-# Load Test JSON Data
+# Data File
 # ==========================================
 
-DATA_FILE = Path("data/dummy_data.json")
+DATA_FILE = (
+    PROJECT_ROOT
+    / "data"
+    / "dummy_data.json"
+)
 
 
-def load_data():
+# ==========================================
+# Load Data
+# ==========================================
+
+@st.cache_data
+def load_project_data():
+
     try:
-        with open(DATA_FILE, "r", encoding="utf-8") as file:
-            return json.load(file)
+
+        return load_all_data(
+            DATA_FILE
+        )
 
     except FileNotFoundError:
+
         st.error(
-            f"Data file not found: {DATA_FILE}"
+            f"Data file not found:\n\n{DATA_FILE}"
         )
+
         st.stop()
 
-    except json.JSONDecodeError:
+    except KeyError as error:
+
         st.error(
-            "The JSON file contains invalid data."
+            f"Missing field in JSON data: {error}"
         )
+
+        st.stop()
+
+    except Exception as error:
+
+        st.error(
+            f"Error while loading project data:\n\n{error}"
+        )
+
         st.stop()
 
 
-data = load_data()
-
-student_data = data["student"]
-course_data = data["courses"]
-academic_events = data["academic_events"]
+student, courses, academic_events = (
+    load_project_data()
+)
 
 
 # ==========================================
@@ -57,41 +93,12 @@ academic_events = data["academic_events"]
 
 if "courses" not in st.session_state:
 
-    st.session_state.courses = []
-
-    # Convert JSON courses to the format
-    # currently used by the UI
-
-    for course in course_data:
-
-        st.session_state.courses.append({
-
-            "id": course["course_id"],
-
-            "name": course["name"],
-
-            "difficulty": course["difficulty_level"],
-
-            "performance": 5,
-
-            "exam_days": 7,
-
-            "remaining_material": 50,
-
-            "unavailable_time": "",
-
-            "prerequisites": course["prerequisites"],
-
-            "sessions": course["sessions"]
-
-        })
+    st.session_state.courses = courses
 
 
 if "points" not in st.session_state:
 
-    st.session_state.points = student_data.get(
-        "points",999
-    )
+    st.session_state.points = student.points
 
 
 if "study_time" not in st.session_state:
@@ -108,7 +115,9 @@ if "plan_generated" not in st.session_state:
 # Header
 # ==========================================
 
-st.title("📚 Intelligent Study Planner")
+st.title(
+    "📚 Intelligent Study Planner"
+)
 
 st.write(
     "Plan your study time intelligently, "
@@ -120,22 +129,40 @@ st.write(
 # Sidebar
 # ==========================================
 
-st.sidebar.title("Student Dashboard")
+st.sidebar.title(
+    "Student Dashboard"
+)
+
+
+# ------------------------------------------
+# Student ID
+# ------------------------------------------
 
 st.sidebar.metric(
     "Student ID",
-    student_data["student_id"]
+    student.student_id
 )
+
+
+# ------------------------------------------
+# Points
+# ------------------------------------------
 
 st.sidebar.metric(
     "Points",
     st.session_state.points
 )
 
+
+# ------------------------------------------
+# Study Time
+# ------------------------------------------
+
 st.sidebar.metric(
     "Study Time",
     f"{st.session_state.study_time:.1f} h"
 )
+
 
 st.sidebar.divider()
 
@@ -144,23 +171,57 @@ st.sidebar.divider()
 # Daily Study Hours
 # ==========================================
 
-daily_hours = student_data.get(
-    "daily_study_hours",
-    {}
-)
+daily_hours = student.daily_study_hours
 
-days = list(daily_hours.keys())
 
-selected_day = st.sidebar.selectbox(
-    "Study Day",
-    days
-)
+if daily_hours:
 
-available_hours = daily_hours[selected_day]
+    days = list(
+        daily_hours.keys()
+    )
+
+    selected_day = st.sidebar.selectbox(
+        "Study Day",
+        days
+    )
+
+    available_hours = daily_hours[
+        selected_day
+    ]
+
+else:
+
+    selected_day = None
+
+    available_hours = 0
+
+    st.sidebar.warning(
+        "No daily study hours available."
+    )
+
+
+# ==========================================
+# Available Hours
+# ==========================================
 
 st.sidebar.metric(
     "Available Hours",
-    f"{available_hours} h"
+    f"{float(available_hours):.1f} h"
+)
+
+
+# ==========================================
+# Maximum Study Hours
+# ==========================================
+
+default_max_hours = max(
+    1.0,
+    float(available_hours)
+)
+
+default_max_hours = min(
+    default_max_hours,
+    24.0
 )
 
 
@@ -168,9 +229,7 @@ max_daily_hours = st.sidebar.number_input(
     "Maximum Study Hours / Day",
     min_value=1.0,
     max_value=24.0,
-    value=float(
-        max(1, available_hours)
-    ),
+    value=default_max_hours,
     step=0.5
 )
 
@@ -190,68 +249,115 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 
 # ==========================================
-# Courses Tab
+# COURSES TAB
 # ==========================================
 
 with tab1:
 
-    st.header("Your Courses")
+    st.header(
+        "Your Courses"
+    )
 
     st.info(
-        "Courses are currently loaded "
-        "automatically from the test JSON file."
+        "Courses are loaded automatically "
+        "from the project JSON data."
     )
 
     st.divider()
 
-    # Display courses
+
+    # ======================================
+    # Courses
+    # ======================================
 
     if st.session_state.courses:
 
         for course in st.session_state.courses:
 
             with st.expander(
-                f"{course['name']} "
-                f"({course['id']})"
+                f"{course.name} ({course.course_id})"
             ):
 
                 c1, c2, c3 = st.columns(3)
 
+
+                # ----------------------------------
+                # Difficulty
+                # ----------------------------------
+
                 c1.metric(
                     "Difficulty",
-                    f"{course['difficulty']}/5"
+                    f"{course.difficulty_level}/5"
                 )
+
+
+                # ----------------------------------
+                # Prerequisites
+                # ----------------------------------
+
+                prerequisites = (
+                    course.prerequisites
+                )
+
+                if prerequisites:
+
+                    prerequisites_text = (
+                        ", ".join(
+                            prerequisites
+                        )
+                    )
+
+                else:
+
+                    prerequisites_text = "None"
+
 
                 c2.metric(
                     "Prerequisites",
-                    (
-                        ", ".join(
-                            course["prerequisites"]
-                        )
-                        if course["prerequisites"]
-                        else "None"
-                    )
+                    prerequisites_text
                 )
+
+
+                # ----------------------------------
+                # Sessions
+                # ----------------------------------
 
                 c3.metric(
                     "Sessions",
-                    len(course["sessions"])
+                    len(course.sessions)
                 )
+
+
+                # ----------------------------------
+                # Class Sessions
+                # ----------------------------------
 
                 st.subheader(
                     "Class Sessions"
                 )
 
-                for session in course["sessions"]:
 
-                    time_slot = session["time_slot"]
+                if course.sessions:
 
-                    st.write(
-                        f"**{session['session_type']}** — "
-                        f"{time_slot['day']} | "
-                        f"{time_slot['start_time']} - "
-                        f"{time_slot['end_time']}"
+                    for session in course.sessions:
+
+                        time_slot = (
+                            session.time_slot
+                        )
+
+                        st.write(
+                            f"**{session.session_type}** — "
+                            f"{time_slot.day} | "
+                            f"{time_slot.start_time} - "
+                            f"{time_slot.end_time}"
+                        )
+
+                else:
+
+                    st.info(
+                        "No sessions available."
                     )
+
 
     else:
 
@@ -259,45 +365,80 @@ with tab1:
             "No courses available."
         )
 
+
+    # ======================================
     # Academic Events
+    # ======================================
+
     st.divider()
 
     st.subheader(
         "📅 Academic Events"
     )
 
-    for event in academic_events:
 
-        st.write(
-            f"**Week {event['week_number']}** — "
-            f"{event['event_name']} "
-            f"({event['course_id']})"
+    if academic_events:
+
+        for event in academic_events:
+
+            st.write(
+                f"**Week {event.week_number}** — "
+                f"{event.event_name} "
+                f"({event.course_id})"
+            )
+
+    else:
+
+        st.info(
+            "No academic events available."
         )
 
 
 # ==========================================
-# Study Plan Tab
+# STUDY PLAN TAB
 # ==========================================
 
 with tab2:
 
-    st.header("🧠 Intelligent Study Plan")
-
-    st.write(
-        f"Selected day: **{selected_day}**"
+    st.header(
+        "🧠 Intelligent Study Plan"
     )
 
-    st.write(
-        f"Available study time: "
-        f"**{available_hours} hours**"
-    )
 
-    st.write(
-        f"Maximum allowed: "
-        f"**{max_daily_hours} hours**"
-    )
+    # --------------------------------------
+    # Selected Day
+    # --------------------------------------
+
+    if selected_day:
+
+        st.write(
+            f"Selected day: "
+            f"**{selected_day}**"
+        )
+
+        st.write(
+            f"Available study time: "
+            f"**{float(available_hours):.1f} hours**"
+        )
+
+        st.write(
+            f"Maximum allowed: "
+            f"**{max_daily_hours:.1f} hours**"
+        )
+
+    else:
+
+        st.warning(
+            "No study day is available."
+        )
+
 
     st.divider()
+
+
+    # ======================================
+    # Courses Check
+    # ======================================
 
     if not st.session_state.courses:
 
@@ -305,7 +446,18 @@ with tab2:
             "No courses available."
         )
 
+    elif available_hours <= 0:
+
+        st.warning(
+            "There are no available study hours "
+            "for this day."
+        )
+
     else:
+
+        # ==================================
+        # Generate Plan
+        # ==================================
 
         if st.button(
             "Generate Optimized Plan",
@@ -314,76 +466,119 @@ with tab2:
 
             st.session_state.plan_generated = True
 
+
+        # ==================================
+        # Display Plan
+        # ==================================
+
         if st.session_state.plan_generated:
 
             st.success(
                 "Study plan generated!"
             )
 
-            # Temporary algorithm
-            # until optimizer.py is connected.
+
+            # ----------------------------------
+            # Temporary Algorithm
+            # ----------------------------------
+            #
+            # optimizer.py is not implemented yet.
+            #
+            # For now, the available time is
+            # distributed equally between courses.
+            #
+            # This section will later be replaced
+            # with the real optimizer.
+            # ----------------------------------
 
             total_hours = min(
                 float(available_hours),
                 float(max_daily_hours)
             )
 
+
             course_count = len(
                 st.session_state.courses
             )
 
-            recommended_time = (
-                total_hours / course_count
-            )
 
-            for course in st.session_state.courses:
+            if course_count > 0:
 
-                st.write(
-                    f"### 📖 {course['name']}"
+                recommended_time = (
+                    total_hours
+                    / course_count
                 )
 
-                st.write(
-                    f"Difficulty: "
-                    f"{course['difficulty']}/5"
-                )
 
-                st.write(
-                    f"Recommended study time: "
-                    f"{recommended_time:.1f} hours"
-                )
+                for course in (
+                    st.session_state.courses
+                ):
 
-                st.divider()
+                    st.write(
+                        f"### 📖 {course.name}"
+                    )
+
+
+                    st.write(
+                        f"Difficulty: "
+                        f"{course.difficulty_level}/5"
+                    )
+
+
+                    st.write(
+                        f"Recommended study time: "
+                        f"{recommended_time:.1f} hours"
+                    )
+
+
+                    st.divider()
 
 
 # ==========================================
-# Study Timer Tab
+# STUDY TIMER TAB
 # ==========================================
 
 with tab3:
 
-    render_timer(available_hours)
+    render_timer(
+        float(available_hours)
+    )
 
 
 # ==========================================
-# Rewards Tab
+# REWARDS TAB
 # ==========================================
 
 with tab4:
 
-    st.header("🛍️ Reward Shop")
+    st.header(
+        "🛍️ Reward Shop"
+    )
+
 
     st.write(
         f"Your Points: "
         f"**{st.session_state.points}**"
     )
 
+
     col1, col2, col3 = st.columns(3)
+
+
+    # ======================================
+    # Theme
+    # ======================================
 
     with col1:
 
-        st.subheader("🎨 Theme")
+        st.subheader(
+            "🎨 Theme"
+        )
 
-        st.write("Cost: 100 Points")
+        st.write(
+            "Cost: 100 Points"
+        )
+
 
         if st.button(
             "Buy Theme"
@@ -403,11 +598,21 @@ with tab4:
                     "Not enough points."
                 )
 
+
+    # ======================================
+    # Banner
+    # ======================================
+
     with col2:
 
-        st.subheader("🖼️ Banner")
+        st.subheader(
+            "🖼️ Banner"
+        )
 
-        st.write("Cost: 150 Points")
+        st.write(
+            "Cost: 150 Points"
+        )
+
 
         if st.button(
             "Buy Banner"
@@ -427,11 +632,21 @@ with tab4:
                     "Not enough points."
                 )
 
+
+    # ======================================
+    # Study Template
+    # ======================================
+
     with col3:
 
-        st.subheader("📋 Study Template")
+        st.subheader(
+            "📋 Study Template"
+        )
 
-        st.write("Cost: 300 Points")
+        st.write(
+            "Cost: 300 Points"
+        )
+
 
         if st.button(
             "Buy Template"

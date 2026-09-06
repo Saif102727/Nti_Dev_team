@@ -28,7 +28,7 @@ def render_timer(available_hours=2.0):
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        course_names = [course["name"] for course in st.session_state.courses]
+        course_names = [course.name for course in st.session_state.courses]
         selected_course = st.selectbox(
             "Choose Course",
             course_names,
