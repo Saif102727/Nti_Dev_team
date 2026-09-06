@@ -13,6 +13,7 @@
       "Saturday": 0
     },
     "free_days": ["Friday", "Saturday"],
+    
     "points": 999
   },
   "courses": [

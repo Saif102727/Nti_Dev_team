@@ -1,7 +1,7 @@
 import json
 from operator import add
 
-from models import Student, Course, Session, Time, Acadmic_Event
+from model import Student, Course, Session, Time, AcadmicEvent
 
 def load_data(file_path: str):
     with open(file_path, "r", encoding="utf-8") as file:
@@ -64,9 +64,9 @@ def load_data(file_path: str):
     # -------------------------
     academic_events = []
 
-    for event_data in data["academic_events"]:
+    for event_data in data["academicevents"]:
 
-        event = Acadmic_Event(
+        event = AcadmicEvent(
             event_name=event_data["event_name"],
             weak_number=str(event_data["week_number"]),
             course_id=event_data["course_id"]
