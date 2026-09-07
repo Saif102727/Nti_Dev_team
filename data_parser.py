@@ -64,7 +64,7 @@ def load_data(file_path: str):
     # -------------------------
     academic_events = []
 
-    for event_data in data["academicevents"]:
+    for event_data in data["academic_events"]:
 
         event = AcadmicEvent(
             event_name=event_data["event_name"],

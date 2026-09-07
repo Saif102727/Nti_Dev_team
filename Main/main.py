@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
-
+from dataclass.schedule import Schedule
 import streamlit as st
-
+import pandas as pd
 
 # ==========================================
 # Project Path
@@ -473,65 +473,89 @@ with tab2:
 
         if st.session_state.plan_generated:
 
-            st.success(
-                "Study plan generated!"
+            # ----------------------------------
+            # Final Scheduling Algorithm
+            # ----------------------------------
+            
+            # 1. Define the schedule object
+            my_schedule = Schedule()
+
+            # 2. Filter available courses based on student prerequisites
+            valid_courses = Schedule.filter_available_courses(
+                st.session_state.courses,
+                student
             )
 
+            # 3. Build the conflict-free schedule
+            my_schedule.build_schedule(valid_courses)
 
-            # ----------------------------------
-            # Temporary Algorithm
-            # ----------------------------------
-            #
-            # optimizer.py is not implemented yet.
-            #
-            # For now, the available time is
-            # distributed equally between courses.
-            #
-            # This section will later be replaced
-            # with the real optimizer.
-            # ----------------------------------
+            # 4. Export to JSON
+            my_schedule.export_to_json("final_schedule.json")
+
+            # 5. Present the final schedule in the UI
+            st.subheader("🗓️ Your Approved Weekly Schedule")
+
+            
+
+            table_data = []
+            for session in my_schedule.get_schedule():
+                table_data.append({
+                    "Day": session.time_slot.day,
+                    "Start Time": session.time_slot.start_time,
+                    "End Time": session.time_slot.end_time,
+                    "Course": getattr(session, 'course_id', 'Unknown'),
+                    "Type": session.session_type
+                })
+
+            if table_data:
+                df = pd.DataFrame(table_data)
+
+                days_order = [
+                    "Sunday", "Monday", "Tuesday", 
+                    "Wednesday", "Thursday", "Friday", "Saturday"
+                ]
+                df['Day'] = pd.Categorical(df['Day'], categories=days_order, ordered=True)
+                
+                df = df.sort_values(['Day', 'Start Time']).reset_index(drop=True)
+
+                st.dataframe(
+                    df, 
+                    use_container_width=True, 
+                    hide_index=True
+                )
+            else:
+                st.info("No classes scheduled. Please check prerequisites.")
+
+            # ==================================
+            # Optimize Self-Study Plan
+            # ==================================
+            
+            st.divider()
+            st.subheader("📊 Suggested Study Plan")
+
+            from dataclass.optimizer import StudyOptimizer
 
             total_hours = min(
-                float(available_hours),
+                float(available_hours), 
                 float(max_daily_hours)
-            )
+            ) if available_hours else 0.0
 
-
-            course_count = len(
-                st.session_state.courses
-            )
-
-
-            if course_count > 0:
-
-                recommended_time = (
-                    total_hours
-                    / course_count
+            if valid_courses and total_hours > 0:
+                study_plan = StudyOptimizer.allocate_study_time(
+                    available_hours=total_hours,
+                    courses=valid_courses
                 )
-
-
-                for course in (
-                    st.session_state.courses
-                ):
-
-                    st.write(
-                        f"### 📖 {course.name}"
-                    )
-
-
-                    st.write(
-                        f"Difficulty: "
-                        f"{course.difficulty_level}/5"
-                    )
-
-
-                    st.write(
-                        f"Recommended study time: "
-                        f"{recommended_time:.1f} hours"
-                    )
-
-
+                
+                for course_name, details in study_plan.items():
+                    st.write(f"### 📖 {course_name} ({details['course_id']})")
+                    
+                    col1, col2 = st.columns(2)
+                    col1.metric("Difficulty", f"{details['difficulty']}/5")
+                    col2.metric("Allocated Time", f"{details['allocated_hours']} hours")
+                    
                     st.divider()
+            else:
+                st.warning("No available study hours or courses to optimize for this day.")
 
 
 # ==========================================
