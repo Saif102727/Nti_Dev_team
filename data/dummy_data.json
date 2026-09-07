@@ -18,7 +18,7 @@
   "courses": [
     {
       "course_id": "CS201",
-      "name": "Data Structures",
+      "course_name": "Data Structures",
       "difficulty_level": 3,
       "prerequisites": ["CS101"],
       "sessions": [

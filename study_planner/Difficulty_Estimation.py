@@ -1,6 +1,3 @@
-
-
-
 import json
 
 
@@ -37,23 +34,85 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
 #         selected_course = course
 #         break
 
+# course = {
+#     "base_difficulty": 7.5,
+#     "prerequisites": {
+#         "Physics 2": {
+#             "personal_difficulty": 6.0,
+#             "influence": 0.75
+#         },
+#         "Math 2": {
+#             "personal_difficulty": 8.0,
+#             "influence": 1.0
+#         },
+#         "Math 1": {
+#             "personal_difficulty": 7.0,
+#             "influence": 0.5
+#         }
+#     }
+# }
+
+# course = {
+#     "base_difficulty": 6.5,
+#     "prerequisites": {}
+# }
+
+# course = {
+#     "base_difficulty": 7.0,
+#     "prerequisites": {
+#         "Programming 1": {
+#             "personal_difficulty": 8.0,
+#             "influence": 1.0
+#         }
+#     }
+# }
+
+# course = {
+#     "base_difficulty": 7.5,
+#     "prerequisites": {
+#         "Physics 2": {
+#             "personal_difficulty": 4.0,
+#             "influence": 0.75
+#         },
+#         "Math 2": {
+#             "personal_difficulty": 9.0,
+#             "influence": 1.0
+#         },
+#         "Math 1": {
+#             "personal_difficulty": 6.0,
+#             "influence": 0.5
+#         }
+#     }
+# }
+
+# course = {
+#     "base_difficulty": 5.0,
+#     "prerequisites": {
+#         "Math 2": {
+#             "personal_difficulty": 10.0,
+#             "influence": 1.0
+#         },
+#         "Physics 2": {
+#             "personal_difficulty": 9.0,
+#             "influence": 0.75
+#         }
+#     }
+# }
+
 course = {
-    "base_difficulty": 7.5,
+    "base_difficulty": 8.0,
     "prerequisites": {
-        "Physics 2": {
-            "personal_difficulty": 6.0,
-            "influence": 0.75
-        },
         "Math 2": {
-            "personal_difficulty": 8.0,
+            "personal_difficulty": 3.0,
             "influence": 1.0
         },
-        "Math 1": {
-            "personal_difficulty": 7.0,
-            "influence": 0.5
+        "Physics 2": {
+            "personal_difficulty": 4.0,
+            "influence": 0.75
         }
     }
 }
+
 difficulty = calculate_difficulty(course["base_difficulty"],course["prerequisites"])
 
 print(f"Predicted difficulty: {difficulty:.2f}/10")
