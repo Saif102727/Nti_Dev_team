@@ -1509,7 +1509,6 @@ with tab2:
 
             st.rerun()
 
-
         # =====================================================
         # GENERATE PLAN
         # =====================================================
@@ -1533,68 +1532,69 @@ with tab2:
 # Optimize Self-Study Plan
 # ---------------------------------------------
 
-from dataclass.optimizer import StudyOptimizer
+            from dataclass.optimizer import StudyOptimizer
 
-study_plan = StudyOptimizer.allocate_study_time(
-    available_hours=total_hours,
-    courses=course_list,
-)
-
-# ---------------------------------------------
-# Display Study Plan
-# ---------------------------------------------
-
-if study_plan:
-
-    for course_name, details in study_plan.items():
-
-        difficulty = safe_int(
-            details.get(
-                "difficulty",
-                0,
-            ),
-            0,
-        )
-
-        recommended_time = safe_float(
-            details.get(
-                "allocated_hours",
-                0.0,
-            ),
-            0.0,
-        )
-
-        with st.container(border=True):
-
-            st.subheader(
-                course_name
+            study_plan = StudyOptimizer.allocate_study_time(
+                available_hours=total_hours,
+                courses=course_list,
             )
 
-            col1, col2 = st.columns(
-                2,
-                gap="medium",
-            )
+            # ---------------------------------------------
+            # Display Study Plan
+            # ---------------------------------------------
 
-            with col1:
+            if study_plan:
 
-                st.metric(
-                    "Difficulty",
-                    f"{difficulty}/5",
+                for course_name, details in study_plan.items():
+
+                    difficulty = safe_int(
+                        details.get(
+                            "difficulty",
+                            0,
+                        ),
+                        0,
+                    )
+
+                    recommended_time = safe_float(
+                        details.get(
+                            "allocated_hours",
+                            0.0,
+                        ),
+                        0.0,
+                    )
+
+                    with st.container(border=True):
+
+                        st.subheader(
+                            course_name
+                        )
+
+                        col1, col2 = st.columns(
+                            2,
+                            gap="medium",
+                        )
+
+                        with col1:
+
+                            st.metric(
+                                "Difficulty",
+                                f"{difficulty}/5",
+                            )
+
+                        with col2:
+
+                            st.metric(
+                                "Recommended Time",
+                                f"{recommended_time:.2f} h",
+                            )
+
+            else:
+
+                st.info(
+                    "No study recommendations "
+                    "could be generated."
                 )
 
-            with col2:
-
-                st.metric(
-                    "Recommended Time",
-                    f"{recommended_time:.2f} h",
-                )
-
-else:
-
-    st.info(
-        "No study recommendations "
-        "could be generated."
-    )
 # =========================================================
 # TAB 3 — TIMER
 # =========================================================
