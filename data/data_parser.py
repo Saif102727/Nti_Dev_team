@@ -1,6 +1,6 @@
 import json
 
-from model import Student, Course, Session, Time, AcademicEvent
+from Nti_Dev_team.models import Student, Course, Session, Time, AcademicEvent
 
 
 def load_data(file_path: str):

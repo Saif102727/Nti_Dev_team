@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from model import Student, Course, Session
+from Nti_Dev_team.models import Student, Course, Session
 
 
 class Schedule:

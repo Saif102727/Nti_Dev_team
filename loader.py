@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from model import (
+from models import (
     Student,
     Course,
     Session,

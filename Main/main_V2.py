@@ -1429,6 +1429,7 @@ with tab1:
         )
 
 
+
 # =========================================================
 # TAB 2 — STUDY PLAN
 # =========================================================
@@ -1439,14 +1440,12 @@ with tab2:
         "Intelligent Study Plan"
     )
 
-
     if selected_day:
 
         c1, c2, c3 = st.columns(
             3,
             gap="medium",
         )
-
 
         with c1:
 
@@ -1455,14 +1454,12 @@ with tab2:
                 selected_day,
             )
 
-
         with c2:
 
             st.metric(
                 "Available Time",
                 f"{available_hours:.1f} h",
             )
-
 
         with c3:
 
@@ -1477,16 +1474,13 @@ with tab2:
             "No study day is available."
         )
 
-
     st.divider()
-
 
     if not course_list:
 
         st.info(
             "No courses available."
         )
-
 
     elif available_hours <= 0:
 
@@ -1495,14 +1489,12 @@ with tab2:
             "for this day."
         )
 
-
     elif max_daily_hours <= 0:
 
         st.warning(
             "Maximum study hours must be greater "
             "than zero."
         )
-
 
     else:
 
@@ -1518,62 +1510,91 @@ with tab2:
             st.rerun()
 
 
+        # =====================================================
+        # GENERATE PLAN
+        # =====================================================
+
         if st.session_state.plan_generated:
 
             st.success(
                 "Study plan generated successfully!"
             )
+
+            # ---------------------------------------------
+            # Calculate total available study time
+            # ---------------------------------------------
+
             total_hours = min(
                 float(available_hours),
                 float(max_daily_hours),
             )
 
-         # ==================================
-         # Optimize Self-Study Plan
-         # ==================================
-            from dataclass.optimizer import StudyOptimizer
+# ---------------------------------------------
+# Optimize Self-Study Plan
+# ---------------------------------------------
 
-            study_plan = StudyOptimizer.allocate_study_time(
-                available_hours=total_hours,
-                courses=course_list  
+from dataclass.optimizer import StudyOptimizer
+
+study_plan = StudyOptimizer.allocate_study_time(
+    available_hours=total_hours,
+    courses=course_list,
+)
+
+# ---------------------------------------------
+# Display Study Plan
+# ---------------------------------------------
+
+if study_plan:
+
+    for course_name, details in study_plan.items():
+
+        difficulty = safe_int(
+            details.get(
+                "difficulty",
+                0,
+            ),
+            0,
+        )
+
+        recommended_time = safe_float(
+            details.get(
+                "allocated_hours",
+                0.0,
+            ),
+            0.0,
+        )
+
+        with st.container(border=True):
+
+            st.subheader(
+                course_name
             )
 
-            if study_plan:
-                for course_name, details in study_plan.items():
+            col1, col2 = st.columns(
+                2,
+                gap="medium",
+            )
 
-                    difficulty = details["difficulty"]
-                    recommended_time = details["allocated_hours"]
+            with col1:
 
-                    with st.container(border=True):
-                        st.subheader(course_name)
+                st.metric(
+                    "Difficulty",
+                    f"{difficulty}/5",
+                )
 
-                        col1, col2 = st.columns(
-                            2,
-                            gap="medium",
-                        )
+            with col2:
 
-                        with col1:
-                            st.metric(
-                                "Difficulty",
-                                f"{difficulty}/5",
-                            )
+                st.metric(
+                    "Recommended Time",
+                    f"{recommended_time:.2f} h",
+                )
 
-                        with col2:
-                            st.metric(
-                                "Recommended Time",
-                                f"{recommended_time:.2f} h",
-                            )
+else:
 
-                else:
-                    st.info(
-                        "No study recommendations "
-                        "could be generated."
-                    )
-
-
-
-
-
+    st.info(
+        "No study recommendations "
+        "could be generated."
+    )
 # =========================================================
 # TAB 3 — TIMER
 # =========================================================
