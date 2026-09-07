@@ -1,241 +1,5822 @@
 {
-  "student": {
-    "student_id": "STU-2026",
-    "completed_courses": ["CS101", "MATH101"],
-    "preferred_study_location": "University",
-    "daily_study_hours": {
-      "Sunday": 3,
-      "Monday": 2,
-      "Tuesday": 4,
-      "Wednesday": 3,
-      "Thursday": 2,
-      "Friday": 0,
-      "Saturday": 0
+    "STU-2026-001": {
+        "student": {
+            "name": "Dustin Hernandez",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 9.6,
+                "performance": {
+                    "current_grade": 96
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.9,
+                        "influence": 0.5,
+                        "grade": 65
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 2,
+                "preparation_hours": 11
+            }
+        ]
     },
-    "free_days": ["Friday", "Saturday"],
-    
-    "points": 999
-  },
-  "courses": [
-    {
-      "course_id": "CS201",
-      "name": "Data Structures",
-      "difficulty_level": 3,
-      "prerequisites": ["CS101"],
-      "sessions": [
-        {
-          "session_id": "LEC-001",
-          "course_id": "CS201",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Sunday",
-            "start_time": "09:00",
-            "end_time": "10:30"
-          }
+    "STU-2026-002": {
+        "student": {
+            "name": "Kayla Dennis",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "SEC-001",
-          "course_id": "CS201",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Tuesday",
-            "start_time": "10:00",
-            "end_time": "11:00"
-          }
-        }
-      ]
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 5.9,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.7,
+                        "influence": 0.5,
+                        "grade": 73
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 5,
+                "preparation_hours": 7
+            }
+        ]
     },
-    {
-      "course_id": "CS301",
-      "name": "Algorithms",
-      "difficulty_level": 4,
-      "prerequisites": ["CS201"],
-      "sessions": [
-        {
-          "session_id": "LEC-002",
-          "course_id": "CS301",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Monday",
-            "start_time": "09:00",
-            "end_time": "10:30"
-          }
+    "STU-2026-003": {
+        "student": {
+            "name": "Kimberly Sharp",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "LEC-003",
-          "course_id": "CS301",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Wednesday",
-            "start_time": "09:00",
-            "end_time": "10:30"
-          }
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
         },
-        {
-          "session_id": "SEC-002",
-          "course_id": "CS301",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Sunday",
-            "start_time": "13:00",
-            "end_time": "14:00"
-          }
-        }
-      ]
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 7.2,
+                "performance": {
+                    "current_grade": 62
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.9,
+                        "influence": 0.5,
+                        "grade": 56
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 4,
+                "preparation_hours": 7
+            }
+        ]
     },
-    {
-      "course_id": "MATH201",
-      "name": "Calculus II",
-      "difficulty_level": 3,
-      "prerequisites": ["MATH101"],
-      "sessions": [
-        {
-          "session_id": "LEC-004",
-          "course_id": "MATH201",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Sunday",
-            "start_time": "11:00",
-            "end_time": "12:30"
-          }
+    "STU-2026-004": {
+        "student": {
+            "name": "Sandra Briggs",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "SEC-003",
-          "course_id": "MATH201",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Wednesday",
-            "start_time": "10:00",
-            "end_time": "11:00"
-          }
-        }
-      ]
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.0,
+                "performance": {
+                    "current_grade": 84
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.5,
+                        "influence": 0.5,
+                        "grade": 78
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 10,
+                "preparation_hours": 8
+            }
+        ]
     },
-    {
-      "course_id": "PHYS101",
-      "name": "Physics I",
-      "difficulty_level": 2,
-      "prerequisites": [],
-      "sessions": [
-        {
-          "session_id": "LEC-005",
-          "course_id": "PHYS101",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Monday",
-            "start_time": "12:00",
-            "end_time": "13:30"
-          }
+    "STU-2026-005": {
+        "student": {
+            "name": "Lee Walsh",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "SEC-004",
-          "course_id": "PHYS101",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Tuesday",
-            "start_time": "14:00",
-            "end_time": "15:00"
-          }
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
         },
-        {
-          "session_id": "SEC-005",
-          "course_id": "PHYS101",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Thursday",
-            "start_time": "09:00",
-            "end_time": "10:00"
-          }
-        }
-      ]
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 6.7,
+                "performance": {
+                    "current_grade": 82
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.9,
+                        "influence": 0.5,
+                        "grade": 84
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 2,
+                "preparation_hours": 15
+            }
+        ]
     },
-    {
-      "course_id": "CS401",
-      "name": "Machine Learning",
-      "difficulty_level": 5,
-      "prerequisites": ["CS201", "MATH201"],
-      "sessions": [
-        {
-          "session_id": "LEC-006",
-          "course_id": "CS401",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Tuesday",
-            "start_time": "16:00",
-            "end_time": "17:30"
-          }
+    "STU-2026-006": {
+        "student": {
+            "name": "Shelby Martinez",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "SEC-006",
-          "course_id": "CS401",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Wednesday",
-            "start_time": "15:00",
-            "end_time": "16:00"
-          }
-        }
-      ]
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 9.8,
+                "performance": {
+                    "current_grade": 88
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.4,
+                        "influence": 0.75,
+                        "grade": 79
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 8,
+                "preparation_hours": 14
+            }
+        ]
     },
-    {
-      "course_id": "ENG102",
-      "name": "Academic Writing",
-      "difficulty_level": 1,
-      "prerequisites": ["ENG101"],
-      "sessions": [
-        {
-          "session_id": "LEC-007",
-          "course_id": "ENG102",
-          "session_type": "Lecture",
-          "time_slot": {
-            "day": "Monday",
-            "start_time": "08:00",
-            "end_time": "09:00"
-          }
+    "STU-2026-007": {
+        "student": {
+            "name": "Amy Castro",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
         },
-        {
-          "session_id": "SEC-007",
-          "course_id": "ENG102",
-          "session_type": "Section",
-          "time_slot": {
-            "day": "Sunday",
-            "start_time": "14:00",
-            "end_time": "15:00"
-          }
-        }
-      ]
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 85
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.8,
+                        "influence": 1.0,
+                        "grade": 58
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 8,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-008": {
+        "student": {
+            "name": "David Brown",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 4.9,
+                "performance": {
+                    "current_grade": 69
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.4,
+                        "influence": 0.5,
+                        "grade": 62
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 12,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-009": {
+        "student": {
+            "name": "Danielle Jones",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 4.7,
+                "performance": {
+                    "current_grade": 63
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.5,
+                        "influence": 1.0,
+                        "grade": 91
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 10,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-010": {
+        "student": {
+            "name": "Jackson Price",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 6.3,
+                "performance": {
+                    "current_grade": 78
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.5,
+                        "influence": 0.75,
+                        "grade": 89
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 2,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-011": {
+        "student": {
+            "name": "Robert Copeland",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 4.3,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.3,
+                        "influence": 1.0,
+                        "grade": 69
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 5,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-012": {
+        "student": {
+            "name": "Stephanie Terry",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 5.7,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.9,
+                        "influence": 0.75,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 12,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-013": {
+        "student": {
+            "name": "Travis Snow Jr.",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 7.0,
+                "performance": {
+                    "current_grade": 72
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.6,
+                        "influence": 0.75,
+                        "grade": 60
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-014": {
+        "student": {
+            "name": "Mr. Brian Fuller",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.7,
+                "performance": {
+                    "current_grade": 68
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.7,
+                        "influence": 1.0,
+                        "grade": 74
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-015": {
+        "student": {
+            "name": "Teresa Flores",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 6.2,
+                "performance": {
+                    "current_grade": 65
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.5,
+                        "influence": 0.5,
+                        "grade": 78
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 10,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-016": {
+        "student": {
+            "name": "Bill Roberson",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 6.5,
+                "performance": {
+                    "current_grade": 84
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.9,
+                        "influence": 1.0,
+                        "grade": 60
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 11,
+                "preparation_hours": 14
+            }
+        ]
+    },
+    "STU-2026-017": {
+        "student": {
+            "name": "Stephanie Noble",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 6.2,
+                "performance": {
+                    "current_grade": 79
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.7,
+                        "influence": 0.75,
+                        "grade": 89
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 7,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-018": {
+        "student": {
+            "name": "John Harrington",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 7.5,
+                "performance": {
+                    "current_grade": 61
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.5,
+                        "influence": 0.5,
+                        "grade": 94
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 7,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-019": {
+        "student": {
+            "name": "Raymond Cruz",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 5.9,
+                "performance": {
+                    "current_grade": 80
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.6,
+                        "influence": 1.0,
+                        "grade": 68
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-020": {
+        "student": {
+            "name": "Roberto Freeman",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 8.9,
+                "performance": {
+                    "current_grade": 89
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.1,
+                        "influence": 0.5,
+                        "grade": 61
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 5,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-021": {
+        "student": {
+            "name": "Jeffrey Mathews",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.4,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.8,
+                        "influence": 0.5,
+                        "grade": 94
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 4,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-022": {
+        "student": {
+            "name": "Anna Brown",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.4,
+                "performance": {
+                    "current_grade": 83
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.8,
+                        "influence": 0.5,
+                        "grade": 60
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 2,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-023": {
+        "student": {
+            "name": "Todd Diaz",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 9.5,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.5,
+                        "influence": 0.5,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 2,
+                "preparation_hours": 3
+            }
+        ]
+    },
+    "STU-2026-024": {
+        "student": {
+            "name": "Heather Mann",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 8.9,
+                "performance": {
+                    "current_grade": 95
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.2,
+                        "influence": 1.0,
+                        "grade": 81
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 7,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-025": {
+        "student": {
+            "name": "Brittney Gonzalez",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 4.1,
+                "performance": {
+                    "current_grade": 85
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.5,
+                        "influence": 1.0,
+                        "grade": 90
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 11,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-026": {
+        "student": {
+            "name": "Jeremy Miller",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 9.0,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.1,
+                        "influence": 0.75,
+                        "grade": 82
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 3
+            }
+        ]
+    },
+    "STU-2026-027": {
+        "student": {
+            "name": "Marcus Hurst",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 4.2,
+                "performance": {
+                    "current_grade": 83
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.2,
+                        "influence": 1.0,
+                        "grade": 69
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 12,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-028": {
+        "student": {
+            "name": "Carla Lee",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 4.4,
+                "performance": {
+                    "current_grade": 77
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.4,
+                        "influence": 1.0,
+                        "grade": 85
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 8,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-029": {
+        "student": {
+            "name": "Kelly Taylor",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 8.7,
+                "performance": {
+                    "current_grade": 94
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.4,
+                        "influence": 0.5,
+                        "grade": 95
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 6,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-030": {
+        "student": {
+            "name": "Stacy Davis",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 63
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.8,
+                        "influence": 0.75,
+                        "grade": 67
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 6
+            }
+        ]
+    },
+    "STU-2026-031": {
+        "student": {
+            "name": "Ashley Hanson",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 8.7,
+                "performance": {
+                    "current_grade": 90
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.7,
+                        "influence": 0.5,
+                        "grade": 60
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 6,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-032": {
+        "student": {
+            "name": "Molly Matthews",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 8.8,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.2,
+                        "influence": 1.0,
+                        "grade": 69
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 10,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-033": {
+        "student": {
+            "name": "Michael Rodriguez",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 6.1,
+                "performance": {
+                    "current_grade": 80
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.3,
+                        "influence": 0.75,
+                        "grade": 89
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 14
+            }
+        ]
+    },
+    "STU-2026-034": {
+        "student": {
+            "name": "Mark Wilson",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 9.5,
+                "performance": {
+                    "current_grade": 88
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.1,
+                        "influence": 1.0,
+                        "grade": 70
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 5,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-035": {
+        "student": {
+            "name": "Jared Castro",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 5.6,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.2,
+                        "influence": 0.75,
+                        "grade": 68
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 4,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-036": {
+        "student": {
+            "name": "Wesley Rodriguez",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 67
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.6,
+                        "influence": 1.0,
+                        "grade": 55
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 6,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-037": {
+        "student": {
+            "name": "Brandi Norton",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 9.4,
+                "performance": {
+                    "current_grade": 90
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.0,
+                        "influence": 0.5,
+                        "grade": 56
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-038": {
+        "student": {
+            "name": "Kevin Bowen",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 9.2,
+                "performance": {
+                    "current_grade": 97
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.0,
+                        "influence": 0.5,
+                        "grade": 75
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-039": {
+        "student": {
+            "name": "Paige Anderson",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 10.0,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.5,
+                        "influence": 0.75,
+                        "grade": 88
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 8,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-040": {
+        "student": {
+            "name": "John Martinez",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 6.3,
+                "performance": {
+                    "current_grade": 60
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.5,
+                        "influence": 0.5,
+                        "grade": 68
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 4,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-041": {
+        "student": {
+            "name": "Jason Brown",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 6.8,
+                "performance": {
+                    "current_grade": 82
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.9,
+                        "influence": 0.5,
+                        "grade": 71
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 7,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-042": {
+        "student": {
+            "name": "Melissa Ferrell",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 4.0,
+                "performance": {
+                    "current_grade": 74
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.3,
+                        "influence": 0.5,
+                        "grade": 55
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 6,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-043": {
+        "student": {
+            "name": "Tara Wheeler",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.2,
+                "performance": {
+                    "current_grade": 73
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.2,
+                        "influence": 1.0,
+                        "grade": 86
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 5,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-044": {
+        "student": {
+            "name": "Kayla Jenkins",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 85
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.0,
+                        "influence": 0.5,
+                        "grade": 69
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 8,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-045": {
+        "student": {
+            "name": "Rhonda Hull",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.2,
+                "performance": {
+                    "current_grade": 77
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.8,
+                        "influence": 0.75,
+                        "grade": 87
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 5,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-046": {
+        "student": {
+            "name": "Isaiah Anthony",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 68
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.4,
+                        "influence": 0.75,
+                        "grade": 65
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 7,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-047": {
+        "student": {
+            "name": "Corey Morgan",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 6.4,
+                "performance": {
+                    "current_grade": 71
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.7,
+                        "influence": 1.0,
+                        "grade": 57
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 4,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-048": {
+        "student": {
+            "name": "Jonathan Henderson",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 8.5,
+                "performance": {
+                    "current_grade": 91
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.7,
+                        "influence": 1.0,
+                        "grade": 78
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 12,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-049": {
+        "student": {
+            "name": "Eric Meyers",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 6.5,
+                "performance": {
+                    "current_grade": 60
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.6,
+                        "influence": 0.5,
+                        "grade": 91
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 12,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-050": {
+        "student": {
+            "name": "Gregory Marshall Jr.",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 6.8,
+                "performance": {
+                    "current_grade": 75
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.3,
+                        "influence": 0.75,
+                        "grade": 85
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 4,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-051": {
+        "student": {
+            "name": "Joseph Lewis",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 8.8,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.5,
+                        "influence": 0.5,
+                        "grade": 55
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-052": {
+        "student": {
+            "name": "Jeremy Brown",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 4.9,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.8,
+                        "influence": 1.0,
+                        "grade": 64
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 14
+            }
+        ]
+    },
+    "STU-2026-053": {
+        "student": {
+            "name": "Tamara Rivera",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 7.1,
+                "performance": {
+                    "current_grade": 84
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.5,
+                        "influence": 1.0,
+                        "grade": 90
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 9,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-054": {
+        "student": {
+            "name": "Daniel Maldonado",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 8.9,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.0,
+                        "influence": 0.75,
+                        "grade": 55
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 11,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-055": {
+        "student": {
+            "name": "Billy Gonzalez DVM",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 4.4,
+                "performance": {
+                    "current_grade": 78
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.0,
+                        "influence": 0.5,
+                        "grade": 88
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 3,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-056": {
+        "student": {
+            "name": "Raymond Chen",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 9.8,
+                "performance": {
+                    "current_grade": 96
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.0,
+                        "influence": 0.5,
+                        "grade": 87
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 2,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-057": {
+        "student": {
+            "name": "Marissa Sanders",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 7.2,
+                "performance": {
+                    "current_grade": 66
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.2,
+                        "influence": 0.75,
+                        "grade": 84
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-058": {
+        "student": {
+            "name": "Brittany Miller",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 7.3,
+                "performance": {
+                    "current_grade": 66
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.9,
+                        "influence": 0.75,
+                        "grade": 64
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-059": {
+        "student": {
+            "name": "Kevin Martinez",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 6.0,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.5,
+                        "influence": 0.5,
+                        "grade": 74
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 2,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-060": {
+        "student": {
+            "name": "Jordan Burke",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 8.7,
+                "performance": {
+                    "current_grade": 97
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.1,
+                        "influence": 0.5,
+                        "grade": 77
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 2,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-061": {
+        "student": {
+            "name": "Michael Hopkins",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 6.4,
+                "performance": {
+                    "current_grade": 69
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.3,
+                        "influence": 0.75,
+                        "grade": 86
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 3,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-062": {
+        "student": {
+            "name": "Alexandria Gordon",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 9.5,
+                "performance": {
+                    "current_grade": 88
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.2,
+                        "influence": 0.5,
+                        "grade": 64
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 6,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-063": {
+        "student": {
+            "name": "Steven Evans",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 6.6,
+                "performance": {
+                    "current_grade": 67
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.7,
+                        "influence": 1.0,
+                        "grade": 70
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 4,
+                "preparation_hours": 6
+            }
+        ]
+    },
+    "STU-2026-064": {
+        "student": {
+            "name": "Jason Torres",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.1,
+                "performance": {
+                    "current_grade": 64
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.4,
+                        "influence": 0.75,
+                        "grade": 77
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 9,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-065": {
+        "student": {
+            "name": "Jenna Willis",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 9.1,
+                "performance": {
+                    "current_grade": 97
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.2,
+                        "influence": 0.5,
+                        "grade": 73
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-066": {
+        "student": {
+            "name": "Rose Johnson",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 9.5,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.2,
+                        "influence": 0.5,
+                        "grade": 85
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 10,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-067": {
+        "student": {
+            "name": "Benjamin Smith",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 5.5,
+                "performance": {
+                    "current_grade": 77
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.6,
+                        "influence": 1.0,
+                        "grade": 90
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 11,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-068": {
+        "student": {
+            "name": "Kimberly Smith",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.5,
+                "performance": {
+                    "current_grade": 73
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.6,
+                        "influence": 0.5,
+                        "grade": 84
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 7,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-069": {
+        "student": {
+            "name": "Joe Ortega",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 5.7,
+                "performance": {
+                    "current_grade": 63
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.6,
+                        "influence": 1.0,
+                        "grade": 57
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 6,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-070": {
+        "student": {
+            "name": "Gabriela Espinoza",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 4.8,
+                "performance": {
+                    "current_grade": 68
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.0,
+                        "influence": 0.5,
+                        "grade": 75
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-071": {
+        "student": {
+            "name": "William Moss",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 9.1,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.9,
+                        "influence": 1.0,
+                        "grade": 75
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 10,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-072": {
+        "student": {
+            "name": "Jessica Wilson",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 8.7,
+                "performance": {
+                    "current_grade": 94
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.0,
+                        "influence": 0.75,
+                        "grade": 73
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 5,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-073": {
+        "student": {
+            "name": "Amanda Yates",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 5.6,
+                "performance": {
+                    "current_grade": 60
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.0,
+                        "influence": 0.5,
+                        "grade": 57
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 5,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-074": {
+        "student": {
+            "name": "Sheryl Lambert",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 9.2,
+                "performance": {
+                    "current_grade": 96
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.5,
+                        "influence": 0.5,
+                        "grade": 90
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 12,
+                "preparation_hours": 12
+            }
+        ]
+    },
+    "STU-2026-075": {
+        "student": {
+            "name": "Jessica Duarte",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 7.0,
+                "performance": {
+                    "current_grade": 73
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.1,
+                        "influence": 0.5,
+                        "grade": 61
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 4,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-076": {
+        "student": {
+            "name": "Robert Carpenter",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 6.2,
+                "performance": {
+                    "current_grade": 85
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.0,
+                        "influence": 1.0,
+                        "grade": 91
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 4,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-077": {
+        "student": {
+            "name": "Brandy Velez",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.3,
+                "performance": {
+                    "current_grade": 60
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.0,
+                        "influence": 0.5,
+                        "grade": 61
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 12,
+                "preparation_hours": 15
+            }
+        ]
+    },
+    "STU-2026-078": {
+        "student": {
+            "name": "Timothy Hill",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 7,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 5.3,
+                "performance": {
+                    "current_grade": 71
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.3,
+                        "influence": 1.0,
+                        "grade": 56
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 11,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-079": {
+        "student": {
+            "name": "Kristen Singleton",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 9.9,
+                "performance": {
+                    "current_grade": 98
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.4,
+                        "influence": 0.75,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 12,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-080": {
+        "student": {
+            "name": "Brett Perkins",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 9.4,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 6.1,
+                        "influence": 0.5,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 8
+            }
+        ]
+    },
+    "STU-2026-081": {
+        "student": {
+            "name": "Christina Hernandez",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 5.9,
+                "performance": {
+                    "current_grade": 76
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.6,
+                        "influence": 0.75,
+                        "grade": 74
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 12,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-082": {
+        "student": {
+            "name": "Justin Arnold",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 6.5,
+                "performance": {
+                    "current_grade": 82
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.4,
+                        "influence": 1.0,
+                        "grade": 86
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 8,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-083": {
+        "student": {
+            "name": "Peter Ellison",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 4.4,
+                "performance": {
+                    "current_grade": 85
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.8,
+                        "influence": 0.75,
+                        "grade": 80
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 7,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-084": {
+        "student": {
+            "name": "Alexandria Watson",
+            "age": 22,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 5.2,
+                "performance": {
+                    "current_grade": 71
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.4,
+                        "influence": 1.0,
+                        "grade": 74
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 3,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-085": {
+        "student": {
+            "name": "Shelly Tapia",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Network Simulation": {
+                "base_difficulty": 6.6,
+                "performance": {
+                    "current_grade": 63
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.4,
+                        "influence": 0.75,
+                        "grade": 81
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 2,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-086": {
+        "student": {
+            "name": "Donna Ruiz",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 60,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 9.9,
+                "performance": {
+                    "current_grade": 97
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.9,
+                        "influence": 1.0,
+                        "grade": 91
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 7,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-087": {
+        "student": {
+            "name": "Theresa Taylor",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Operating Systems": {
+                "base_difficulty": 6.8,
+                "performance": {
+                    "current_grade": 65
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.9,
+                        "influence": 0.75,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 4,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-088": {
+        "student": {
+            "name": "Rhonda Kaiser",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 6.6,
+                "performance": {
+                    "current_grade": 73
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.7,
+                        "influence": 1.0,
+                        "grade": 85
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 2,
+                "preparation_hours": 10
+            }
+        ]
+    },
+    "STU-2026-089": {
+        "student": {
+            "name": "Kevin Reed",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 4.7,
+                "performance": {
+                    "current_grade": 65
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 9.5,
+                        "influence": 0.75,
+                        "grade": 73
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 13
+            }
+        ]
+    },
+    "STU-2026-090": {
+        "student": {
+            "name": "Emily Rios",
+            "age": 18,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 7.3,
+                "performance": {
+                    "current_grade": 63
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 3.1,
+                        "influence": 1.0,
+                        "grade": 78
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 8,
+                "preparation_hours": 14
+            }
+        ]
+    },
+    "STU-2026-091": {
+        "student": {
+            "name": "Heather Williams",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 4.2,
+                "performance": {
+                    "current_grade": 66
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.4,
+                        "influence": 0.5,
+                        "grade": 93
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 7,
+                "preparation_hours": 4
+            }
+        ]
+    },
+    "STU-2026-092": {
+        "student": {
+            "name": "Wesley Wells",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "Thanaweya Amma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 6,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 9.2,
+                "performance": {
+                    "current_grade": 96
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.5,
+                        "influence": 0.5,
+                        "grade": 64
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 6
+            }
+        ]
+    },
+    "STU-2026-093": {
+        "student": {
+            "name": "Sally Boyd",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 4,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 8.6,
+                "performance": {
+                    "current_grade": 93
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.1,
+                        "influence": 0.75,
+                        "grade": 82
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 2,
+                "preparation_hours": 5
+            }
+        ]
+    },
+    "STU-2026-094": {
+        "student": {
+            "name": "John Chan",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 7.5,
+                "performance": {
+                    "current_grade": 82
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.9,
+                        "influence": 0.5,
+                        "grade": 95
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "quiz",
+                "week": 9,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-095": {
+        "student": {
+            "name": "Erin Hudson",
+            "age": 21,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 3,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Data Structures": {
+                "base_difficulty": 9.0,
+                "performance": {
+                    "current_grade": 92
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.2,
+                        "influence": 0.5,
+                        "grade": 64
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 11,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-096": {
+        "student": {
+            "name": "Summer Stewart",
+            "age": 20,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "STEM",
+            "study_preferences": {
+                "workload_preference": "weekdays",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Database Systems": {
+                "base_difficulty": 4.5,
+                "performance": {
+                    "current_grade": 82
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.9,
+                        "influence": 0.5,
+                        "grade": 89
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 5,
+                "preparation_hours": 11
+            }
+        ]
+    },
+    "STU-2026-097": {
+        "student": {
+            "name": "Mrs. Erica Campbell",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 8,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Tuesday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Wednesday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 5.1,
+                "performance": {
+                    "current_grade": 70
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 5.5,
+                        "influence": 0.75,
+                        "grade": 57
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 9,
+                "preparation_hours": 7
+            }
+        ]
+    },
+    "STU-2026-098": {
+        "student": {
+            "name": "Allison Young",
+            "age": 19,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 5,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 90,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Morning"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 5.3,
+                "performance": {
+                    "current_grade": 80
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 8.9,
+                        "influence": 0.75,
+                        "grade": 74
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "midterm",
+                "week": 6,
+                "preparation_hours": 3
+            }
+        ]
+    },
+    "STU-2026-099": {
+        "student": {
+            "name": "Scott Richardson",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "IGCSE",
+            "study_preferences": {
+                "workload_preference": "balanced",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 9,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Monday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Thursday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Cybersecurity Basics": {
+                "base_difficulty": 8.9,
+                "performance": {
+                    "current_grade": 97
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 7.1,
+                        "influence": 0.75,
+                        "grade": 70
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 6,
+                "preparation_hours": 9
+            }
+        ]
+    },
+    "STU-2026-100": {
+        "student": {
+            "name": "Curtis Mejia",
+            "age": 23,
+            "university": "Nile University",
+            "major": "Computer Science",
+            "high_school_background": "American Diploma",
+            "study_preferences": {
+                "workload_preference": "weekends",
+                "weekday_hours_per_day": 2,
+                "weekend_hours_per_day": 5,
+                "preferred_session_minutes": 120,
+                "preferred_study_times": [
+                    {
+                        "day": "Sunday",
+                        "time": "Night"
+                    }
+                ]
+            }
+        },
+        "unavailable_periods": {
+            "hard_constraints": [
+                {
+                    "day": "Sunday",
+                    "start": "10:00",
+                    "end": "12:00",
+                    "reason": "University Lecture"
+                }
+            ],
+            "soft_constraints": [
+                {
+                    "day": "Friday",
+                    "start": "16:00",
+                    "end": "18:00",
+                    "reason": "Gym or Rest"
+                }
+            ]
+        },
+        "courses": {
+            "Python Programming": {
+                "base_difficulty": 8.8,
+                "performance": {
+                    "current_grade": 94
+                },
+                "prerequisites": {
+                    "Programming Fundamentals": {
+                        "personal_difficulty": 4.6,
+                        "influence": 0.75,
+                        "grade": 59
+                    }
+                }
+            }
+        },
+        "events": [
+            {
+                "type": "assignment",
+                "week": 11,
+                "preparation_hours": 15
+            }
+        ]
     }
-  ],
-  "academic_events": [
-    {
-      "event_name": "Quiz 1",
-      "week_number": 3,
-      "course_id": "CS201"
-    },
-    {
-      "event_name": "Essay Draft Due",
-      "week_number": 5,
-      "course_id": "ENG102"
-    },
-    {
-      "event_name": "Midterm Exam",
-      "week_number": 7,
-      "course_id": "MATH201"
-    },
-    {
-      "event_name": "Project Submission",
-      "week_number": 10,
-      "course_id": "CS301"
-    },
-    {
-      "event_name": "Quiz 2",
-      "week_number": 12,
-      "course_id": "CS401"
-    },
-    {
-      "event_name": "Final Exam",
-      "week_number": 15,
-      "course_id": "PHYS101"
-    }
-  ]
 }
