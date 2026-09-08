@@ -300,3 +300,53 @@ def load_all_data(
         courses,
         academic_events,
     )
+
+
+# =========================================================
+# LOAD CATALOG DATA (courses + academic events only)
+# =========================================================
+#
+# Used by Main/main_V2.py: the student themself now comes from the
+# login system (Login_system/auth_service.py -> a real SQLite record
+# tied to their account), while the shared course catalog and
+# academic-events calendar still come from a JSON file
+# (data/mock_university_data.json), since every student studies the
+# same set of courses.
+
+def load_courses_and_events(
+    file_path: str | Path,
+):
+    data = load_json(file_path)
+
+    courses_data = data.get(
+        "courses",
+        [],
+    )
+
+    events_data = data.get(
+        "academic_events",
+        [],
+    )
+
+    if not isinstance(courses_data, list):
+        courses_data = []
+
+    if not isinstance(events_data, list):
+        events_data = []
+
+    courses = [
+        load_course(course)
+        for course in courses_data
+        if isinstance(course, dict)
+    ]
+
+    academic_events = [
+        load_academic_event(event)
+        for event in events_data
+        if isinstance(event, dict)
+    ]
+
+    return (
+        courses,
+        academic_events,
+    )

@@ -19,13 +19,33 @@ Suggested signature:
 
 from datetime import datetime, timedelta
 
+<<<<<<< HEAD
 def time_to_minutes(time_string):
+=======
+
+# ============================================================
+# TASK 4 - SCHEDULE GENERATION UNDER CONSTRAINTS
+# ============================================================
+
+def time_to_minutes(time_string):
+    """
+    Convert a time such as '14:30' into minutes from midnight.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     hours, minutes = map(int, time_string.split(":"))
 
     return hours * 60 + minutes
 
+<<<<<<< HEAD
 def minutes_to_time(minutes):
+=======
+
+def minutes_to_time(minutes):
+    """
+    Convert minutes from midnight back to HH:MM format.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     hours = minutes // 60
     mins = minutes % 60
@@ -42,6 +62,13 @@ def overlaps(start1, end1, start2, end2):
 
 
 def is_slot_available(day, start, end, unavailable):
+<<<<<<< HEAD
+=======
+    """
+    Check whether a proposed study slot conflicts
+    with any hard-unavailable period.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     for period in unavailable:
 
@@ -58,6 +85,13 @@ def is_slot_available(day, start, end, unavailable):
 
 
 def is_slot_free(day, start, end, schedule):
+<<<<<<< HEAD
+=======
+    """
+    Check whether a proposed study slot overlaps
+    with an already scheduled session.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     for session in schedule:
 
@@ -74,6 +108,16 @@ def is_slot_free(day, start, end, schedule):
 
 
 def split_into_sessions(hours, session_length=2):
+<<<<<<< HEAD
+=======
+    """
+    Divide the required study hours into sessions.
+
+    Example:
+    5 hours with 2-hour sessions becomes:
+    2h, 2h, 1h
+    """
+>>>>>>> fd68fda (Save local changes)
 
     sessions = []
 
@@ -96,7 +140,16 @@ def generate_available_slots(
     classes,
     session_duration
 ):
+<<<<<<< HEAD
 
+=======
+    """
+    Generate possible study slots based on the ACTUAL
+    duration of the study session.
+
+    This allows partial sessions such as 1 hour.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     slots = []
 
@@ -115,6 +168,13 @@ def generate_available_slots(
 
                 current_end = current_start + duration_minutes
 
+<<<<<<< HEAD
+=======
+                # ------------------------------------------------
+                # Check university classes
+                # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
                 class_conflict = False
 
                 for university_class in classes:
@@ -139,6 +199,13 @@ def generate_available_slots(
                         class_conflict = True
                         break
 
+<<<<<<< HEAD
+=======
+                # ------------------------------------------------
+                # Check hard unavailable periods
+                # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
                 unavailable_conflict = not is_slot_available(
                     day,
                     current_start,
@@ -146,6 +213,13 @@ def generate_available_slots(
                     unavailable
                 )
 
+<<<<<<< HEAD
+=======
+                # ------------------------------------------------
+                # Add legal slot
+                # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
                 if not class_conflict and not unavailable_conflict:
 
                     slots.append({
@@ -160,7 +234,16 @@ def generate_available_slots(
 
 
 def preferred_slot_score(slot, preferred_times):
+<<<<<<< HEAD
 
+=======
+    """
+    Give a slot a score depending on whether it matches
+    the student's preferred study times.
+
+    This is a SOFT constraint.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     score = 0
 
@@ -197,11 +280,27 @@ def generate_schedule(
     preferred_times=None,
     session_length=2
 ):
+<<<<<<< HEAD
 
+=======
+    """
+    Generate one feasible study schedule.
+
+    The function takes allocated hours from Task 3
+    and converts them into actual timetable sessions.
+    """
+>>>>>>> fd68fda (Save local changes)
 
     if preferred_times is None:
         preferred_times = []
 
+<<<<<<< HEAD
+=======
+    # ========================================================
+    # STEP 1 - Sort courses
+    # ========================================================
+
+>>>>>>> fd68fda (Save local changes)
     day_order = {
         "Sunday": 0,
         "Monday": 1,
@@ -234,7 +333,16 @@ def generate_schedule(
         key=course_sort_key
     )
 
+<<<<<<< HEAD
     sessions = []
+=======
+    # ========================================================
+    # STEP 2 - Create study sessions
+    # ========================================================
+
+    sessions = []
+
+>>>>>>> fd68fda (Save local changes)
     for course in courses:
 
         course_sessions = split_into_sessions(
@@ -251,9 +359,24 @@ def generate_schedule(
                 "deadline": course.get("deadline")
             })
 
+<<<<<<< HEAD
     schedule = []
     for session in sessions:
 
+=======
+    # ========================================================
+    # STEP 3 - Schedule each session
+    # ========================================================
+
+    schedule = []
+
+    for session in sessions:
+
+        # ----------------------------------------------------
+        # Generate slots using THIS session's duration
+        # ----------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
         slots = generate_available_slots(
             availability,
             unavailable,
@@ -273,6 +396,13 @@ def generate_schedule(
                 slot["end"]
             )
 
+<<<<<<< HEAD
+=======
+            # ------------------------------------------------
+            # Check overlap with existing study sessions
+            # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
             if not is_slot_free(
                 slot["day"],
                 slot_start,
@@ -281,6 +411,13 @@ def generate_schedule(
             ):
                 continue
 
+<<<<<<< HEAD
+=======
+            # ------------------------------------------------
+            # Check deadline
+            # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
             deadline = session["deadline"]
 
             if deadline is not None:
@@ -296,6 +433,13 @@ def generate_schedule(
                 if slot_day_number > deadline_day_number:
                     continue
 
+<<<<<<< HEAD
+=======
+            # ------------------------------------------------
+            # Calculate preference score
+            # ------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
             preference_score = preferred_slot_score(
                 slot,
                 preferred_times
@@ -308,6 +452,13 @@ def generate_schedule(
                 )
             )
 
+<<<<<<< HEAD
+=======
+        # ----------------------------------------------------
+        # No legal slot found
+        # ----------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
         if len(possible_slots) == 0:
 
             print(
@@ -317,6 +468,13 @@ def generate_schedule(
 
             return []
 
+<<<<<<< HEAD
+=======
+        # ----------------------------------------------------
+        # Prefer the best soft-constraint slot
+        # ----------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
         possible_slots.sort(
             key=lambda x: x[0],
             reverse=True
@@ -324,6 +482,13 @@ def generate_schedule(
 
         selected_slot = possible_slots[0][1]
 
+<<<<<<< HEAD
+=======
+        # ----------------------------------------------------
+        # Add session to schedule
+        # ----------------------------------------------------
+
+>>>>>>> fd68fda (Save local changes)
         schedule.append({
             "course": session["course"],
             "day": selected_slot["day"],
@@ -333,6 +498,13 @@ def generate_schedule(
             "priority": session["priority"]
         })
 
+<<<<<<< HEAD
+=======
+    # ========================================================
+    # STEP 4 - Verify required hours
+    # ========================================================
+
+>>>>>>> fd68fda (Save local changes)
     for course in courses:
 
         required_hours = course["allocated_hours"]
@@ -354,6 +526,13 @@ def generate_schedule(
 
             return []
 
+<<<<<<< HEAD
+=======
+    # ========================================================
+    # STEP 5 - Sort schedule chronologically
+    # ========================================================
+
+>>>>>>> fd68fda (Save local changes)
     schedule.sort(
         key=lambda session: (
             day_order[session["day"]],
@@ -364,6 +543,7 @@ def generate_schedule(
     return schedule
 
 
+<<<<<<< HEAD
 # schedule = generate_schedule(
 #     courses,
 #     availability,
@@ -387,3 +567,107 @@ def generate_schedule(
 #             f"{session['course']} | "
 #             f"{session['duration']} hours"
 #         )
+=======
+# ============================================================
+# TESTING - PARTIAL SESSION
+# ============================================================
+
+# courses = [
+#     {
+#         "course": "Math",
+#         "allocated_hours": 5,
+#         "priority": 0.7,
+#         "deadline": None
+#     }
+# ]
+
+
+# availability = {
+#     "Monday": [
+#         {"start": "16:00", "end": "22:00"}
+#     ]
+# }
+
+
+# classes = []
+
+# unavailable = []
+
+# preferred_times = []
+
+
+
+
+
+courses = [
+    {
+        "course": "Math",
+        "allocated_hours": 4,
+        "priority": 0.9,
+        "deadline": "Tuesday"
+    },
+    {
+        "course": "Programming",
+        "allocated_hours": 4,
+        "priority": 0.5,
+        "deadline": None
+    }
+]
+
+availability = {
+    "Sunday": [
+        {"start": "16:00", "end": "22:00"}
+    ],
+    "Monday": [
+        {"start": "16:00", "end": "22:00"}
+    ],
+    "Tuesday": [
+        {"start": "16:00", "end": "22:00"}
+    ]
+}
+
+classes = [
+    {
+        "course": "Math",
+        "day": "Sunday",
+        "start": "18:00",
+        "end": "20:00"
+    }
+]
+
+unavailable = [
+    {
+        "day": "Monday",
+        "start": "18:00",
+        "end": "20:00"
+    }
+]
+
+preferred_times = []
+
+
+
+schedule = generate_schedule(
+    courses,
+    availability,
+    classes,
+    unavailable,
+    preferred_times,
+    session_length=2
+)
+
+
+if schedule:
+
+    print("\nGenerated Study Schedule")
+    print("------------------------")
+
+    for session in schedule:
+
+        print(
+            f"{session['day']} | "
+            f"{session['start']} - {session['end']} | "
+            f"{session['course']} | "
+            f"{session['duration']} hours"
+        )
+>>>>>>> fd68fda (Save local changes)

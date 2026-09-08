@@ -34,3 +34,12 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     return final_difficulty
 
 
+<<<<<<< HEAD
+=======
+    # Example of loading a course from the real project data file:
+    #
+    # from pathlib import Path
+    # data_path = Path(__file__).resolve().parent.parent / "data" / "dummy_data.json"
+    # with open(data_path, "r", encoding="utf-8") as file:
+    #     data = json.load(file)
+>>>>>>> fd68fda (Save local changes)

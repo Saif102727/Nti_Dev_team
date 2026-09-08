@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from Nti_Dev_team.models import Student, Course, Session
+from models import Student, Course, Session
 
 
 class Schedule:
 
-    def __init__(self, sessions: List[Session] = None):
+    def __init__(self, sessions: List[Session]):
         self.sessions = sessions if sessions is not None else []
 
 

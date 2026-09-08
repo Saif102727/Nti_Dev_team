@@ -57,6 +57,101 @@ def allocate_study_hours(courses, weekday_hours, weekdays, weekend_hours, weeken
 
     return allocations
 
+<<<<<<< HEAD
+=======
+
+# courses = [
+#     {"course": "Math", "priority": 0.70},
+#     {"course": "Circuits", "priority": 0.50},
+#     {"course": "Programming", "priority": 0.30}
+# ]
+
+# allocations = allocate_study_hours(
+#     courses,
+#     weekday_hours=4,
+#     weekdays=5,
+#     weekend_hours=6,
+#     weekend_days=2,
+#     min_hours=2
+# )
+
+# for course in allocations:
+#     print(
+#         course["course"],
+#         "->",
+#         round(course["allocated_hours"], 2),
+#         "hours/week"
+#     )
+
+
+# courses = [
+#     {"course": "Math", "priority": 0.50},
+#     {"course": "Physics", "priority": 0.50}
+# ]
+
+# allocations = allocate_study_hours(
+#     courses,
+#     weekday_hours=4,
+#     weekdays=5,
+#     weekend_hours=6,
+#     weekend_days=2,
+#     min_hours=2
+# )
+
+# for course in allocations:
+#     print(course)
+
+
+# courses = [
+#     {"course": "Math", "priority": 1.0}
+# ]
+
+# allocations = allocate_study_hours(
+#     courses,
+#     weekday_hours=4,
+#     weekdays=5,
+#     weekend_hours=6,
+#     weekend_days=2,
+#     min_hours=2
+# )
+
+# for course in allocations:
+#     print(course)
+
+
+# courses = [
+#     {"course": "Math", "priority": 0.90},
+#     {"course": "Physics", "priority": 0.10}
+# ]
+
+# allocations = allocate_study_hours(
+#     courses,
+#     weekday_hours=4,
+#     weekdays=5,
+#     weekend_hours=6,
+#     weekend_days=2,
+#     min_hours=2
+# )
+
+# for course in allocations:
+#     print(course)
+
+
+# courses = []
+
+# allocations = allocate_study_hours(
+#     courses,
+#     weekday_hours=4,
+#     weekdays=5,
+#     weekend_hours=6,
+#     weekend_days=2,
+#     min_hours=2
+# )
+
+# print(allocations)
+
+
+>>>>>>> fd68fda (Save local changes)
 courses = [
     {"course": "Math", "priority": 0.30},
     {"course": "Physics", "priority": 0.20},
