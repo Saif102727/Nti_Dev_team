@@ -18,6 +18,7 @@ def init_timer_state():
         "timer_course": None,
         "timer_mode": "Pomodoro (25 min)",
         "completed_sessions": [],
+        "reward_given": False
     }
 
     for key, value in defaults.items():
@@ -56,6 +57,7 @@ def reset_timer(seconds: int):
     st.session_state.timer_seconds = seconds
     st.session_state.timer_total_seconds = seconds
     st.session_state.timer_last_tick = None
+    st.session_state.reward_given = False
 
 
 # =========================================================
@@ -105,6 +107,9 @@ def _complete_session(
     course_name: str,
     completed_by_user: bool = False,
 ):
+    if st.session_state.reward_given.get("reward_given", False):
+        return 0, 0
+    st.session_state.reward_given = True
     total_seconds = int(
         st.session_state.timer_total_seconds
     )
@@ -164,8 +169,9 @@ def _complete_session(
     )
 
     # Reset timer
-    reset_timer(total_seconds)
-
+    st.session_state.timer_running = False
+    st.session_state.timer_seconds = total_seconds
+    st.session_state.timer_last_tick = None
     return duration_mins, earned_points
 
 
@@ -519,12 +525,12 @@ def render_timer(
                 selected_course,
                 completed_by_user=True,
             )
-
-            st.success(
-                f"Session completed: "
-                f"{duration} min • "
-                f"+{points} points"
-            )
+            if points > 0:
+                st.success(
+                    f"Session completed: "
+                    f"{duration} min • "
+                    f"+{points} points"
+                )
 
             st.rerun()
 
