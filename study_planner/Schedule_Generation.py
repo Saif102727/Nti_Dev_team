@@ -364,26 +364,26 @@ def generate_schedule(
     return schedule
 
 
-schedule = generate_schedule(
-    courses,
-    availability,
-    classes,
-    unavailable,
-    preferred_times,
-    session_length=2
-)
+# schedule = generate_schedule(
+#     courses,
+#     availability,
+#     classes,
+#     unavailable,
+#     preferred_times,
+#     session_length=2
+# )
 
 
-if schedule:
+# if schedule:
 
-    print("\nGenerated Study Schedule")
-    print("------------------------")
+#     print("\nGenerated Study Schedule")
+#     print("------------------------")
 
-    for session in schedule:
+#     for session in schedule:
 
-        print(
-            f"{session['day']} | "
-            f"{session['start']} - {session['end']} | "
-            f"{session['course']} | "
-            f"{session['duration']} hours"
-        )
+#         print(
+#             f"{session['day']} | "
+#             f"{session['start']} - {session['end']} | "
+#             f"{session['course']} | "
+#             f"{session['duration']} hours"
+#         )
