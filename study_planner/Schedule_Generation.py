@@ -19,13 +19,11 @@ Suggested signature:
 
 from datetime import datetime, timedelta
 
-
 def time_to_minutes(time_string):
 
     hours, minutes = map(int, time_string.split(":"))
 
     return hours * 60 + minutes
-
 
 def minutes_to_time(minutes):
 
