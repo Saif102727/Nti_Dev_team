@@ -57,27 +57,20 @@ def register(
     university: str,
     faculty: str,
     certificate: str,
-<<<<<<< HEAD
     student_id: str = None,
-=======
-    student_id: str ,
-    daily_study_hours: dict,
-    free_days: list ,
+    daily_study_hours: dict = None,
+    free_days: list = None,
     preferred_study_location: str = "Home",
->>>>>>> fd68fda (Save local changes)
 ) -> str:
     """
     Creates a new student record + a linked user account.
 
-<<<<<<< HEAD
-=======
     daily_study_hours / free_days / preferred_study_location let the
     GUI collect the student's weekly availability at sign-up time so
     the study planner has real data to work with immediately. They
     all have sensible defaults so existing callers (e.g. cli_test.py)
     keep working unchanged.
 
->>>>>>> fd68fda (Save local changes)
     Returns the newly created student_id.
     Raises UsernameTakenError or WeakPasswordError on failure.
     """
@@ -93,8 +86,6 @@ def register(
     if student_id is None:
         student_id = f"STU-{uuid.uuid4().hex[:8].upper()}"
 
-<<<<<<< HEAD
-=======
     if not isinstance(daily_study_hours, dict):
         daily_study_hours = {}
 
@@ -104,7 +95,6 @@ def register(
     if not preferred_study_location:
         preferred_study_location = "Home"
 
->>>>>>> fd68fda (Save local changes)
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -130,13 +120,8 @@ def register(
             (
                 student_id, name, age, university, faculty, certificate,
                 json.dumps({}), json.dumps([]),
-<<<<<<< HEAD
-                "Home", json.dumps({}),
-                json.dumps([]), 0,
-=======
                 preferred_study_location, json.dumps(daily_study_hours),
                 json.dumps(free_days), 0,
->>>>>>> fd68fda (Save local changes)
             ),
         )
 
@@ -211,8 +196,6 @@ def authenticate(username: str, password: str) -> dict:
 
     finally:
         conn.close()
-<<<<<<< HEAD
-=======
 
 
 # ==========================================
@@ -255,4 +238,3 @@ def update_daily_study_hours(student_id: str, daily_study_hours: dict) -> None:
         conn.commit()
     finally:
         conn.close()
->>>>>>> fd68fda (Save local changes)

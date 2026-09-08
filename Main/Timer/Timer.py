@@ -18,7 +18,7 @@ def init_timer_state():
         "timer_course": None,
         "timer_mode": "Pomodoro (25 min)",
         "completed_sessions": [],
-        "reward_given": False
+        "reward_given": False,
     }
 
     for key, value in defaults.items():
@@ -31,11 +31,6 @@ def init_timer_state():
 # =========================================================
 
 def render_html(html: str):
-    """
-    Render HTML using Streamlit's native HTML renderer.
-    Falls back to markdown for older Streamlit versions.
-    """
-
     if hasattr(st, "html"):
         st.html(html)
     else:
@@ -82,6 +77,7 @@ def start_timer(
     ):
         st.session_state.timer_seconds = seconds
         st.session_state.timer_total_seconds = seconds
+        st.session_state.reward_given = False
 
     st.session_state.timer_course = course_name
     st.session_state.timer_running = True
@@ -107,27 +103,35 @@ def _complete_session(
     course_name: str,
     completed_by_user: bool = False,
 ):
-    if st.session_state.reward_given.get("reward_given", False):
+    # Prevent duplicate rewards
+    if st.session_state.get("reward_given", False):
         return 0, 0
-    st.session_state.reward_given = True
+
     total_seconds = int(
-        st.session_state.timer_total_seconds
+        st.session_state.get(
+            "timer_total_seconds",
+            25 * 60,
+        )
     )
 
     remaining_seconds = int(
-        st.session_state.timer_seconds
+        st.session_state.get(
+            "timer_seconds",
+            total_seconds,
+        )
     )
 
-    elapsed_seconds = (
-        total_seconds - remaining_seconds
+    elapsed_seconds = max(
+        0,
+        total_seconds - remaining_seconds,
     )
 
     # Manual Finish
     if completed_by_user:
-        elapsed_seconds = max(
-            60,
-            elapsed_seconds,
-        )
+
+        # Don't finish an untouched session
+        if elapsed_seconds < 60:
+            return 0, 0
 
     # Automatic completion
     else:
@@ -152,9 +156,30 @@ def _complete_session(
         int(duration_mins * 0.75),
     )
 
-    # Update global progress
-    st.session_state.study_time += duration_hours
-    st.session_state.points += earned_points
+    # Mark reward as given
+    st.session_state.reward_given = True
+
+    # Update study time
+    st.session_state.study_time = (
+        float(
+            st.session_state.get(
+                "study_time",
+                0.0,
+            )
+        )
+        + duration_hours
+    )
+
+    # Update points
+    st.session_state.points = (
+        int(
+            st.session_state.get(
+                "points",
+                0,
+            )
+        )
+        + earned_points
+    )
 
     # Save session
     st.session_state.completed_sessions.append(
@@ -168,10 +193,14 @@ def _complete_session(
         }
     )
 
-    # Reset timer
+    # Stop timer completely
     st.session_state.timer_running = False
-    st.session_state.timer_seconds = total_seconds
+    st.session_state.timer_paused = False
     st.session_state.timer_last_tick = None
+
+    # Keep the completed timer at its original duration
+    st.session_state.timer_seconds = total_seconds
+
     return duration_mins, earned_points
 
 
@@ -204,10 +233,31 @@ def render_timer(
     # COURSE
     # =====================================================
 
-    course_names = [
-        course.name
-        for course in courses
-    ]
+    course_names = []
+
+    for course in courses:
+
+        if isinstance(course, dict):
+
+            name = course.get(
+                "name",
+                course.get(
+                    "course_name",
+                    "Unnamed Course",
+                ),
+            )
+
+        else:
+
+            name = getattr(
+                course,
+                "name",
+                "Unnamed Course",
+            )
+
+        course_names.append(
+            str(name)
+        )
 
     selected_course = st.selectbox(
         "Choose Course",
@@ -246,7 +296,8 @@ def render_timer(
     )
 
     st.info(
-        f"Active template: **{template.get('name', 'Study Template')}**"
+        f"Active template: "
+        f"**{template.get('name', 'Study Template')}**"
     )
 
     # =====================================================
@@ -418,9 +469,9 @@ def render_timer(
 
     b1, b2, b3, b4 = st.columns(4)
 
-    # -----------------------------------------------------
+    # =====================================================
     # START
-    # -----------------------------------------------------
+    # =====================================================
 
     with b1:
 
@@ -439,9 +490,9 @@ def render_timer(
 
                 st.rerun()
 
-    # -----------------------------------------------------
+    # =====================================================
     # PAUSE / RESUME
-    # -----------------------------------------------------
+    # =====================================================
 
     with b2:
 
@@ -464,18 +515,16 @@ def render_timer(
             ):
 
                 st.session_state.timer_running = True
-
                 st.session_state.timer_paused = False
-
                 st.session_state.timer_last_tick = (
                     time.monotonic()
                 )
 
                 st.rerun()
 
-    # -----------------------------------------------------
+    # =====================================================
     # RESET
-    # -----------------------------------------------------
+    # =====================================================
 
     with b3:
 
@@ -490,9 +539,9 @@ def render_timer(
 
             st.rerun()
 
-    # -----------------------------------------------------
+    # =====================================================
     # FINISH
-    # -----------------------------------------------------
+    # =====================================================
 
     with b4:
 
@@ -501,44 +550,81 @@ def render_timer(
             use_container_width=True,
         ):
 
-            # Update elapsed time before completing
-            if st.session_state.timer_running:
+            # Check that a session was actually started
+            if (
+                not st.session_state.timer_running
+                and not st.session_state.timer_paused
+            ):
 
-                now = time.monotonic()
-
-                last_tick = (
-                    st.session_state.timer_last_tick
-                    or now
+                st.warning(
+                    "⚠️ Start the timer before finishing."
                 )
 
-                elapsed_tick = int(
-                    now - last_tick
+            else:
+
+                # -------------------------------------------------
+                # STOP TIMER FIRST
+                # -------------------------------------------------
+
+                if st.session_state.timer_running:
+
+                    now = time.monotonic()
+
+                    last_tick = (
+                        st.session_state.timer_last_tick
+                        or now
+                    )
+
+                    elapsed_tick = int(
+                        now - last_tick
+                    )
+
+                    st.session_state.timer_seconds = max(
+                        0,
+                        st.session_state.timer_seconds
+                        - elapsed_tick,
+                    )
+
+                # IMPORTANT:
+                # Stop the countdown BEFORE rerun
+                st.session_state.timer_running = False
+                st.session_state.timer_paused = False
+                st.session_state.timer_last_tick = None
+
+                # -------------------------------------------------
+                # COMPLETE SESSION
+                # -------------------------------------------------
+
+                duration, points = _complete_session(
+                    selected_course,
+                    completed_by_user=True,
                 )
 
-                st.session_state.timer_seconds = max(
-                    0,
-                    st.session_state.timer_seconds
-                    - elapsed_tick,
-                )
+                if duration > 0:
 
-            duration, points = _complete_session(
-                selected_course,
-                completed_by_user=True,
-            )
-            if points > 0:
-                st.success(
-                    f"Session completed: "
-                    f"{duration} min • "
-                    f"+{points} points"
-                )
+                    st.success(
+                        f"✅ Session completed: "
+                        f"{duration} min • "
+                        f"+{points} points"
+                    )
 
-            st.rerun()
+                else:
+
+                    st.warning(
+                        "⚠️ You need at least "
+                        "1 minute before finishing."
+                    )
+
+                st.rerun()
 
     # =====================================================
     # COUNTDOWN
     # =====================================================
 
-    if st.session_state.timer_running:
+    if (
+        st.session_state.timer_running
+        and not st.session_state.timer_paused
+    ):
 
         now = time.monotonic()
 
@@ -561,9 +647,9 @@ def render_timer(
 
             st.session_state.timer_last_tick = now
 
-        # -------------------------------------------------
+        # =================================================
         # TIME'S UP
-        # -------------------------------------------------
+        # =================================================
 
         if st.session_state.timer_seconds <= 0:
 
@@ -572,19 +658,21 @@ def render_timer(
                 completed_by_user=False,
             )
 
-            st.balloons()
+            if duration > 0:
 
-            st.success(
-                f"🎉 Time's up! "
-                f"{duration} minutes completed. "
-                f"+{points} points!"
-            )
+                st.balloons()
+
+                st.success(
+                    f"🎉 Time's up! "
+                    f"{duration} minutes completed. "
+                    f"+{points} points!"
+                )
 
             st.rerun()
 
-        # -------------------------------------------------
+        # =================================================
         # REFRESH
-        # -------------------------------------------------
+        # =================================================
 
         time.sleep(1)
 

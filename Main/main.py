@@ -39,8 +39,8 @@ LOGIN_SYSTEM_DIR = PROJECT_ROOT / "Login_system"
 if str(LOGIN_SYSTEM_DIR) not in sys.path:
     sys.path.insert(0, str(LOGIN_SYSTEM_DIR))
 
-from login_page import render_login_page, render_logout_button, is_authenticated
-from auth_service import update_points
+from Login_system.login_page import render_login_page, render_logout_button, is_authenticated
+from Login_system.auth_service import update_points
 
 
 # =========================================================
