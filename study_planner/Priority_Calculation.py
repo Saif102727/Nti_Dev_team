@@ -117,46 +117,4 @@ weights = calculate_ahp_weights(comparison_matrix)
 #     weights=weights
 # )
 
-
-
-# priority = calculate_priority(
-#     difficulty=9.0,
-#     grade=50,
-#     total_material=20,
-#     completed_material=5,
-#     days_remaining=14,
-#     weights=weights
-# )
-
-
-# priority = calculate_priority(
-#     difficulty=3.0,
-#     grade=90,
-#     total_material=20,
-#     completed_material=15,
-#     days_remaining=30,
-#     weights=weights
-# )
-
-
-# priority = calculate_priority(
-#     difficulty=7.0,
-#     grade=70,
-#     total_material=20,
-#     completed_material=10,
-#     days_remaining=1,
-#     weights=weights
-# )
-
-
-# priority = calculate_priority(
-#     difficulty=8.0,
-#     grade=75,
-#     total_material=20,
-#     completed_material=20,
-#     days_remaining=14,
-#     weights=weights
-# )
-
-
 # print(f"Priority: {priority:.2f}")

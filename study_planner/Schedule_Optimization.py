@@ -18,24 +18,18 @@ Suggested signature:
 
 
 import math
-
-
-# ============================================================
-# TASK 5 — SCHEDULE OPTIMIZATION
-# ============================================================
-
-
-# ------------------------------------------------------------
-# 1. AHP WEIGHT CALCULATION
-# ------------------------------------------------------------
+from itertools import product
+import schedule_generation
 
 def calculate_ahp_weights(matrix):
+
     n = len(matrix)
 
-    # Step 1: Calculate column sums
+    # Sum each column
     column_sums = []
 
     for j in range(n):
+
         total = 0
 
         for i in range(n):
@@ -43,45 +37,41 @@ def calculate_ahp_weights(matrix):
 
         column_sums.append(total)
 
-    # Step 2: Normalize the matrix
     normalized_matrix = []
 
     for i in range(n):
+
         row = []
 
         for j in range(n):
+
             value = matrix[i][j] / column_sums[j]
+
             row.append(value)
 
         normalized_matrix.append(row)
 
-    # Step 3: Calculate row averages
+    # Average each row
     weights = []
 
     for i in range(n):
+
         row_average = sum(normalized_matrix[i]) / n
+
         weights.append(row_average)
 
     return weights
 
-
-# ------------------------------------------------------------
-# 2. TASK 5 AHP COMPARISON MATRIX
-# ------------------------------------------------------------
-
-# Order:
-# P = Priority Satisfaction
-# E = Deadline/Event Satisfaction
-# R = Preference Satisfaction
-# B = Workload Balance
-
 comparison_matrix = [
 
-    #    P    E    R    B
-    [   1,  1/2,  3,   3 ],   # P
-    [   2,   1,  5,   5 ],   # E
-    [ 1/3, 1/5,  1, 1/2 ],   # R
-    [ 1/3, 1/5,  2,   1 ]     # B
+    [1,   1/2, 3,   3],
+
+    [2,   1,   5,   5],
+
+    [1/3, 1/5, 1,   1/2],
+
+    [1/3, 1/5, 2,   1]
+
 ]
 
 
@@ -93,159 +83,162 @@ wR = weights[2]
 wB = weights[3]
 
 
-print("Task 5 AHP Weights")
+print("\nTask 5 AHP Weights")
 print("------------------")
+
 print(f"Priority:   {wP:.3f}")
 print(f"Deadline:   {wE:.3f}")
 print(f"Preference: {wR:.3f}")
 print(f"Balance:    {wB:.3f}")
 print(f"Total:      {sum(weights):.3f}")
 
-
-# ------------------------------------------------------------
-# 3. PRIORITY SATISFACTION
-# ------------------------------------------------------------
-
 def calculate_priority_satisfaction(schedule, courses):
-    """
-    schedule:
-        dictionary containing study hours for each course
 
-        Example:
-        {
-            "Math": 6,
-            "Programming": 4,
-            "Physics": 2
-        }
-
-    courses:
-        dictionary containing course priorities
-
-        Example:
-        {
-            "Math": 0.8,
-            "Programming": 0.5,
-            "Physics": 0.3
-        }
-    """
-
-    total_study_hours = sum(schedule.values())
-
-    if total_study_hours == 0:
-        return 0
-
-    numerator = 0
+    total_hours = 0
+    weighted_hours = 0
+    total_priority = 0
 
     for course in courses:
-        priority = courses[course]
-        hours = schedule.get(course, 0)
 
-        numerator += priority * hours
+        priority = course["priority"]
 
-    denominator = total_study_hours * sum(courses.values())
+        total_priority += priority
 
-    if denominator == 0:
+        for session in schedule:
+
+            if session["course"] == course["course"]:
+
+                hours = session["duration"]
+
+                total_hours += hours
+
+                weighted_hours += priority * hours
+
+    if total_hours == 0 or total_priority == 0:
         return 0
 
-    score = numerator / denominator
+    score = weighted_hours / (total_hours * total_priority)
 
     return min(score, 1)
 
-
-# ------------------------------------------------------------
-# 4. DEADLINE / EVENT SATISFACTION
-# ------------------------------------------------------------
-
-def calculate_deadline_satisfaction(events):
-    """
-    events is a list of dictionaries.
-
-    Example:
-
-    [
-        {
-            "required_hours": 4,
-            "scheduled_before_deadline": 4
-        },
-        {
-            "required_hours": 6,
-            "scheduled_before_deadline": 5
-        }
-    ]
-    """
+def calculate_deadline_satisfaction(schedule, courses):
 
     total_required = 0
-    total_completed = 0
+    completed_before_deadline = 0
 
-    for event in events:
+    day_order = {
+        "Sunday": 0,
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6
+    }
 
-        required = event["required_hours"]
-        completed = event["scheduled_before_deadline"]
+    for course in courses:
 
-        total_required += required
-        total_completed += min(completed, required)
+        deadline = course.get("deadline")
+
+        if deadline is None:
+            continue
+
+        required_hours = course["allocated_hours"]
+
+        total_required += required_hours
+
+        deadline_number = day_order[deadline]
+
+        for session in schedule:
+
+            if session["course"] != course["course"]:
+                continue
+
+            session_day = day_order[session["day"]]
+
+            if session_day <= deadline_number:
+
+                completed_before_deadline += session["duration"]
 
     if total_required == 0:
         return 1
 
-    score = total_completed / total_required
+    score = completed_before_deadline / total_required
 
     return min(score, 1)
 
+def calculate_preference_satisfaction(schedule, preferred_times):
 
-# ------------------------------------------------------------
-# 5. PREFERENCE SATISFACTION
-# ------------------------------------------------------------
-
-def calculate_preference_satisfaction(sessions):
-    """
-    sessions is a list of study sessions.
-
-    Example:
-
-    [
-        {"preferred": True},
-        {"preferred": True},
-        {"preferred": False}
-    ]
-    """
-
-    if len(sessions) == 0:
+    if len(schedule) == 0:
         return 1
 
     preferred_sessions = 0
 
-    for session in sessions:
+    for session in schedule:
 
-        if session["preferred"]:
+        session_start = schedule_generation.time_to_minutes(
+            session["start"]
+        )
+
+        session_end = schedule_generation.time_to_minutes(
+            session["end"]
+        )
+
+        preferred = False
+
+        for preference in preferred_times:
+
+            if preference["day"] != session["day"]:
+                continue
+
+            preference_start = schedule_generation.time_to_minutes(
+                preference["start"]
+            )
+
+            preference_end = schedule_generation.time_to_minutes(
+                preference["end"]
+            )
+
+            if (
+                session_start >= preference_start
+                and
+                session_end <= preference_end
+            ):
+
+                preferred = True
+                break
+
+        if preferred:
             preferred_sessions += 1
 
-    score = preferred_sessions / len(sessions)
+    score = preferred_sessions / len(schedule)
 
     return score
 
+def calculate_workload_balance(schedule):
 
-# ------------------------------------------------------------
-# 6. WORKLOAD BALANCE
-# ------------------------------------------------------------
+    day_hours = {}
 
-def calculate_workload_balance(daily_hours):
-    """
-    daily_hours is a list containing study hours for each day.
+    for session in schedule:
 
-    Example:
+        day = session["day"]
 
-    [3, 4, 3, 2, 4, 3, 3]
-    """
+        if day not in day_hours:
+            day_hours[day] = 0
 
-    if len(daily_hours) == 0:
+        day_hours[day] += session["duration"]
+
+    if len(day_hours) == 0:
         return 1
+
+    daily_hours = list(day_hours.values())
 
     average = sum(daily_hours) / len(daily_hours)
 
     variance = 0
 
     for hours in daily_hours:
+
         variance += (hours - average) ** 2
 
     variance = variance / len(daily_hours)
@@ -256,20 +249,11 @@ def calculate_workload_balance(daily_hours):
 
     return score
 
-
-# ------------------------------------------------------------
-# 7. FINAL SCHEDULE SCORE
-# ------------------------------------------------------------
-
 def calculate_schedule_score(
         schedule,
         courses,
-        events,
-        sessions,
-        daily_hours
-    ):
-
-    # Calculate the four criteria
+        preferred_times
+):
 
     P = calculate_priority_satisfaction(
         schedule,
@@ -277,87 +261,376 @@ def calculate_schedule_score(
     )
 
     E = calculate_deadline_satisfaction(
-        events
+        schedule,
+        courses
     )
 
     R = calculate_preference_satisfaction(
-        sessions
+        schedule,
+        preferred_times
     )
 
     B = calculate_workload_balance(
-        daily_hours
+        schedule
     )
 
-    # Final weighted score
+    final_score = (
 
-    score = (
         wP * P
-        + wE * E
-        + wR * R
-        + wB * B
+        +
+        wE * E
+        +
+        wR * R
+        +
+        wB * B
+
     )
 
-    return score
+    return final_score, P, E, R, B
 
+def is_valid_schedule(schedule, courses):
 
-# ------------------------------------------------------------
-# 8. CHECK HARD CONSTRAINTS
-# ------------------------------------------------------------
+    for course in courses:
 
-def is_valid_schedule(schedule_data):
-    """
-    Hard constraint violations make a schedule invalid.
+        required_hours = course["allocated_hours"]
 
-    schedule_data should contain:
+        scheduled_hours = 0
 
-        {
-            "has_conflict": False,
-            "deadline_violation": False,
-            "unavailable_time_used": False
-        }
-    """
+        for session in schedule:
 
-    if schedule_data["has_conflict"]:
-        return False
+            if session["course"] == course["course"]:
 
-    if schedule_data["deadline_violation"]:
-        return False
+                scheduled_hours += session["duration"]
 
-    if schedule_data["unavailable_time_used"]:
-        return False
+        if scheduled_hours < required_hours:
+
+            return False
+
+    for i in range(len(schedule)):
+
+        for j in range(i + 1, len(schedule)):
+
+            session1 = schedule[i]
+            session2 = schedule[j]
+
+            if session1["day"] != session2["day"]:
+                continue
+
+            start1 = schedule_generation.time_to_minutes(
+                session1["start"]
+            )
+
+            end1 = schedule_generation.time_to_minutes(
+                session1["end"]
+            )
+
+            start2 = schedule_generation.time_to_minutes(
+                session2["start"]
+            )
+
+            end2 = schedule_generation.time_to_minutes(
+                session2["end"]
+            )
+
+            if schedule_generation.overlaps(
+                start1,
+                end1,
+                start2,
+                end2
+            ):
+
+                return False
+
+    day_order = {
+        "Sunday": 0,
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6
+    }
+
+    for session in schedule:
+
+        for course in courses:
+
+            if session["course"] != course["course"]:
+                continue
+
+            deadline = course.get("deadline")
+
+            if deadline is None:
+                continue
+
+            if day_order[session["day"]] > day_order[deadline]:
+
+                return False
 
     return True
 
+def generate_schedule_options(
+        courses,
+        availability,
+        classes,
+        unavailable,
+        preferred_times=None,
+        session_length=2,
+        max_options=50
+):
 
-# ------------------------------------------------------------
-# 9. OPTIMIZE / RANK SCHEDULES
-# ------------------------------------------------------------
+    if preferred_times is None:
+        preferred_times = []
 
-def optimize_schedules(schedules):
+    day_order = {
+        "Sunday": 0,
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6
+    }
 
-    valid_schedules = []
+    courses = sorted(
+        courses,
+        key=lambda course: (
+            day_order.get(course.get("deadline"), 999),
+            -course["priority"]
+        )
+    )
+
+    sessions = []
+
+    for course in courses:
+
+        course_sessions = schedule_generation.split_into_sessions(
+            course["allocated_hours"],
+            session_length
+        )
+
+        for duration in course_sessions:
+
+            sessions.append({
+
+                "course": course["course"],
+
+                "priority": course["priority"],
+
+                "duration": duration,
+
+                "deadline": course.get("deadline")
+
+            })
+    session_options = []
+
+    for session in sessions:
+
+        slots = schedule_generation.generate_available_slots(
+            availability,
+            unavailable,
+            classes,
+            session["duration"]
+        )
+
+        possible_slots = []
+
+        for slot in slots:
+            deadline = session["deadline"]
+
+            if deadline is not None:
+
+                if day_order[slot["day"]] > day_order[deadline]:
+
+                    continue
+            preference_score = schedule_generation.preferred_slot_score(
+                slot,
+                preferred_times
+            )
+
+            possible_slots.append(
+                (preference_score, slot)
+            )
+
+        possible_slots.sort(
+            key=lambda x: x[0],
+            reverse=True
+        )
+
+        session_options.append(
+            possible_slots[:10]
+        )
+
+    for options in session_options:
+
+        if len(options) == 0:
+
+            print(
+                "Error: No feasible schedule exists "
+                "under the current constraints."
+            )
+
+            return []
+
+    schedules = []
+
+    combinations = product(*session_options)
+
+    for combination in combinations:
+
+        schedule = []
+
+        for session, selected in zip(
+                sessions,
+                combination
+        ):
+
+            slot = selected[1]
+
+            schedule.append({
+
+                "course": session["course"],
+
+                "day": slot["day"],
+
+                "start": slot["start"],
+
+                "end": slot["end"],
+
+                "duration": session["duration"],
+
+                "priority": session["priority"]
+
+            })
+
+        if is_valid_schedule(schedule, courses):
+
+            schedule.sort(
+                key=lambda session: (
+                    day_order[session["day"]],
+                    schedule_generation.time_to_minutes(
+                        session["start"]
+                    )
+                )
+            )
+
+            schedules.append(schedule)
+
+        if len(schedules) >= max_options:
+
+            break
+
+    return schedules
+
+def optimize_schedules(
+        schedules,
+        courses,
+        preferred_times
+):
+
+    results = []
 
     for schedule in schedules:
 
-        if not is_valid_schedule(schedule):
-            continue
-
-        score = calculate_schedule_score(
-            schedule["course_hours"],
-            schedule["courses"],
-            schedule["events"],
-            schedule["sessions"],
-            schedule["daily_hours"]
+        score, P, E, R, B = calculate_schedule_score(
+            schedule,
+            courses,
+            preferred_times
         )
 
-        schedule["score"] = score
+        results.append({
 
-        valid_schedules.append(schedule)
+            "schedule": schedule,
 
-    # Highest score first
-    valid_schedules.sort(
-        key=lambda x: x["score"],
+            "score": score,
+
+            "priority_score": P,
+
+            "deadline_score": E,
+
+            "preference_score": R,
+
+            "balance_score": B
+
+        })
+
+    results.sort(
+        key=lambda result: result["score"],
         reverse=True
     )
 
-    return valid_schedules
+    return results
+
+
+def print_best_schedule(results):
+
+    if len(results) == 0:
+
+        print("No valid schedules were found.")
+
+        return
+
+    best = results[0]
+
+    print("\n====================================")
+    print("BEST SCHEDULE")
+    print("====================================")
+
+    for session in best["schedule"]:
+
+        print(
+            f'{session["day"]} | '
+            f'{session["start"]} - '
+            f'{session["end"]} | '
+            f'{session["course"]}'
+        )
+
+    print("\nScores")
+    print("------------------------------------")
+
+    print(
+        f'Priority Satisfaction: '
+        f'{best["priority_score"]:.3f}'
+    )
+
+    print(
+        f'Deadline Satisfaction: '
+        f'{best["deadline_score"]:.3f}'
+    )
+
+    print(
+        f'Preference Satisfaction: '
+        f'{best["preference_score"]:.3f}'
+    )
+
+    print(
+        f'Workload Balance: '
+        f'{best["balance_score"]:.3f}'
+    )
+
+    print("------------------------------------")
+
+    print(
+        f'FINAL SCORE: '
+        f'{best["score"]:.3f}'
+    )
+
+    print("====================================")
+
+schedules = generate_schedule_options(
+    schedule_generation.courses,
+    schedule_generation.availability,
+    schedule_generation.classes,
+    schedule_generation.unavailable,
+    schedule_generation.preferred_times,
+    session_length=2,
+    max_options=50
+)
+
+results = optimize_schedules(
+    schedules,
+    schedule_generation.courses,
+    schedule_generation.preferred_times
+)
+
+print_best_schedule(results)

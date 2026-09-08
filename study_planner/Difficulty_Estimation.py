@@ -11,22 +11,6 @@ import json
 
 
 def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
-    """
-    Calculate a personalized difficulty score for a course.
-
-    Args:
-        base_difficulty (float): The course's official difficulty (0-10).
-        prerequisites (dict): Mapping of prerequisite name -> {
-            "personal_difficulty": float,  # how hard the student found it
-            "influence": float              # how relevant it is to this course
-        }
-        w (float): Weight given to prerequisite history vs. base difficulty
-            (0 = ignore prerequisites, 1 = ignore base difficulty).
-
-    Returns:
-        float: Estimated personal difficulty for the course.
-    """
-
     if not prerequisites:
         return base_difficulty
 
@@ -50,9 +34,3 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     return final_difficulty
 
 
-    # Example of loading a course from the real project data file:
-    #
-    # from pathlib import Path
-    # data_path = Path(__file__).resolve().parent.parent / "data" / "dummy_data.json"
-    # with open(data_path, "r", encoding="utf-8") as file:
-    #     data = json.load(file)
