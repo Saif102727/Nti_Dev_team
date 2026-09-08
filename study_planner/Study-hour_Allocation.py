@@ -147,3 +147,23 @@ def allocate_study_hours(courses, weekday_hours, weekdays, weekend_hours, weeken
 # )
 
 # print(allocations)
+
+
+courses = [
+    {"course": "Math", "priority": 0.30},
+    {"course": "Physics", "priority": 0.20},
+    {"course": "Programming", "priority": 0.20},
+    {"course": "Circuits", "priority": 0.20},
+    {"course": "Electronics", "priority": 0.10}
+]
+
+allocations = allocate_study_hours(
+    courses,
+    weekday_hours=2,
+    weekdays=4,
+    weekend_hours=0,
+    weekend_days=2,
+    min_hours=2
+)
+
+print(allocations)
