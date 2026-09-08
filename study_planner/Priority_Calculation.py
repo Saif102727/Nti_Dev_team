@@ -102,11 +102,11 @@ comparison_matrix = [
 
 weights = calculate_ahp_weights(comparison_matrix)
 
-print("Difficulty:", weights[0])
-print("Weakness:", weights[1])
-print("Urgency:", weights[2])
-print("Material:", weights[3])
-print("Total:", sum(weights))
+# print("Difficulty:", weights[0])
+# print("Weakness:", weights[1])
+# print("Urgency:", weights[2])
+# print("Material:", weights[3])
+# print("Total:", sum(weights))
 
 # priority = calculate_priority(
 #     difficulty=7.0,
@@ -149,14 +149,14 @@ print("Total:", sum(weights))
 # )
 
 
-priority = calculate_priority(
-    difficulty=8.0,
-    grade=75,
-    total_material=20,
-    completed_material=20,
-    days_remaining=14,
-    weights=weights
-)
+# priority = calculate_priority(
+#     difficulty=8.0,
+#     grade=75,
+#     total_material=20,
+#     completed_material=20,
+#     days_remaining=14,
+#     weights=weights
+# )
 
 
-print(f"Priority: {priority:.2f}")
+# print(f"Priority: {priority:.2f}")
