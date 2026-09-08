@@ -50,54 +50,6 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     return final_difficulty
 
 
-# ==========================================
-# Manual test / demo cases
-# ==========================================
-#
-# Run this file directly (`python Difficulty_Estimation.py`) to see sample
-# output. This block does NOT run when the module is imported elsewhere.
-
-if __name__ == "__main__":
-
-    sample_cases = [
-        {
-            "label": "No prerequisites",
-            "base_difficulty": 6.5,
-            "prerequisites": {}
-        },
-        {
-            "label": "Single easy prerequisite",
-            "base_difficulty": 7.0,
-            "prerequisites": {
-                "Programming 1": {"personal_difficulty": 8.0, "influence": 1.0}
-            }
-        },
-        {
-            "label": "Multiple prerequisites, mixed influence",
-            "base_difficulty": 7.5,
-            "prerequisites": {
-                "Physics 2": {"personal_difficulty": 6.0, "influence": 0.75},
-                "Math 2": {"personal_difficulty": 8.0, "influence": 1.0},
-                "Math 1": {"personal_difficulty": 7.0, "influence": 0.5}
-            }
-        },
-        {
-            "label": "Student struggled with a highly-influential prerequisite",
-            "base_difficulty": 8.0,
-            "prerequisites": {
-                "Math 2": {"personal_difficulty": 3.0, "influence": 1.0},
-                "Physics 2": {"personal_difficulty": 4.0, "influence": 0.75}
-            }
-        }
-    ]
-
-    for case in sample_cases:
-        difficulty = calculate_difficulty(
-            case["base_difficulty"],
-            case["prerequisites"]
-        )
-        print(f"{case['label']}: {difficulty:.2f}/10")
-
     # Example of loading a course from the real project data file:
     #
     # from pathlib import Path
