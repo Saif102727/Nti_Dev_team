@@ -8,23 +8,17 @@ new course).
 """
 
 import json
-
-
 def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     """
-    Calculate a personalized difficulty score for a course.
+    Formula:
 
-    Args:
-        base_difficulty (float): The course's official difficulty (0-10).
-        prerequisites (dict): Mapping of prerequisite name -> {
-            "personal_difficulty": float,  # how hard the student found it
-            "influence": float              # how relevant it is to this course
-        }
-        w (float): Weight given to prerequisite history vs. base difficulty
-            (0 = ignore prerequisites, 1 = ignore base difficulty).
+    D_C = (1 - w) * B_C
+          + w * (sum(D_i * R_i) / sum(R_i))
 
-    Returns:
-        float: Estimated personal difficulty for the course.
+    B_C = base course difficulty
+    D_i = student's personal difficulty in prerequisite
+    R_i = influence of prerequisite
+    w   = weight given to prerequisite history
     """
 
     if not prerequisites:
@@ -34,6 +28,7 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     influence_sum = 0
 
     for prerequisite in prerequisites.values():
+
         difficulty = prerequisite["personal_difficulty"]
         influence = prerequisite["influence"]
 
@@ -49,10 +44,58 @@ def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
 
     return final_difficulty
 
+def estimate_student_difficulties(student):
 
-    # Example of loading a course from the real project data file:
-    #
-    # from pathlib import Path
-    # data_path = Path(__file__).resolve().parent.parent / "data" / "dummy_data.json"
-    # with open(data_path, "r", encoding="utf-8") as file:
-    #     data = json.load(file)
+    courses = {}
+
+    for course_name, course_data in student["courses"].items():
+
+        difficulty = calculate_difficulty(
+            course_data["base_difficulty"],
+            course_data["completed_prerequisites"]
+        )
+
+        courses[course_name] = course_data.copy()
+
+        courses[course_name]["difficulty"] = difficulty
+
+    return courses
+
+def load_students(filename=r"data\dummy_data.json"):
+
+    with open(filename, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def get_student(students, student_id):
+
+    for student in students:
+
+        if student["student_id"] == student_id:
+            return student
+
+    raise ValueError(
+        f"Student {student_id} was not found."
+    )
+
+
+if __name__ == "__main__":
+
+    students = load_students()
+
+    student = get_student(
+        students,
+        "STU-2026-001"
+    )
+
+    difficulties = estimate_student_difficulties(student)
+
+    print("\nDifficulty Estimation")
+    print("=====================")
+
+    for course, data in difficulties.items():
+
+        print(
+            f"{course}: "
+            f"{data['difficulty']:.2f}/10"
+        )
