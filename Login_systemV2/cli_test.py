@@ -11,6 +11,7 @@ from db import init_db
 from auth_service import (
     register,
     authenticate,
+    change_password,
     UsernameTakenError,
     WeakPasswordError,
     InvalidCredentialsError,
@@ -56,11 +57,24 @@ def run_login() -> None:
         print(f"Login failed: {error}")
 
 
+def run_change_password() -> None:
+    print("\n--- Change Password ---")
+    username = input("Username: ")
+    old_password = input("Current password: ")
+    new_password = input("New password: ")
+
+    try:
+        change_password(username, old_password, new_password)
+        print("Password changed successfully.")
+    except (InvalidCredentialsError, WeakPasswordError) as error:
+        print(f"Could not change password: {error}")
+
+
 def main() -> None:
     init_db()
 
     while True:
-        print("\n1) Register\n2) Login\n3) Exit")
+        print("\n1) Register\n2) Login\n3) Change Password\n4) Exit")
         choice = input("Choose an option: ").strip()
 
         if choice == "1":
@@ -68,6 +82,8 @@ def main() -> None:
         elif choice == "2":
             run_login()
         elif choice == "3":
+            run_change_password()
+        elif choice == "4":
             break
         else:
             print("Invalid option.")

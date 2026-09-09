@@ -58,18 +58,18 @@ def register(
     faculty: str,
     certificate: str,
     student_id: str = None,
+    preferred_study_location: str = "Home",
     daily_study_hours: dict = None,
     free_days: list = None,
-    preferred_study_location: str = "Home",
 ) -> str:
     """
     Creates a new student record + a linked user account.
 
-    daily_study_hours / free_days / preferred_study_location let the
-    GUI collect the student's weekly availability at sign-up time so
-    the study planner has real data to work with immediately. They
-    all have sensible defaults so existing callers (e.g. cli_test.py)
-    keep working unchanged.
+    preferred_study_location / daily_study_hours / free_days are optional —
+    older callers that don't pass them still work exactly as before
+    (empty defaults, fillable later from a profile screen). Callers that
+    DO collect them at registration time (e.g. login_page.py's form) can
+    pass them in directly so they're saved immediately.
 
     Returns the newly created student_id.
     Raises UsernameTakenError or WeakPasswordError on failure.
@@ -86,14 +86,9 @@ def register(
     if student_id is None:
         student_id = f"STU-{uuid.uuid4().hex[:8].upper()}"
 
-    if not isinstance(daily_study_hours, dict):
-        daily_study_hours = {}
-
-    if not isinstance(free_days, list):
-        free_days = []
-
-    if not preferred_study_location:
-        preferred_study_location = "Home"
+    # Mutable defaults must never live in the function signature itself.
+    daily_study_hours = daily_study_hours or {}
+    free_days = free_days or []
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -105,9 +100,6 @@ def register(
         if cursor.fetchone() is not None:
             raise UsernameTakenError("This username is already taken.")
 
-        # Student record starts with sensible defaults for the fields
-        # that aren't collected at registration time. These can be
-        # filled in later from the profile screen.
         cursor.execute(
             """
             INSERT INTO students (
@@ -199,42 +191,52 @@ def authenticate(username: str, password: str) -> dict:
 
 
 # ==========================================
-# Persist progress (called from the GUI)
+# Change Password
 # ==========================================
 
-def update_points(student_id: str, points: int) -> None:
+def change_password(username: str, old_password: str, new_password: str) -> None:
     """
-    Persists the student's current reward-points total to the
-    database. Called from the Streamlit app whenever points change
-    (finishing a study session, buying a shop item, ...) so progress
-    survives logging out and back in.
-    """
-    conn = get_connection()
-    cursor = conn.cursor()
+    Lets an already-registered user change their own password.
 
-    try:
-        cursor.execute(
-            "UPDATE students SET points = ? WHERE student_id = ?",
-            (max(0, int(points or 0)), student_id),
+    Requires the CURRENT password as proof of identity — this is not a
+    "reset" (that would need a separate recovery flow, e.g. via email).
+
+    Raises InvalidCredentialsError if username/old_password don't match.
+    Raises WeakPasswordError if new_password doesn't meet requirements.
+    """
+    if len(new_password) < MIN_PASSWORD_LENGTH:
+        raise WeakPasswordError(
+            f"Password must be at least {MIN_PASSWORD_LENGTH} characters."
         )
-        conn.commit()
-    finally:
-        conn.close()
-
-
-def update_daily_study_hours(student_id: str, daily_study_hours: dict) -> None:
-    """Persists an updated weekly study-hours schedule for the student."""
-    if not isinstance(daily_study_hours, dict):
-        return
 
     conn = get_connection()
     cursor = conn.cursor()
 
     try:
         cursor.execute(
-            "UPDATE students SET daily_study_hours = ? WHERE student_id = ?",
-            (json.dumps(daily_study_hours), student_id),
+            "SELECT password_hash, salt FROM users WHERE username = ?",
+            (username.strip(),),
         )
+        row = cursor.fetchone()
+
+        if row is None:
+            raise InvalidCredentialsError("Invalid username or password.")
+
+        if not verify_password(old_password, row["salt"], row["password_hash"]):
+            raise InvalidCredentialsError("Invalid username or password.")
+
+        new_salt = generate_salt()
+        new_hash = hash_password(new_password, new_salt)
+
+        cursor.execute(
+            "UPDATE users SET password_hash = ?, salt = ? WHERE username = ?",
+            (new_hash, new_salt, username.strip()),
+        )
+
         conn.commit()
+
+    except sqlite3.Error:
+        conn.rollback()
+        raise
     finally:
         conn.close()

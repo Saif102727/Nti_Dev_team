@@ -109,7 +109,7 @@ def render_logout_button():
     st.markdown(f"👤 **{student.get('name', 'Student')}**")
     st.caption(f"ID: {student.get('student_id', 'N/A')}")
 
-    if st.button("🚪 Log out", key="logout_button", width="stretch"):
+    if st.button("🚪 Log out", key="logout_button", use_container_width=True):
         logout()
         st.rerun()
 
@@ -126,7 +126,7 @@ def _render_login_form():
         )
 
         submitted = st.form_submit_button(
-            "Log in", type="primary", width="stretch"
+            "Log in", type="primary", use_container_width=True
         )
 
     if not submitted:
@@ -225,7 +225,7 @@ def _render_register_form():
         )
 
         submitted = st.form_submit_button(
-            "Create account", type="primary", width="stretch"
+            "Create account", type="primary", use_container_width=True
         )
 
     if not submitted:
