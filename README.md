@@ -11,11 +11,23 @@ Nti_Dev_team/
 ├── model.py                    # Core dataclasses: Student, Course, Session, Time, AcademicEvent
 ├── loader.py                   # Loads data/dummy_data.json into the model.py dataclasses
 ├── requirements.txt
+│
 ├── data/
 │   └── dummy_data.json         # Sample student/course/event data
+│   └── data_parser.py          # Commit
+│ 
+│── Login_systemV2\
+│   └── auth_service.py         # Commit
+│   └── bulk_register.py        # Commit
+│   └── cli_test.py             # Commit
+│   └── db.py                   # Commit
+│   └── login_page.py           # Commit
+│   └── security.py             # Commit
+│ 
 ├── dataclass/
 │   ├── schedule.py             # Schedule: conflict checks, prerequisite checks, free-time gaps
 │   └── optimizer.py            # TODO: study-plan optimizer (see docstring)
+│ 
 ├── study_planner/
 │   ├── Difficulty_Estimation.py   # Implemented: personalized course difficulty
 │   ├── Priority_Calculation.py    # TODO
@@ -23,6 +35,7 @@ Nti_Dev_team/
 │   ├── Schedule_Optimization.py   # TODO
 │   ├── Study-hour_Allocation.py   # TODO
 │   └── Notifications.py           # TODO
+│ 
 └── Main/
     ├── main.py                 # Streamlit entry point / UI
     └── Timer/
