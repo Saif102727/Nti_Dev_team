@@ -1559,14 +1559,31 @@ with tab2:
                 available_hours=total_hours,
                 courses=course_list,
             )
+            study_plan = StudyOptimizer.allocate_study_time( available_hours=total_hours,
+                courses=course_list,) 
 
-            # ---------------------------------------------
-            # Display Study Plan
-            # ---------------------------------------------
 
-            if study_plan:
+# Send notification
+if not st.session_state.get("notification_sent", False):
+    email = student.get("email")
 
-                for course_name, details in study_plan.items():
+    if email:
+        notification_sent = send_notification_email(
+            recipient_email=email,
+            quiz_hours=24,
+            remaining_material=0,
+            total_material=0,
+            study_hours_needed=total_hours,
+            schedule_updated=True,
+        )
+
+        if notification_sent:
+            st.session_state.notification_sent = True
+
+# Display Study Plan
+    if study_plan:
+
+            for course_name, details in study_plan.items():
 
                     difficulty = safe_int(
                         details.get(
@@ -2130,7 +2147,7 @@ if _current_points != safe_int(student.get("points", 0), 0):
 
 
 # =========================================================
-# FOOTER
+# FOOTERs
 # =========================================================
 
 st.divider()
