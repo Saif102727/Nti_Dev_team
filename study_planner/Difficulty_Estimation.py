@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     student = get_student(
         students,
-        "STU-2026-001"
+        "STU-2026-010"
     )
 
     difficulties = estimate_student_difficulties(student)
