@@ -107,7 +107,7 @@ STUDY_TEMPLATES = {
     "pomodoro": {
         "name": "⏱️ Pomodoro (25/5)",
         "price": 0,
-        "desc": "25 دقيقة مذاكرة + 5 دقائق راحة",
+        "desc": "\u200f25 دقيقة مذاكرة - 5 دقائق راحة",
         "study_minutes": 25,
         "break_minutes": 5,
     },
@@ -115,7 +115,7 @@ STUDY_TEMPLATES = {
     "deep_work": {
         "name": "🧠 Deep Work (50/10)",
         "price": 300,
-        "desc": "50 دقيقة تركيز عميق + 10 دقائق راحة",
+        "desc": "\u200f50 دقيقة تركيز عميق - 10 دقائق راحة",
         "study_minutes": 50,
         "break_minutes": 10,
     },
@@ -123,7 +123,7 @@ STUDY_TEMPLATES = {
     "ultradian": {
         "name": "⚡ Ultradian (90/20)",
         "price": 300,
-        "desc": "90 دقيقة عمل مكثف + 20 دقيقة راحة",
+        "desc": "\u200f90 دقيقة عمل مكثف - 20 دقيقة راحة",
         "study_minutes": 90,
         "break_minutes": 20,
     },

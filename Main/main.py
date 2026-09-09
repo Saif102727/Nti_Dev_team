@@ -1584,11 +1584,15 @@ with tab2:
                         0.0,
                     )
 
-                    with st.container(border=True):
+                    diff_style = get_difficulty_style(
+                        difficulty
+                    )
 
-                        st.subheader(
-                            course_name
-                        )
+                    with st.expander(
+                        course_name,
+                        icon=diff_style["emoji"],
+                        expanded=True,
+                    ):
 
                         col1, col2 = st.columns(
                             2,
@@ -1599,7 +1603,8 @@ with tab2:
 
                             st.metric(
                                 "Difficulty",
-                                f"{difficulty}/5",
+                                f"{diff_style['label']} "
+                                f"({difficulty}/5)",
                             )
 
                         with col2:
