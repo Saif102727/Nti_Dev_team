@@ -306,44 +306,117 @@ def load_all_data(
 # LOAD CATALOG DATA (courses + academic events only)
 # =========================================================
 #
-# Used by Main/main_V2.py: the student themself now comes from the
-# login system (Login_system/auth_service.py -> a real SQLite record
-# tied to their account), while the shared course catalog and
-# academic-events calendar still come from a JSON file
-# (data/mock_university_data.json), since every student studies the
-# same set of courses.
+# Used by Main/main.py: the student themself now comes from the
+# login system (Login_systemV2/auth_service.py -> a real SQLite
+# record tied to their account), while the shared course catalog and
+# academic-events calendar are built from data/dummy_data.json.
+#
+# There is no pre-built, shared catalog file in this project
+# (data/mock_university_data.json doesn't exist). data/dummy_data.json
+# is instead a *per-student* dump — a list of 100 student records,
+# each with their own "courses" dict (name -> difficulty /
+# prerequisites / events) — used by the study_planner modules and
+# Login_systemV2/bulk_register.py. Every student in that file happens
+# to study the same set of courses with the same difficulty and event
+# schedule, so we build the shared catalog by merging the course +
+# event info across all of them (first-seen difficulty wins, and
+# per-course prerequisites/events are unioned/deduplicated).
 
 def load_courses_and_events(
     file_path: str | Path,
 ):
-    data = load_json(file_path)
+    file_path = Path(file_path)
 
-    courses_data = data.get(
-        "courses",
-        [],
-    )
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"Data file not found: {file_path}"
+        )
 
-    events_data = data.get(
-        "academic_events",
-        [],
-    )
+    with file_path.open(
+        "r",
+        encoding="utf-8-sig",
+    ) as file:
+        students = json.load(file)
 
-    if not isinstance(courses_data, list):
-        courses_data = []
+    if not isinstance(students, list):
+        students = []
 
-    if not isinstance(events_data, list):
-        events_data = []
+    course_difficulty: dict[str, int] = {}
+    course_prereqs: dict[str, set[str]] = {}
+    seen_events: set[tuple[str, str]] = set()
+    academic_events: list[AcademicEvent] = []
+
+    for student_record in students:
+
+        if not isinstance(student_record, dict):
+            continue
+
+        student_courses = student_record.get("courses", {})
+
+        if not isinstance(student_courses, dict):
+            continue
+
+        for course_name, course_info in student_courses.items():
+
+            if not isinstance(course_info, dict):
+                continue
+
+            if course_name not in course_difficulty:
+                try:
+                    raw_difficulty = float(
+                        course_info.get("base_difficulty", 5.0)
+                    )
+                except (TypeError, ValueError):
+                    raw_difficulty = 5.0
+
+                # base_difficulty is on a 0-10 scale; Course expects 1-5.
+                course_difficulty[course_name] = max(
+                    1, min(5, round(raw_difficulty / 2) or 1)
+                )
+
+            prereqs = course_prereqs.setdefault(course_name, set())
+            completed_prereqs = course_info.get(
+                "completed_prerequisites", {}
+            )
+
+            if isinstance(completed_prereqs, dict):
+                prereqs.update(completed_prereqs.keys())
+
+            for event in course_info.get("events", []):
+
+                if not isinstance(event, dict):
+                    continue
+
+                event_name = str(event.get("name", "Event"))
+                dedup_key = (course_name, event_name)
+
+                if dedup_key in seen_events:
+                    continue
+
+                seen_events.add(dedup_key)
+
+                try:
+                    week_number = int(event.get("week", 0))
+                except (TypeError, ValueError):
+                    week_number = 0
+
+                academic_events.append(
+                    AcademicEvent(
+                        event_name=event_name,
+                        week_number=max(0, week_number),
+                        course_id=course_name,
+                    )
+                )
 
     courses = [
-        load_course(course)
-        for course in courses_data
-        if isinstance(course, dict)
-    ]
-
-    academic_events = [
-        load_academic_event(event)
-        for event in events_data
-        if isinstance(event, dict)
+        Course(
+            course_id=course_name,
+            name=course_name,
+            difficulty_level=course_difficulty[course_name],
+            prerequisites=sorted(course_prereqs.get(course_name, set())),
+            sessions=[],
+        )
+        for course_name in course_difficulty
     ]
 
     return (

@@ -29,12 +29,16 @@ from Main.styles import (
     apply_styles,
     render_app_header,
     render_banner,
+    render_academic_events,
+    render_shop_banner_card,
+    render_shop_theme_card,
+    render_shop_template_card,
     get_active_template,
 )
 
-# Login system: make Login_system's plain (non-package) modules
+# Login system: make Login_systemV2's plain (non-package) modules
 # importable, then pull in the GUI + persistence helpers.
-LOGIN_SYSTEM_DIR = PROJECT_ROOT / "Login_system"
+LOGIN_SYSTEM_DIR = PROJECT_ROOT / "Login_systemV2"
 
 if str(LOGIN_SYSTEM_DIR) not in sys.path:
     sys.path.insert(0, str(LOGIN_SYSTEM_DIR))
@@ -74,7 +78,12 @@ student = st.session_state.auth_student
 # CONSTANTS
 # =========================================================
 
-CATALOG_FILE = PROJECT_ROOT / "data" / "mock_university_data.json"
+# NOTE: data/mock_university_data.json (a pre-built, shared course
+# catalog) is not part of this project. The only dataset that ships
+# with it is data/dummy_data.json — a *per-student* dump used by the
+# study_planner modules and Login_systemV2/bulk_register.py.
+# loader.load_courses_and_events() builds a shared catalog out of it.
+CATALOG_FILE = PROJECT_ROOT / "data" / "dummy_data.json"
 
 
 # =========================================================
@@ -1427,41 +1436,7 @@ with tab1:
         "Academic Events"
     )
 
-
-    if academic_events:
-
-        for event in academic_events:
-
-            week = get_value(
-                event,
-                "week_number",
-                default="N/A",
-            )
-
-            event_name = get_value(
-                event,
-                "event_name",
-                default="Event",
-            )
-
-            event_course_id = get_value(
-                event,
-                "course_id",
-                default="N/A",
-            )
-
-
-            st.write(
-                f"**Week {week}** — "
-                f"{event_name} "
-                f"({event_course_id})"
-            )
-
-    else:
-
-        st.info(
-            "No academic events available."
-        )
+    render_academic_events(academic_events)
 
 
 
@@ -1792,31 +1767,31 @@ with tab4:
                 index % theme_count
             ]:
 
-                st.markdown(
-                    f"### {item['name']}"
+                is_unlocked = (
+                    key in st.session_state.unlocked_themes
                 )
 
-                st.write(
-                    f"Cost: **{item['price']} Points**"
+                is_active = (
+                    st.session_state.active_theme == key
                 )
+
+                if is_active:
+                    card_status = "active"
+                elif is_unlocked:
+                    card_status = "owned"
+                else:
+                    card_status = "locked"
+
+                render_shop_theme_card(item, card_status)
 
 
                 # -------------------------------------------------
                 # UNLOCKED
                 # -------------------------------------------------
 
-                if key in st.session_state.unlocked_themes:
+                if is_unlocked:
 
-                    if (
-                        st.session_state.active_theme
-                        == key
-                    ):
-
-                        st.success(
-                            "Active"
-                        )
-
-                    else:
+                    if not is_active:
 
                         if st.button(
                             "Use Theme",
@@ -1908,46 +1883,35 @@ with tab4:
                 index % banner_count
             ]:
 
-                try:
+                # -------------------------------------------------
+                # STATUS (drives the badge on the card)
+                # -------------------------------------------------
 
-                    st.image(
-                        item["url"],
-                        width="stretch",
-                    )
-
-                except Exception:
-
-                    st.warning(
-                        "Unable to load banner preview."
-                    )
-
-
-                st.markdown(
-                    f"### {item['name']}"
+                is_unlocked = (
+                    key in st.session_state.unlocked_banners
                 )
 
-
-                st.write(
-                    f"Cost: **{item['price']} Points**"
+                is_active = (
+                    st.session_state.active_banner == key
                 )
+
+                if is_active:
+                    card_status = "active"
+                elif is_unlocked:
+                    card_status = "owned"
+                else:
+                    card_status = "locked"
+
+                render_shop_banner_card(item, card_status)
 
 
                 # -------------------------------------------------
                 # UNLOCKED
                 # -------------------------------------------------
 
-                if key in st.session_state.unlocked_banners:
+                if is_unlocked:
 
-                    if (
-                        st.session_state.active_banner
-                        == key
-                    ):
-
-                        st.success(
-                            "Active"
-                        )
-
-                    else:
+                    if not is_active:
 
                         if st.button(
                             "Use Banner",
@@ -2039,10 +2003,22 @@ with tab4:
                 index % template_count
             ]:
 
-                st.markdown(
-                    f"### {item['name']}"
+                is_unlocked = (
+                    key in st.session_state.unlocked_templates
                 )
 
+                is_active = (
+                    st.session_state.active_template == key
+                )
+
+                if is_active:
+                    card_status = "active"
+                elif is_unlocked:
+                    card_status = "owned"
+                else:
+                    card_status = "locked"
+
+                render_shop_template_card(item, card_status)
 
                 st.caption(
                     item.get(
@@ -2052,27 +2028,13 @@ with tab4:
                 )
 
 
-                st.write(
-                    f"Cost: **{item['price']} Points**"
-                )
-
-
                 # -------------------------------------------------
                 # UNLOCKED
                 # -------------------------------------------------
 
-                if key in st.session_state.unlocked_templates:
+                if is_unlocked:
 
-                    if (
-                        st.session_state.active_template
-                        == key
-                    ):
-
-                        st.success(
-                            "Active"
-                        )
-
-                    else:
+                    if not is_active:
 
                         if st.button(
                             "Use Template",

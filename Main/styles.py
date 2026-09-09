@@ -1,3 +1,4 @@
+import html as html_lib
 import textwrap
 import streamlit as st
 
@@ -80,8 +81,8 @@ BANNERS = {
         "name": "🌆 Neon Workspace",
         "price": 150,
         "url": (
-            "https://images.unsplash.com/"
-            "photo-1526374965328-7f61d4dc18c5"
+            "https://6a9e5c12b9f3f1e956cb1136.imgix.net/"
+            "%F0%9F%8C%86-Neon-study_banner-588013.png"
             "?q=80&w=1600&auto=format&fit=crop"
         ),
     },
@@ -106,7 +107,7 @@ STUDY_TEMPLATES = {
     "pomodoro": {
         "name": "⏱️ Pomodoro (25/5)",
         "price": 0,
-        "desc": "25 دقيقة مذاكرة + 5 دقائق راحة",
+        "desc": "\u200f25 دقيقة مذاكرة - 5 دقائق راحة",
         "study_minutes": 25,
         "break_minutes": 5,
     },
@@ -114,7 +115,7 @@ STUDY_TEMPLATES = {
     "deep_work": {
         "name": "🧠 Deep Work (50/10)",
         "price": 300,
-        "desc": "50 دقيقة تركيز عميق + 10 دقائق راحة",
+        "desc": "\u200f50 دقيقة تركيز عميق - 10 دقائق راحة",
         "study_minutes": 50,
         "break_minutes": 10,
     },
@@ -122,7 +123,7 @@ STUDY_TEMPLATES = {
     "ultradian": {
         "name": "⚡ Ultradian (90/20)",
         "price": 300,
-        "desc": "90 دقيقة عمل مكثف + 20 دقيقة راحة",
+        "desc": "\u200f90 دقيقة عمل مكثف - 20 دقيقة راحة",
         "study_minutes": 90,
         "break_minutes": 20,
     },
@@ -264,6 +265,283 @@ def render_banner():
     """
 
     render_html(banner_html)
+
+
+# =========================================================
+# ACADEMIC EVENTS
+# =========================================================
+#
+# Renders academic events (assignments, quizzes, midterms, finals...)
+# as a themed, week-grouped timeline instead of plain text lines.
+
+EVENT_TYPE_STYLES = {
+    "quiz": {"icon": "🧩", "label": "Quiz", "color": "#38bdf8"},
+    "assignment": {"icon": "📝", "label": "Assignment", "color": "#34d399"},
+    "midterm": {"icon": "📘", "label": "Midterm", "color": "#fbbf24"},
+    "final": {"icon": "🎓", "label": "Final", "color": "#f87171"},
+    "project": {"icon": "🛠️", "label": "Project", "color": "#a78bfa"},
+    "exam": {"icon": "🧾", "label": "Exam", "color": "#fb923c"},
+}
+
+DEFAULT_EVENT_STYLE = {"icon": "📌", "label": "Event", "color": "#818cf8"}
+
+
+def get_event_style(event_name: str) -> dict:
+    lowered = (event_name or "").lower()
+
+    for keyword, style in EVENT_TYPE_STYLES.items():
+        if keyword in lowered:
+            return style
+
+    return DEFAULT_EVENT_STYLE
+
+
+def _event_value(item, key, default=None):
+    """Supports both dataclass/object data and dictionaries."""
+
+    if isinstance(item, dict):
+        return item.get(key, default)
+
+    return getattr(item, key, default)
+
+
+def render_academic_events(events):
+
+    if not events:
+        st.info("No academic events available.")
+        return
+
+    grouped: dict[int, list] = {}
+
+    for event in events:
+
+        try:
+            week = int(
+                _event_value(event, "week_number", 0) or 0
+            )
+        except (TypeError, ValueError):
+            week = 0
+
+        grouped.setdefault(week, []).append(event)
+
+    weeks_sorted = sorted(grouped.keys())
+
+    week_rows_html = []
+
+    for week in weeks_sorted:
+
+        event_cards_html = []
+
+        for event in grouped[week]:
+
+            event_name = str(
+                _event_value(event, "event_name", "Event")
+            )
+
+            course_id = str(
+                _event_value(event, "course_id", "N/A")
+            )
+
+            style = get_event_style(event_name)
+
+            event_cards_html.append(
+                f"""
+                <div class="event-card" style="--event-color: {style['color']};">
+                    <div class="event-card-badge">
+                        {style['icon']} {html_lib.escape(style['label'])}
+                    </div>
+                    <div class="event-card-name">
+                        {html_lib.escape(event_name)}
+                    </div>
+                    <div class="event-card-course">
+                        📚 {html_lib.escape(course_id)}
+                    </div>
+                </div>
+                """
+            )
+
+        week_rows_html.append(
+            f"""
+            <div class="event-week-row">
+                <div class="event-week-marker">
+                    <div class="event-week-dot"></div>
+                    <div class="event-week-label">Week {week}</div>
+                </div>
+                <div class="event-week-cards">
+                    {''.join(event_cards_html)}
+                </div>
+            </div>
+            """
+        )
+
+    render_html(
+        f"""
+        <div class="event-timeline">
+            {''.join(week_rows_html)}
+        </div>
+        """
+    )
+
+
+# =========================================================
+# SHOP — PREVIEW CARDS
+# =========================================================
+#
+# One shared visual system for every purchasable item in the shop
+# (Banners, Themes, Study Templates): a media box (image / color
+# swatch / ratio bar depending on the item type) topped with a
+# status ribbon, and a dark-gradient overlay carrying the name +
+# the "💎 N Points" badge. The actual "Use" / "Buy" button stays a
+# real st.button rendered right after this, since Streamlit widgets
+# can't live inside raw HTML.
+
+SHOP_STATUS_STYLES = {
+    "active": ("✓ Active", "is-active"),
+    "owned": ("Owned", "is-owned"),
+    "locked": ("🔒 Locked", "is-locked"),
+}
+
+
+def _shop_status(status: str):
+    return SHOP_STATUS_STYLES.get(
+        status,
+        SHOP_STATUS_STYLES["locked"],
+    )
+
+
+def _render_shop_preview_card(media_html: str, name: str, price, status: str):
+
+    label, css_class = _shop_status(status)
+
+    render_html(
+        f"""
+        <div class="shop-preview-card">
+            <div class="shop-preview-media">
+                {media_html}
+                <div class="shop-preview-status {css_class}">
+                    {label}
+                </div>
+                <div class="shop-preview-overlay">
+                    <div class="shop-preview-title">
+                        {html_lib.escape(str(name))}
+                    </div>
+                    <div class="shop-preview-price">
+                        💎 {price} Points
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+    )
+
+
+# ---------------------------------------------------------
+# Banners — the media is the actual banner image
+# ---------------------------------------------------------
+
+def render_shop_banner_card(item: dict, status: str = "locked"):
+
+    name = item.get("name", "Banner")
+    price = item.get("price", 0)
+    url = html_lib.escape(str(item.get("url", "")), quote=True)
+
+    media_html = f"""
+    <img
+        class="shop-preview-image"
+        src="{url}"
+        alt="{html_lib.escape(str(name))}"
+        loading="lazy"
+        onerror="
+            this.style.display='none';
+            this.parentElement.classList.add('shop-preview-media-error');
+        "
+    />
+    """
+
+    _render_shop_preview_card(media_html, name, price, status)
+
+
+# ---------------------------------------------------------
+# Themes — the media is a live swatch of the theme's own colors
+# ---------------------------------------------------------
+
+def render_shop_theme_card(item: dict, status: str = "locked"):
+
+    name = item.get("name", "Theme")
+    price = item.get("price", 0)
+
+    bg = item.get("bg_color", "#1e293b")
+    bg2 = item.get("bg_color2", bg)
+    primary = item.get("primary_color", "#6366f1")
+    accent = item.get("accent_color", "#22c55e")
+    card = item.get("card_bg", bg)
+
+    media_html = f"""
+    <div
+        class="theme-swatch"
+        style="background: linear-gradient(135deg, {bg}, {bg2});"
+    >
+        <span class="theme-swatch-dot" style="background:{primary};"></span>
+        <span class="theme-swatch-dot" style="background:{accent};"></span>
+        <span class="theme-swatch-dot" style="background:{card};"></span>
+    </div>
+    """
+
+    _render_shop_preview_card(media_html, name, price, status)
+
+
+# ---------------------------------------------------------
+# Study templates — the media is a study/break ratio bar
+# ---------------------------------------------------------
+
+def render_shop_template_card(item: dict, status: str = "locked"):
+
+    theme = get_active_theme()
+    primary = theme["primary_color"]
+    accent = theme["accent_color"]
+
+    name = item.get("name", "Template")
+    price = item.get("price", 0)
+
+    try:
+        study_minutes = max(0, int(item.get("study_minutes", 0)))
+    except (TypeError, ValueError):
+        study_minutes = 0
+
+    try:
+        break_minutes = max(0, int(item.get("break_minutes", 0)))
+    except (TypeError, ValueError):
+        break_minutes = 0
+
+    total_minutes = max(1, study_minutes + break_minutes)
+    study_pct = round(study_minutes / total_minutes * 100)
+    break_pct = 100 - study_pct
+
+    media_html = f"""
+    <div
+        class="template-visual"
+        style="background: linear-gradient(135deg, {primary}, {accent});"
+    >
+        <div class="template-ratio-bar">
+            <div
+                class="template-ratio-segment"
+                style="width: {study_pct}%; background: rgba(255,255,255,0.92);"
+            ></div>
+            <div
+                class="template-ratio-segment"
+                style="width: {break_pct}%; background: rgba(255,255,255,0.28);"
+            ></div>
+        </div>
+        <div class="template-ratio-labels">
+            <span>🧠 {study_minutes}m focus</span>
+            <span>☕ {break_minutes}m break</span>
+        </div>
+    </div>
+    """
+
+    _render_shop_preview_card(media_html, name, price, status)
+
+
 
 
 # =========================================================
@@ -881,6 +1159,298 @@ def apply_styles():
 
 
         /* =============================================
+           SHOP — PREVIEW CARDS (banners / themes / templates)
+        ============================================= */
+
+        .shop-preview-card {{
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            margin-bottom: 10px;
+
+            border:
+                1px solid {primary}33;
+
+            box-shadow:
+                0 10px 28px rgba(0, 0, 0, 0.25);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }}
+
+
+        .shop-preview-card:hover {{
+            transform:
+                translateY(-4px);
+
+            border-color:
+                {accent}88;
+
+            box-shadow:
+                0 16px 36px {primary}40;
+        }}
+
+
+        .shop-preview-media {{
+            position: relative;
+
+            width: 100%;
+
+            aspect-ratio: 16 / 9;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    {card},
+                    {bg}
+                );
+        }}
+
+
+        .shop-preview-image {{
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }}
+
+
+        .shop-preview-media-error {{
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }}
+
+
+        .shop-preview-media-error::after {{
+            content: "🖼️ Preview unavailable";
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: {text};
+
+            opacity: 0.55;
+        }}
+
+
+        .shop-preview-overlay {{
+            position: absolute;
+
+            left: 0;
+
+            right: 0;
+
+            bottom: 0;
+
+            padding: 34px 16px 12px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.88),
+                    rgba(0, 0, 0, 0.15) 65%,
+                    rgba(0, 0, 0, 0) 100%
+                );
+        }}
+
+
+        .shop-preview-title {{
+            color: #ffffff !important;
+
+            font-size: 15px;
+
+            font-weight: 750;
+
+            line-height: 1.25;
+
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.65);
+        }}
+
+
+        .shop-preview-price {{
+            display: inline-block;
+
+            margin-top: 6px;
+
+            font-size: 11.5px;
+
+            font-weight: 650;
+
+            color: #ffffff;
+
+            background: {primary}CC;
+
+            padding: 3px 10px;
+
+            border-radius: 999px;
+
+            backdrop-filter: blur(4px);
+        }}
+
+
+        .shop-preview-status {{
+            position: absolute;
+
+            top: 10px;
+
+            right: 10px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.3px;
+
+            padding: 4px 11px;
+
+            border-radius: 999px;
+
+            backdrop-filter: blur(6px);
+
+            z-index: 2;
+        }}
+
+
+        .shop-preview-status.is-active {{
+            background: {accent}E6;
+
+            color: #0f172a;
+        }}
+
+
+        .shop-preview-status.is-owned {{
+            background: rgba(255, 255, 255, 0.16);
+
+            color: #ffffff;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.35);
+        }}
+
+
+        .shop-preview-status.is-locked {{
+            background: rgba(0, 0, 0, 0.55);
+
+            color: #f1f5f9;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.2);
+        }}
+
+
+        /* -----------------------------------------------
+           THEME SWATCH (media content for Theme cards)
+        ----------------------------------------------- */
+
+        .theme-swatch {{
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+        }}
+
+
+        .theme-swatch-dot {{
+            width: 22px;
+
+            height: 22px;
+
+            border-radius: 50%;
+
+            border:
+                2px solid rgba(255, 255, 255, 0.55);
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.35);
+        }}
+
+
+        /* -----------------------------------------------
+           TEMPLATE RATIO VISUAL (media content for
+           Study Template cards)
+        ----------------------------------------------- */
+
+        .template-visual {{
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            padding: 0 22px;
+        }}
+
+
+        .template-ratio-bar {{
+            width: 100%;
+
+            max-width: 220px;
+
+            height: 10px;
+
+            display: flex;
+
+            border-radius: 999px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.25);
+        }}
+
+
+        .template-ratio-segment {{
+            height: 100%;
+        }}
+
+
+        .template-ratio-labels {{
+            width: 100%;
+
+            max-width: 220px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 12px;
+
+            font-weight: 650;
+
+            color: #ffffff;
+
+            text-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.35);
+        }}
+
+
+        /* =============================================
            TIMER
         ============================================= */
 
@@ -906,6 +1476,212 @@ def apply_styles():
 
             box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.25);
+        }}
+
+
+        /* =============================================
+           ACADEMIC EVENTS
+        ============================================= */
+
+        .event-timeline {{
+            position: relative;
+
+            padding-left: 4px;
+
+            margin-top: 6px;
+        }}
+
+
+        .event-week-row {{
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }}
+
+
+        .event-week-marker {{
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            min-width: 64px;
+
+            position: relative;
+        }}
+
+
+        .event-week-dot {{
+            width: 12px;
+
+            height: 12px;
+
+            border-radius: 50%;
+
+            background: {accent};
+
+            box-shadow:
+                0 0 0 4px {accent}33;
+
+            margin-bottom: 6px;
+        }}
+
+
+        .event-week-row:not(:last-child)
+        .event-week-marker::after {{
+            content: "";
+
+            position: absolute;
+
+            top: 18px;
+
+            bottom: -20px;
+
+            width: 2px;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    {primary}66,
+                    {primary}11
+                );
+        }}
+
+
+        .event-week-label {{
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: {text};
+
+            opacity: 0.85;
+
+            white-space: nowrap;
+        }}
+
+
+        .event-week-cards {{
+            flex: 1;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }}
+
+
+        .event-card {{
+            background:
+                linear-gradient(
+                    145deg,
+                    {card}EE,
+                    {card}CC
+                );
+
+            border:
+                1px solid var(--event-color, {primary});
+
+            border-left:
+                4px solid var(--event-color, {primary});
+
+            border-radius: 12px;
+
+            padding: 10px 14px;
+
+            min-width: 180px;
+
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.15);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }}
+
+
+        .event-card:hover {{
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                var(--event-color, {primary})33;
+        }}
+
+
+        .event-card-badge {{
+            display: inline-block;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.3px;
+
+            color: var(--event-color, {primary});
+
+            background:
+                var(--event-color, {primary})1A;
+
+            padding: 2px 8px;
+
+            border-radius: 999px;
+
+            margin-bottom: 6px;
+        }}
+
+
+        .event-card-name {{
+            font-size: 14px;
+
+            font-weight: 650;
+
+            color: {text};
+
+            margin-bottom: 2px;
+        }}
+
+
+        .event-card-course {{
+            font-size: 12px;
+
+            color: {text};
+
+            opacity: 0.65;
+        }}
+
+
+        @media (max-width: 640px) {{
+
+            .event-week-row {{
+                flex-direction: column;
+
+                gap: 8px;
+            }}
+
+            .event-week-marker {{
+                flex-direction: row;
+
+                min-width: auto;
+            }}
+
+            .event-week-dot {{
+                margin-bottom: 0;
+
+                margin-right: 6px;
+            }}
+
+            .event-week-row:not(:last-child)
+            .event-week-marker::after {{
+                display: none;
+            }}
         }}
 
 
