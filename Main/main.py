@@ -1535,13 +1535,12 @@ with tab2:
             st.session_state.plan_generated = True
 
             st.rerun()
-
+            
         # =====================================================
         # GENERATE PLAN
         # =====================================================
 
         if st.session_state.plan_generated:
-
             st.success(
                 "Study plan generated successfully!"
             )
@@ -1549,70 +1548,54 @@ with tab2:
             # ---------------------------------------------
             # Calculate total available study time
             # ---------------------------------------------
-
             total_hours = min(
                 float(available_hours),
                 float(max_daily_hours),
             )
 
-# ---------------------------------------------
-# Optimize Self-Study Plan
-# ---------------------------------------------
-
+            # ---------------------------------------------
+            # Optimize Self-Study Plan
+            # ---------------------------------------------
             from dataclass.optimizer import StudyOptimizer
 
             study_plan = StudyOptimizer.allocate_study_time(
                 available_hours=total_hours,
                 courses=course_list,
             )
-            study_plan = StudyOptimizer.allocate_study_time( available_hours=total_hours,
-                courses=course_list,) 
 
-
-<<<<<<< HEAD
+            # ---------------------------------------------
             # Send notification
-            if not st.session_state.get("notification_sent", False):
-                email = student.get("email")
+            # ---------------------------------------------
+            if not st.session_state.get(
+                "notification_sent",
+                False,
+            ):
+                email = get_value(
+                    student,
+                    "email",
+                    default=None,
+                )
 
                 if email:
-                    notification_sent = send_notification_email(
-                        recipient_email=email,
-                        quiz_hours=24,
-                        remaining_material=0,
-                        total_material=0,
-                        study_hours_needed=total_hours,
-                        schedule_updated=True,
+                    notification_sent = (
+                        send_notification_email(
+                            recipient_email=email,
+                            quiz_hours=24,
+                            remaining_material=0,
+                            total_material=0,
+                            study_hours_needed=total_hours,
+                            schedule_updated=True,
+                        )
                     )
 
                     if notification_sent:
                         st.session_state.notification_sent = True
 
+            # ---------------------------------------------
             # Display Study Plan
+            # ---------------------------------------------
             if study_plan:
-=======
-# Send notification
-if not st.session_state.get("notification_sent", False):
-    email = student.get("email")
->>>>>>> 375d1469fedc9a82df7cc5fa2df15e89fcb78cb6
-
-    if email:
-        notification_sent = send_notification_email(
-            recipient_email=email,
-            quiz_hours=24,
-            remaining_material=0,
-            total_material=0,
-            study_hours_needed=total_hours,
-            schedule_updated=True,
-        )
-
-        if notification_sent:
-            st.session_state.notification_sent = True
-
-# Display Study Plan
-    if study_plan:
-
-            for course_name, details in study_plan.items():
-
+                for course_name, details in study_plan.items():
                     difficulty = safe_int(
                         details.get(
                             "difficulty",
@@ -1638,14 +1621,12 @@ if not st.session_state.get("notification_sent", False):
                         icon=diff_style["emoji"],
                         expanded=True,
                     ):
-
                         col1, col2 = st.columns(
                             2,
                             gap="medium",
                         )
 
                         with col1:
-
                             st.metric(
                                 "Difficulty",
                                 f"{diff_style['label']} "
@@ -1653,18 +1634,16 @@ if not st.session_state.get("notification_sent", False):
                             )
 
                         with col2:
-
                             st.metric(
                                 "Recommended Time",
                                 f"{recommended_time:.2f} h",
                             )
 
-                else:
-
-                    st.info(
-                        "No study recommendations "
-                        "could be generated."
-                    )
+            else:
+                st.info(
+                    "No study recommendations "
+                    "could be generated."
+                )
 
 # =========================================================
 # TAB 3 — TIMER
