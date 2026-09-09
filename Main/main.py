@@ -34,6 +34,8 @@ from Main.styles import (
     render_shop_theme_card,
     render_shop_template_card,
     get_active_template,
+    get_difficulty_style,
+    render_prerequisite_chips,
 )
 
 # Login system: make Login_systemV2's plain (non-package) modules
@@ -1309,13 +1311,26 @@ with tab1:
                 0,
             )
 
+            diff_style = get_difficulty_style(
+                difficulty
+            )
+
+            # Only show the id if it actually adds information —
+            # in this project course_id and name are the same string.
+            expander_title = (
+                course_name
+                if course_id in (course_name, "N/A")
+                else f"{course_name} ({course_id})"
+            )
+
 
             with st.expander(
-                f"{course_name} ({course_id})"
+                expander_title,
+                icon=diff_style["emoji"],
             ):
 
-                c1, c2, c3 = st.columns(
-                    3,
+                c1, c2 = st.columns(
+                    2,
                     gap="medium",
                 )
 
@@ -1324,35 +1339,26 @@ with tab1:
 
                     st.metric(
                         "Difficulty",
-                        f"{difficulty}/5",
+                        f"{diff_style['label']} "
+                        f"({difficulty}/5)",
                     )
 
 
                 with c2:
 
-                    prerequisites_text = (
-                        ", ".join(
-                            map(
-                                str,
-                                prerequisites,
-                            )
-                        )
-                        if prerequisites
-                        else "None"
-                    )
-
-                    st.metric(
-                        "Prerequisites",
-                        prerequisites_text,
-                    )
-
-
-                with c3:
-
                     st.metric(
                         "Sessions",
                         len(sessions),
                     )
+
+
+                st.write(
+                    "**Prerequisites**"
+                )
+
+                render_prerequisite_chips(
+                    prerequisites
+                )
 
 
                 st.divider()
@@ -1415,8 +1421,13 @@ with tab1:
 
                 else:
 
-                    st.info(
-                        "No sessions available."
+                    st.caption(
+                        "🗓️ No class timetable for this course "
+                        "yet — the current dataset tracks "
+                        "difficulty, prerequisites, and "
+                        "assignment/quiz/exam weeks (see "
+                        "Academic Events below), but not "
+                        "weekly lecture times."
                     )
 
     else:

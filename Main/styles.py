@@ -107,7 +107,7 @@ STUDY_TEMPLATES = {
     "pomodoro": {
         "name": "⏱️ Pomodoro (25/5)",
         "price": 0,
-        "desc": "\u200f25 دقيقة مذاكرة - 5 دقائق راحة",
+        "desc": "25 دقيقة مذاكرة + 5 دقائق راحة",
         "study_minutes": 25,
         "break_minutes": 5,
     },
@@ -115,7 +115,7 @@ STUDY_TEMPLATES = {
     "deep_work": {
         "name": "🧠 Deep Work (50/10)",
         "price": 300,
-        "desc": "\u200f50 دقيقة تركيز عميق - 10 دقائق راحة",
+        "desc": "50 دقيقة تركيز عميق + 10 دقائق راحة",
         "study_minutes": 50,
         "break_minutes": 10,
     },
@@ -123,7 +123,7 @@ STUDY_TEMPLATES = {
     "ultradian": {
         "name": "⚡ Ultradian (90/20)",
         "price": 300,
-        "desc": "\u200f90 دقيقة عمل مكثف - 20 دقيقة راحة",
+        "desc": "90 دقيقة عمل مكثف + 20 دقيقة راحة",
         "study_minutes": 90,
         "break_minutes": 20,
     },
@@ -265,6 +265,57 @@ def render_banner():
     """
 
     render_html(banner_html)
+
+
+# =========================================================
+# COURSES
+# =========================================================
+#
+# Difficulty badge + prerequisite "chips" used on the Courses tab,
+# instead of a plain difficulty number and a comma-separated string.
+
+COURSE_DIFFICULTY_STYLES = {
+    1: {"emoji": "🟢", "label": "Very Easy", "color": "#34d399"},
+    2: {"emoji": "🟢", "label": "Easy", "color": "#4ade80"},
+    3: {"emoji": "🟡", "label": "Moderate", "color": "#fbbf24"},
+    4: {"emoji": "🟠", "label": "Hard", "color": "#fb923c"},
+    5: {"emoji": "🔴", "label": "Very Hard", "color": "#f87171"},
+}
+
+DEFAULT_DIFFICULTY_STYLE = {
+    "emoji": "⚪",
+    "label": "Unrated",
+    "color": "#94a3b8",
+}
+
+
+def get_difficulty_style(level) -> dict:
+    try:
+        level = int(level)
+    except (TypeError, ValueError):
+        level = 0
+
+    return COURSE_DIFFICULTY_STYLES.get(level, DEFAULT_DIFFICULTY_STYLE)
+
+
+def render_prerequisite_chips(prerequisites):
+
+    if not prerequisites:
+        st.caption("No prerequisites required.")
+        return
+
+    chips_html = "".join(
+        f'<span class="prereq-chip">{html_lib.escape(str(item))}</span>'
+        for item in prerequisites
+    )
+
+    render_html(
+        f"""
+        <div class="prereq-chip-row">
+            {chips_html}
+        </div>
+        """
+    )
 
 
 # =========================================================
@@ -1447,6 +1498,41 @@ def apply_styles():
 
             text-shadow:
                 0 2px 8px rgba(0, 0, 0, 0.35);
+        }}
+
+
+        /* =============================================
+           COURSES — PREREQUISITE CHIPS
+        ============================================= */
+
+        .prereq-chip-row {{
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 4px;
+        }}
+
+
+        .prereq-chip {{
+            display: inline-block;
+
+            font-size: 12.5px;
+
+            font-weight: 600;
+
+            color: {text};
+
+            background: {primary}1F;
+
+            border:
+                1px solid {primary}55;
+
+            border-radius: 999px;
+
+            padding: 4px 12px;
         }}
 
 
