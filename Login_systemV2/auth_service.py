@@ -240,3 +240,38 @@ def change_password(username: str, old_password: str, new_password: str) -> None
         raise
     finally:
         conn.close()
+
+
+# ==========================================
+# Update Points
+# ==========================================
+
+def update_points(student_id: str, points: int) -> None:
+    """
+    Overwrites a student's points total.
+
+    Used by the GUI to persist gamification progress (finishing a
+    study session, buying a shop item) back to the account, so it
+    survives logging out and logging back in.
+
+    Raises AuthError if student_id doesn't exist.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "UPDATE students SET points = ? WHERE student_id = ?",
+            (int(points), student_id),
+        )
+
+        if cursor.rowcount == 0:
+            raise AuthError(f"No student found with id '{student_id}'.")
+
+        conn.commit()
+
+    except sqlite3.Error:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
