@@ -1,31 +1,13 @@
 """
 Login / Registration GUI for the Intelligent Study Planner.
 
-This is the Streamlit front-end for `auth_service.py`. It contains
-NO business logic of its own (no password hashing, no SQL) — it just
-collects input, calls `auth_service`, and stores the result in
-`st.session_state` so the rest of the app (Main/main_V2.py) can use
-it.
-
-Usage from another Streamlit script (e.g. Main/main_V2.py):
-
-    from login_page import render_login_page, render_logout_button
-
-    if not st.session_state.get("authenticated"):
-        render_login_page()
-        st.stop()
-
-    student = st.session_state.auth_student   # dict, see auth_service.authenticate()
+This is the Streamlit front-end for `auth_service.py`.
+It collects user input, calls the authentication service,
+and stores the authenticated student in Streamlit session state.
 """
 
 import sys
 from pathlib import Path
-
-# ---------------------------------------------------------
-# Make sure `db.py` / `auth_service.py` / `security.py` (which use
-# plain, non-package imports) can always be found, no matter which
-# working directory Streamlit was launched from.
-# ---------------------------------------------------------
 
 LOGIN_SYSTEM_DIR = Path(__file__).resolve().parent
 
@@ -67,7 +49,10 @@ def _init_session():
 
 def is_authenticated() -> bool:
     _init_session()
-    return bool(st.session_state.authenticated and st.session_state.auth_student)
+    return bool(
+        st.session_state.authenticated
+        and st.session_state.auth_student
+    )
 
 
 def logout():
@@ -75,9 +60,6 @@ def logout():
 
     keys_to_clear = [
         "authenticated", "auth_student",
-        # Dashboard/session data tied to the previous account —
-        # cleared so the next login starts fresh instead of leaking
-        # one student's points/courses into another's session.
         "courses", "points", "study_time", "plan_generated",
         "unlocked_themes", "unlocked_banners", "unlocked_templates",
         "active_theme", "active_banner", "active_template",
@@ -93,7 +75,7 @@ def logout():
 
 
 # =========================================================
-# SIDEBAR WIDGET (shown once logged in)
+# SIDEBAR WIDGET
 # =========================================================
 
 def render_logout_button():
@@ -108,8 +90,13 @@ def render_logout_button():
 
     st.markdown(f"👤 **{student.get('name', 'Student')}**")
     st.caption(f"ID: {student.get('student_id', 'N/A')}")
+    st.caption(f"📧 {student.get('email', 'N/A')}")
 
-    if st.button("🚪 Log out", key="logout_button", use_container_width=True):
+    if st.button(
+        "🚪 Log out",
+        key="logout_button",
+        use_container_width=True,
+    ):
         logout()
         st.rerun()
 
@@ -120,13 +107,22 @@ def render_logout_button():
 
 def _render_login_form():
     with st.form("login_form", clear_on_submit=False):
-        username = st.text_input("Username", key="login_username")
+
+        username = st.text_input(
+            "Username",
+            key="login_username",
+        )
+
         password = st.text_input(
-            "Password", type="password", key="login_password"
+            "Password",
+            type="password",
+            key="login_password",
         )
 
         submitted = st.form_submit_button(
-            "Log in", type="primary", use_container_width=True
+            "Log in",
+            type="primary",
+            use_container_width=True,
         )
 
     if not submitted:
@@ -148,7 +144,11 @@ def _render_login_form():
     else:
         st.session_state.authenticated = True
         st.session_state.auth_student = student
-        st.success(f"Welcome back, {student['name']}! 🎉")
+
+        st.success(
+            f"Welcome back, {student['name']}! 🎉"
+        )
+
         st.rerun()
 
 
@@ -157,41 +157,82 @@ def _render_login_form():
 # =========================================================
 
 def _render_register_form():
+
     with st.form("register_form", clear_on_submit=False):
 
         st.markdown("**Account**")
+
         c1, c2 = st.columns(2)
 
         with c1:
-            username = st.text_input("Choose a username", key="reg_username")
+
+            username = st.text_input(
+                "Choose a username",
+                key="reg_username",
+            )
+
             password = st.text_input(
-                "Choose a password", type="password", key="reg_password"
+                "Choose a password",
+                type="password",
+                key="reg_password",
             )
 
         with c2:
-            confirm_password = st.text_input(
-                "Confirm password", type="password", key="reg_confirm_password"
+
+            email = st.text_input(
+                "Email",
+                placeholder="example@gmail.com",
+                key="reg_email",
             )
-            st.caption("Password must be at least 6 characters.")
+
+            confirm_password = st.text_input(
+                "Confirm password",
+                type="password",
+                key="reg_confirm_password",
+            )
+
+            st.caption(
+                "Password must be at least 6 characters."
+            )
 
         st.divider()
 
         st.markdown("**Profile**")
+
         c3, c4 = st.columns(2)
 
         with c3:
-            name = st.text_input("Full name", key="reg_name")
-            university = st.text_input("University", key="reg_university")
+
+            name = st.text_input(
+                "Full name",
+                key="reg_name",
+            )
+
+            university = st.text_input(
+                "University",
+                key="reg_university",
+            )
+
             certificate = st.text_input(
                 "Certificate (e.g. High School Diploma)",
                 key="reg_certificate",
             )
 
         with c4:
+
             age = st.number_input(
-                "Age", min_value=10, max_value=100, value=20, key="reg_age"
+                "Age",
+                min_value=10,
+                max_value=100,
+                value=20,
+                key="reg_age",
             )
-            faculty = st.text_input("Faculty", key="reg_faculty")
+
+            faculty = st.text_input(
+                "Faculty",
+                key="reg_faculty",
+            )
+
             preferred_location = st.selectbox(
                 "Preferred study location",
                 STUDY_LOCATIONS,
@@ -201,6 +242,7 @@ def _render_register_form():
         st.divider()
 
         st.markdown("**Weekly study availability**")
+
         st.caption(
             "How many hours can you study on each day? "
             "This powers the Study Plan and Study Timer tabs."
@@ -210,7 +252,9 @@ def _render_register_form():
         daily_hours = {}
 
         for column, day in zip(day_columns, DAYS):
+
             with column:
+
                 daily_hours[day] = st.number_input(
                     day[:3],
                     min_value=0.0,
@@ -221,18 +265,24 @@ def _render_register_form():
                 )
 
         free_days = st.multiselect(
-            "Free days (no classes)", DAYS, key="reg_free_days"
+            "Free days (no classes)",
+            DAYS,
+            key="reg_free_days",
         )
 
         submitted = st.form_submit_button(
-            "Create account", type="primary", use_container_width=True
+            "Create account",
+            type="primary",
+            use_container_width=True,
         )
 
     if not submitted:
         return
 
-    if not username or not password or not name:
-        st.error("Username, password and full name are required.")
+    if not username or not password or not name or not email:
+        st.error(
+            "Username, password, name and email are required."
+        )
         return
 
     if password != confirm_password:
@@ -240,6 +290,7 @@ def _render_register_form():
         return
 
     try:
+
         student_id = register(
             username=username,
             password=password,
@@ -248,6 +299,7 @@ def _render_register_form():
             university=university,
             faculty=faculty,
             certificate=certificate,
+            email=email,
             daily_study_hours=daily_hours,
             free_days=free_days,
             preferred_study_location=preferred_location,
@@ -263,11 +315,19 @@ def _render_register_form():
         st.error(f"Could not create account: {error}")
 
     else:
-        student = authenticate(username, password)
+
+        student = authenticate(
+            username,
+            password,
+        )
+
         st.session_state.authenticated = True
         st.session_state.auth_student = student
 
-        st.success(f"Account created! Your student ID is {student_id}.")
+        st.success(
+            f"Account created! Your student ID is {student_id}."
+        )
+
         st.rerun()
 
 
@@ -277,21 +337,23 @@ def _render_register_form():
 
 def render_login_page():
     """
-    Renders the full login/registration screen. Call this and then
-    `st.stop()` from the host app whenever the user isn't
-    authenticated yet.
+    Renders the full login/registration screen.
     """
 
     init_db()
     _init_session()
 
     st.markdown(
-        "<h1 style='text-align:center; margin-bottom:0;'>📚 Intelligent Study Planner</h1>",
+        "<h1 style='text-align:center; margin-bottom:0;'>"
+        "📚 Intelligent Study Planner"
+        "</h1>",
         unsafe_allow_html=True,
     )
+
     st.markdown(
         "<p style='text-align:center; opacity:0.75; margin-top:4px;'>"
-        "Log in or create an account to continue</p>",
+        "Log in or create an account to continue"
+        "</p>",
         unsafe_allow_html=True,
     )
 
@@ -300,7 +362,10 @@ def render_login_page():
     _, center, _ = st.columns([1, 2, 1])
 
     with center:
-        login_tab, register_tab = st.tabs(["🔐 Log in", "🆕 Create account"])
+
+        login_tab, register_tab = st.tabs(
+            ["🔐 Log in", "🆕 Create account"]
+        )
 
         with login_tab:
             _render_login_form()

@@ -27,12 +27,17 @@ Produces:
 """
 
 import json
+from pathlib import Path
 
 from db import init_db
 from auth_service import register, UsernameTakenError, WeakPasswordError, AuthError
 
-STUDENTS_JSON_PATH = "dummy_data.json"
-CREDENTIALS_OUTPUT_PATH = "generated_credentials.json"
+# dummy_data.json lives in the top-level data/ folder, NOT next to this
+# script — resolve it relative to this file so it works no matter what
+# directory you run `python bulk_register.py` from.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+STUDENTS_JSON_PATH = PROJECT_ROOT / "data" / "dummy_data.json"
+CREDENTIALS_OUTPUT_PATH = Path(__file__).resolve().parent / "generated_credentials.json"
 
 # Placeholders for fields students_100.json doesn't contain.
 DEFAULT_AGE = 20
@@ -40,6 +45,7 @@ DEFAULT_UNIVERSITY = "Placeholder University"
 DEFAULT_FACULTY = "Computer & Communications Engineering"
 DEFAULT_CERTIFICATE = "Thanaweya Amma"
 DEFAULT_PASSWORD = "Test1234"  # same password for every test account, on purpose
+DEFAULT_EMAIL_DOMAIN = "example.com"  # dummy_data.json has no real emails
 
 
 def slugify_name(name: str) -> str:
@@ -72,6 +78,8 @@ def main():
         name = student["name"]
         username = make_unique_username(name, used_usernames)
 
+        email = f"{username}@{DEFAULT_EMAIL_DOMAIN}"
+
         try:
             register(
                 username=username,
@@ -81,6 +89,7 @@ def main():
                 university=DEFAULT_UNIVERSITY,
                 faculty=DEFAULT_FACULTY,
                 certificate=DEFAULT_CERTIFICATE,
+                email=email,
                 student_id=student_id,  # reuse the ID from students_100.json
             )
             credentials.append({
@@ -88,8 +97,9 @@ def main():
                 "name": name,
                 "username": username,
                 "password": DEFAULT_PASSWORD,
+                "email": email,
             })
-        except (UsernameTakenError, WeakPasswordError, AuthError) as error:
+        except (UsernameTakenError, WeakPasswordError, AuthError, TypeError) as error:
             failures.append({
                 "student_id": student_id,
                 "name": name,

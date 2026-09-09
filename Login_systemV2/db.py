@@ -35,6 +35,7 @@ def init_db() -> None:
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS students (
             student_id TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
             name TEXT NOT NULL,
             age INTEGER,
             university TEXT,

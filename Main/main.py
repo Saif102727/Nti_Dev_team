@@ -48,6 +48,10 @@ if str(LOGIN_SYSTEM_DIR) not in sys.path:
 from Login_systemV2.login_page import render_login_page, render_logout_button, is_authenticated
 from Login_systemV2.auth_service import update_points
 
+# Notifications: study_planner/Notifications.py is importable because
+# PROJECT_ROOT is already on sys.path (see above).
+from study_planner.Notifications import send_notification_email
+
 
 # =========================================================
 # PAGE CONFIGURATION
@@ -110,6 +114,8 @@ except Exception as error:
     st.error("Unable to load project data.")
     st.exception(error)
     st.stop()
+    raise  # unreachable at runtime (st.stop() halts the script) —
+           # only here so static analyzers know execution can't fall through
 
 
 # =========================================================
@@ -1560,10 +1566,25 @@ with tab2:
                 courses=course_list,
             )
 
-            # ---------------------------------------------
-            # Display Study Plan
-            # ---------------------------------------------
 
+            # Send notification
+            if not st.session_state.get("notification_sent", False):
+                email = student.get("email")
+
+                if email:
+                    notification_sent = send_notification_email(
+                        recipient_email=email,
+                        quiz_hours=24,
+                        remaining_material=0,
+                        total_material=0,
+                        study_hours_needed=total_hours,
+                        schedule_updated=True,
+                    )
+
+                    if notification_sent:
+                        st.session_state.notification_sent = True
+
+            # Display Study Plan
             if study_plan:
 
                 for course_name, details in study_plan.items():
@@ -1614,12 +1635,12 @@ with tab2:
                                 f"{recommended_time:.2f} h",
                             )
 
-            else:
+                else:
 
-                st.info(
-                    "No study recommendations "
-                    "could be generated."
-                )
+                    st.info(
+                        "No study recommendations "
+                        "could be generated."
+                    )
 
 # =========================================================
 # TAB 3 — TIMER
@@ -2130,7 +2151,7 @@ if _current_points != safe_int(student.get("points", 0), 0):
 
 
 # =========================================================
-# FOOTER
+# FOOTERs
 # =========================================================
 
 st.divider()

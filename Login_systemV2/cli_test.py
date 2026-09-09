@@ -24,6 +24,7 @@ def run_register() -> None:
     username = input("Choose a username: ")
     password = input("Choose a password: ")
     name = input("Full name: ")
+    email = input("Email: ")
 
     try:
         age = int(input("Age: "))
@@ -37,7 +38,14 @@ def run_register() -> None:
 
     try:
         student_id = register(
-            username, password, name, age, university, faculty, certificate
+            username=username,
+            password=password,
+            name=name,
+            age=age,
+            university=university,
+            faculty=faculty,
+            certificate=certificate,
+            email=email,
         )
         print(f"Account created. Your student ID is: {student_id}")
     except (UsernameTakenError, WeakPasswordError, AuthError) as error:

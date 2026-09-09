@@ -45,11 +45,10 @@ class Course:
 @dataclass
 class Student:
     student_id: str
+    email: str
     completed_courses: List[str]
     preferred_study_location: str
     daily_study_hours: Dict[str, int]
-    free_days: List[str] = field(default_factory=list)
-    points: int = 0
 
 
 # ==========================================
