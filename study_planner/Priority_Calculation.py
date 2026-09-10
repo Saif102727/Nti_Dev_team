@@ -1,28 +1,11 @@
-"""
-Priority Calculation
-======================
-STATUS: Not implemented yet.
-
-Intended purpose:
-    Rank a student's courses/sessions by priority so the scheduler knows
-    what to study first. Priority should likely combine:
-      - course difficulty (see Difficulty_Estimation.py)
-      - proximity of upcoming academic_events (exams, quizzes, deadlines)
-      - how little time remains before the next related session
-
-Suggested signature:
-
-    def calculate_priority(course, academic_events, current_week: int) -> float:
-        ...
-"""
-
 import Difficulty_Estimation
+# from Login_systemV2 import auth_service
 from datetime import datetime, date, timedelta
 
 
-# ============================================================
+# ==========================================
 # AHP WEIGHTS
-# ============================================================
+# ==========================================
 
 AHP_WEIGHTS = {
     "difficulty": 0.169,
@@ -32,102 +15,52 @@ AHP_WEIGHTS = {
 }
 
 
-# ============================================================
-# NORMALIZE PERSONALIZED DIFFICULTY
-# ============================================================
+# ==========================================
+# DIFFICULTY NORMALIZATION
+# ==========================================
 
 def normalize_difficulty(personalized_difficulty):
-    """
-    Convert personalized difficulty from a 1-10 scale
-    to a 0-1 scale.
-
-    Formula:
-
-        D' = (D - 1) / 9
-    """
 
     return (personalized_difficulty - 1) / 9
 
 
-# ============================================================
+# ==========================================
 # WEAKNESS
-# ============================================================
+# ==========================================
 
 def calculate_weakness(current_grade):
-    """
-    Calculate weakness using the student's current grade.
-
-    The current grade is out of 50.
-
-    Formula:
-
-        W' = 1 - (current_grade / 50)
-
-    A lower grade produces a higher weakness value.
-    """
 
     weakness = 1 - (current_grade / 50)
 
     return max(0, min(1, weakness))
 
 
-# ============================================================
+# ==========================================
 # REMAINING MATERIAL
-# ============================================================
+# ==========================================
 
-def calculate_remaining_material(
-    total_material,
-    completed_material
-):
-    """
-    Calculate the remaining-material ratio.
-
-    Group A provides total_material.
-
-    The student provides how many chapters they
-    have completed.
-
-    Formula:
-
-        Remaining chapters =
-            Total chapters - Completed chapters
-
-        M' =
-            Remaining chapters / Total chapters
-    """
+def calculate_remaining_material(total_material, completed_material):
 
     if total_material <= 0:
         return 0
 
-    remaining_material = (
-        total_material - completed_material
-    )
+    remaining_material = total_material - completed_material
 
-    # Prevent impossible values
     remaining_material = max(
         0,
         min(total_material, remaining_material)
     )
 
-    material_ratio = (
-        remaining_material / total_material
-    )
+    material_ratio = remaining_material / total_material
 
     return material_ratio
 
 
-# ============================================================
+# ==========================================
 # DATE CONVERSION
-# ============================================================
+# ==========================================
 
 def convert_date(date_string):
-    """
-    Convert a date written as:
-
-        YYYY-MM-DD
-
-    into a Python date object.
-    """
 
     return datetime.strptime(
         date_string,
@@ -135,199 +68,89 @@ def convert_date(date_string):
     ).date()
 
 
-# ============================================================
+# ==========================================
 # SEMESTER WEEK
-# ============================================================
+# ==========================================
 
 def get_semester_week(today, semester_start):
-    """
-    Determine the current week of the semester.
 
-    Week 1 starts on semester_start.
-    """
-
-    days_passed = (
-        today - semester_start
-    ).days
+    days_passed = (today - semester_start).days
 
     if days_passed < 0:
         return 0
 
     return (days_passed // 7) + 1
 
-# ============================================================
-# CALENDAR DATE
-# ============================================================
+
+# ==========================================
+# GET DATE FROM WEEK
+# ==========================================
 
 def get_event_date(semester_start, week):
-    """
-    Convert an event's semester week into its
-    actual calendar deadline.
 
-    Events are semester-wide, meaning the same
-    event applies to every course.
-
-    The event deadline is considered to be the
-    end of that week (Saturday).
-
-    Example:
-
-        Semester starts: Sunday, 2026-10-04
-        Week 1: Oct 4 - Oct 10
-        Week 2: Oct 11 - Oct 17
-
-        Week 2 event deadline = Oct 17
-    """
-
-    week_end = semester_start + timedelta(
-        days=(week * 7) - 1
+    return semester_start + timedelta(
+        days=(week - 1) * 7
     )
 
-    return week_end
 
-# ============================================================
-# CURRENT GRADE
-# ============================================================
+# ==========================================
+# EVENT IMPORTANCE
+# ==========================================
 
-def get_current_grade():
-    """
-    Ask the student for their current marks out of 50.
+EVENT_PRIORITY = {
 
-    Current coursework structure:
+    "assignment": 0.40,
 
-        Quizzes       = 10
-        Assignments   = 10
-        Project       = 10
-        Midterm       = 20
-        -----------------
-        Total         = 50
+    "quiz": 0.55,
 
-    The final exam is NOT included because the final
-    has not happened when the study plan is being created.
-    """
+    "project": 0.75,
 
-    while True:
+    "midterm": 0.90,
 
-        try:
-
-            grade = float(
-                input(
-                    "\nHow many marks have you obtained "
-                    "so far out of 50? "
-                )
-            )
-
-            if 0 <= grade <= 50:
-                return grade
-
-            print(
-                "The grade must be between 0 and 50."
-            )
-
-        except ValueError:
-
-            print(
-                "Please enter a valid number."
-            )
+    "final": 1.00
+}
 
 
-# ============================================================
-# COMPLETED CHAPTERS
-# ============================================================
-
-def get_completed_chapters(total_material):
-    """
-    Ask the student how many chapters they have completed.
-
-    The total number of chapters comes from Group A.
-
-    Example:
-
-        Total chapters = 8
-        Completed      = 3
-
-        Remaining      = 5
-    """
-
-    while True:
-
-        try:
-
-            completed = int(
-                input(
-                    f"\nHow many chapters have you "
-                    f"completed out of {total_material}? "
-                )
-            )
-
-            if 0 <= completed <= total_material:
-                return completed
-
-            print(
-                f"Please enter a number between "
-                f"0 and {total_material}."
-            )
-
-        except ValueError:
-
-            print(
-                "Please enter a whole number."
-            )
-
-
-# ============================================================
-# URGENCY
-# ============================================================
+# ==========================================
+# TIME URGENCY
+# ==========================================
 
 def calculate_urgency(today, deadline):
-    """
-    Calculate urgency based on the distance between
-    today's date and the deadline.
 
-    The program calculates the number of days internally.
-    The user does NOT enter days_remaining.
+    days_left = (deadline - today).days
 
-    Formula:
-
-        U' = 1 / (1 + days_left / 7)
-
-    The closer the deadline, the higher the urgency.
-    """
-
-    days_left = (
-        deadline - today
-    ).days
-
-    # Deadline is today or has passed
     if days_left <= 0:
         return 1.0
 
-    urgency = 1 / (
-        1 + (days_left / 7)
-    )
+    urgency = 1 / (1 + (days_left / 7))
 
     return min(1, urgency)
 
 
-# ============================================================
+# ==========================================
 # COURSE URGENCY
-# ============================================================
+# ==========================================
 
 def get_course_urgency(events, today, semester_start):
+
     if not events:
         return 0
 
-    current_week = get_semester_week(today, semester_start)
+    current_week = get_semester_week(
+        today,
+        semester_start
+    )
 
-    nearest_deadline = None
+    highest_urgency = 0
 
     for event in events:
+
         if "week" not in event:
             continue
 
         event_week = event["week"]
 
-        # Skip events from previous weeks
+        # Ignore events from previous weeks
         if event_week < current_week:
             continue
 
@@ -336,502 +159,231 @@ def get_course_urgency(events, today, semester_start):
             event_week
         )
 
+        # Ignore events that already passed
         if event_date < today:
             continue
 
-        if nearest_deadline is None or event_date < nearest_deadline:
-            nearest_deadline = event_date
+        event_type = event.get(
+            "type",
+            "assignment"
+        ).lower()
 
-    if nearest_deadline is None:
-        return 0
-
-    return calculate_urgency(today, nearest_deadline)
-
-
-# ============================================================
-# COURSE DIFFICULTY
-# ============================================================
-
-def calculate_course_difficulty(course):
-    """
-    Use Task 1 to calculate personalized difficulty.
-
-    Task 1 remains completely separate.
-
-    Task 2 simply imports and uses its function.
-    """
-
-    prerequisites = course.get(
-        "completed_prerequisites",
-        {}
-    )
-
-    base_difficulty = course[
-        "base_difficulty"
-    ]
-
-    personalized_difficulty = (
-        Difficulty_Estimation.calculate_difficulty(
-            base_difficulty,
-            prerequisites
+        event_priority = EVENT_PRIORITY.get(
+            event_type,
+            0.40
         )
-    )
 
-    return personalized_difficulty
+        time_urgency = calculate_urgency(
+            today,
+            event_date
+        )
+
+        event_urgency = (
+            time_urgency *
+            event_priority
+        )
+
+        if event_urgency > highest_urgency:
+
+            highest_urgency = event_urgency
+
+    return highest_urgency
 
 
-# ============================================================
-# START-OF-SEMESTER PRIORITY
-# ============================================================
+# ==========================================
+# CALCULATE PRIORITY FOR ONE COURSE
+# ==========================================
 
-def calculate_start_priority(
-    personalized_difficulty
+def calculate_course_priority(
+    personalized_difficulty,
+    current_grade,
+    total_material,
+    completed_material,
+    events,
+    today,
+    semester_start
 ):
-    """
-    At the start of the semester:
 
-        Priority = Normalized Personalized Difficulty
-    """
-
-    normalized_difficulty = (
-        normalize_difficulty(
-            personalized_difficulty
-        )
+    # D'
+    difficulty = normalize_difficulty(
+        personalized_difficulty
     )
 
-    return normalized_difficulty
-
-
-# ============================================================
-# NORMAL PRIORITY
-# ============================================================
-
-def calculate_priority(
-    difficulty,
-    weakness,
-    urgency,
-    remaining_material
-):
-    """
-    Calculate final course priority.
-
-    Formula:
-
-        P =
-            wD * D'
-          + wW * W'
-          + wU * U'
-          + wM * M'
-    """
-
-    priority = (
-
-        AHP_WEIGHTS["difficulty"]
-        * difficulty
-
-        +
-
-        AHP_WEIGHTS["weakness"]
-        * weakness
-
-        +
-
-        AHP_WEIGHTS["urgency"]
-        * urgency
-
-        +
-
-        AHP_WEIGHTS["remaining_material"]
-        * remaining_material
+    # W'
+    weakness = calculate_weakness(
+        current_grade
     )
 
-    return priority
-
-
-# ============================================================
-# MAIN STUDENT PRIORITY CALCULATION
-# ============================================================
-
-def calculate_student_priorities(student):
-    """
-    Calculate priorities for every course of a student.
-
-    The user is first asked whether they are at the
-    start of the semester.
-
-    --------------------------------------------------------
-    START OF SEMESTER
-    --------------------------------------------------------
-
-        Priority = Difficulty
-
-    --------------------------------------------------------
-    SEMESTER ALREADY STARTED
-    --------------------------------------------------------
-
-        Ask today's date.
-
-        For every course:
-
-            1. Personalized difficulty
-            2. Current grade / 50
-            3. Completed chapters
-            4. Remaining material ratio
-            5. Upcoming event urgency
-            6. Final priority
-    """
-
-    answer = input(
-        "Are you at the start of the semester? "
-        "(yes/no): "
-    ).strip().lower()
-
-
-    # ========================================================
-    # START OF SEMESTER
-    # ========================================================
-
-    if answer in ["yes", "y"]:
-
-        print(
-            "\nStart-of-semester mode selected."
-        )
-
-        print(
-            "Priority will initially be based "
-            "on personalized difficulty.\n"
-        )
-
-        for course_name, course in (
-            student["courses"].items()
-        ):
-
-            personalized_difficulty = (
-                calculate_course_difficulty(
-                    course
-                )
-            )
-
-            normalized_difficulty = (
-                normalize_difficulty(
-                    personalized_difficulty
-                )
-            )
-
-            course[
-                "personalized_difficulty"
-            ] = personalized_difficulty
-
-            course[
-                "normalized_difficulty"
-            ] = normalized_difficulty
-
-            course[
-                "priority"
-            ] = normalized_difficulty
-
-        return student
-
-
-    # ========================================================
-    # SEMESTER ALREADY STARTED
-    # ========================================================
-
-    print(
-        "\nSemester-progress mode selected."
+    # M'
+    remaining_material = calculate_remaining_material(
+        total_material,
+        completed_material
     )
 
-
-    # --------------------------------------------------------
-    # GET TODAY'S DATE
-    # --------------------------------------------------------
-
-    while True:
-
-        today_string = input(
-            "What is today's date? "
-            "(YYYY-MM-DD): "
-        ).strip()
-
-        try:
-
-            today = convert_date(
-                today_string
-            )
-
-            break
-
-        except ValueError:
-
-            print(
-                "Invalid date."
-                " Please use YYYY-MM-DD."
-            )
-
-
-    # --------------------------------------------------------
-    # SEMESTER START
-    # --------------------------------------------------------
-
-    semester_start = date(
-        2026,
-        10,
-        4
-    )
-
-    semester_week = get_semester_week(
+    # U'
+    urgency = get_course_urgency(
+        events,
         today,
         semester_start
     )
 
-    print(
-        f"\nCurrent semester week: "
-        f"{semester_week}"
+    # Final priority formula
+    priority = (
+        AHP_WEIGHTS["difficulty"] * difficulty
+        + AHP_WEIGHTS["weakness"] * weakness
+        + AHP_WEIGHTS["urgency"] * urgency
+        + AHP_WEIGHTS["remaining_material"] * remaining_material
     )
 
+    return {
+        "difficulty": difficulty,
+        "weakness": weakness,
+        "urgency": urgency,
+        "remaining_material": remaining_material,
+        "priority": priority
+    }
 
-    # ========================================================
-    # COURSE LOOP
-    # ========================================================
 
-    for course_name, course in (
-        student["courses"].items()
-    ):
+# ==========================================
+# CALCULATE ALL COURSE PRIORITIES
+# ==========================================
 
-        print(
-            "\n========================================"
+def calculate_student_priorities(
+    student,
+    today=None,
+    semester_start=date(2026, 10, 4)
+):
+
+    if today is None:
+        today = date.today()
+
+    for course_name, course in student["courses"].items():
+
+        # --------------------------------------
+        # PERSONALIZED DIFFICULTY
+        # --------------------------------------
+
+        prerequisites = course.get(
+            "completed_prerequisites",
+            {}
         )
-
-        print(
-            f"Course: {course_name}"
-        )
-
-        print(
-            "========================================"
-        )
-
-
-        # ----------------------------------------------------
-        # DIFFICULTY
-        # ----------------------------------------------------
 
         personalized_difficulty = (
-            calculate_course_difficulty(
-                course
+            Difficulty_Estimation.calculate_difficulty(
+                course["base_difficulty"],
+                prerequisites
             )
         )
 
-        normalized_difficulty = (
-            normalize_difficulty(
-                personalized_difficulty
-            )
-        )
-
-
-        # ----------------------------------------------------
+        # --------------------------------------
         # CURRENT GRADE
-        # ----------------------------------------------------
+        # --------------------------------------
 
-        current_grade = get_current_grade()
+        if prerequisites:
 
-        weakness = calculate_weakness(
-            current_grade
-        )
+            total_grade = 0
+            total_influence = 0
 
+            for prerequisite in prerequisites.values():
 
-        # ----------------------------------------------------
-        # TOTAL MATERIAL
-        # ----------------------------------------------------
+                total_grade += (
+                    prerequisite["grade"]
+                    * prerequisite["influence"]
+                )
 
-        total_material = course.get(
-            "total_material"
-        )
+                total_influence += (
+                    prerequisite["influence"]
+                )
 
-        if total_material is None:
-
-            raise ValueError(
-                f"total_material is missing "
-                f"from Group A data for "
-                f"{course_name}."
+            current_grade = (
+                total_grade / total_influence
+                if total_influence > 0
+                else 0
             )
 
+        else:
 
-        # ----------------------------------------------------
-        # COMPLETED CHAPTERS
-        # ----------------------------------------------------
+            # No prerequisites
+            current_grade = 50
 
-        completed_material = (
-            get_completed_chapters(
-                total_material
-            )
+        # --------------------------------------
+        # COMPLETED MATERIAL
+        # --------------------------------------
+
+        completed_material = len(
+            prerequisites
         )
 
+        # --------------------------------------
+        # EVENTS
+        # --------------------------------------
 
-        # ----------------------------------------------------
-        # REMAINING MATERIAL
-        # ----------------------------------------------------
-
-        remaining_material = (
-            total_material
-            - completed_material
+        events = course.get(
+            "events",
+            []
         )
 
-        remaining_material_ratio = (
-            calculate_remaining_material(
-                total_material,
-                completed_material
-            )
-        )
+        # --------------------------------------
+        # CALCULATE PRIORITY
+        # --------------------------------------
 
+        result = calculate_course_priority(
 
-        # ----------------------------------------------------
-        # URGENCY
-        # ----------------------------------------------------
+            personalized_difficulty,
 
-        urgency = get_course_urgency(
-            student["events"],
+            current_grade,
+
+            course["total_material"],
+
+            completed_material,
+
+            events,
+
             today,
+
             semester_start
         )
 
-        # ----------------------------------------------------
-        # FINAL PRIORITY
-        # ----------------------------------------------------
+        # --------------------------------------
+        # SAVE RESULTS
+        # --------------------------------------
 
-        priority = calculate_priority(
-
-            normalized_difficulty,
-
-            weakness,
-
-            urgency,
-
-            remaining_material_ratio
+        course["personal_difficulty"] = (
+            personalized_difficulty
         )
 
+        course["current_grade"] = current_grade
 
-        # ----------------------------------------------------
-        # STORE RESULTS
-        # ----------------------------------------------------
+        course["completed_material"] = (
+            completed_material
+        )
 
-        course[
-            "personalized_difficulty"
-        ] = personalized_difficulty
+        course["difficulty_normalized"] = (
+            result["difficulty"]
+        )
 
-        course[
-            "normalized_difficulty"
-        ] = normalized_difficulty
+        course["weakness"] = (
+            result["weakness"]
+        )
 
-        course[
-            "current_grade"
-        ] = current_grade
+        course["urgency"] = (
+            result["urgency"]
+        )
 
-        course[
-            "weakness"
-        ] = weakness
+        course["remaining_material_ratio"] = (
+            result["remaining_material"]
+        )
 
-        course[
-            "completed_material"
-        ] = completed_material
-
-        course[
-            "remaining_material"
-        ] = remaining_material
-
-        course[
-            "remaining_material_ratio"
-        ] = remaining_material_ratio
-
-        course[
-            "urgency"
-        ] = urgency
-
-        course[
-            "priority"
-        ] = priority
-
+        course["priority"] = (
+            result["priority"]
+        )
 
     return student
 
 
-# ============================================================
-# DISPLAY RESULTS
-# ============================================================
-
-def display_priorities(student):
-
-    print(
-        "\n\n========================================"
-    )
-
-    print(
-        "COURSE PRIORITIES"
-    )
-
-    print(
-        "========================================"
-    )
-
-
-    for course_name, course in (
-        student["courses"].items()
-    ):
-
-        print(
-            f"\n{course_name}"
-        )
-
-        print(
-            f"Personalized Difficulty: "
-            f"{course['personalized_difficulty']:.2f}"
-        )
-
-        print(
-            f"Normalized Difficulty: "
-            f"{course['normalized_difficulty']:.3f}"
-        )
-
-        if "current_grade" in course:
-
-            print(
-                f"Current Grade: "
-                f"{course['current_grade']:.2f}/50"
-            )
-
-            print(
-                f"Weakness: "
-                f"{course['weakness']:.3f}"
-            )
-
-            print(
-                f"Completed Chapters: "
-                f"{course['completed_material']}"
-            )
-
-            print(
-                f"Remaining Chapters: "
-                f"{course['remaining_material']}"
-            )
-
-            print(
-                f"Remaining Material Ratio: "
-                f"{course['remaining_material_ratio']:.3f}"
-            )
-
-            print(
-                f"Urgency: "
-                f"{course['urgency']:.3f}"
-            )
-
-        print(
-            f"Priority: "
-            f"{course['priority']:.3f}"
-        )
-
-
-# ============================================================
+# ==========================================
 # TEST
-# ============================================================
+# ==========================================
 
 if __name__ == "__main__":
 
@@ -844,15 +396,84 @@ if __name__ == "__main__":
 
         students = json.load(file)
 
-
     student = students[0]
 
+    # Example testing date
+    today = date(2026, 12, 5)
 
     student = calculate_student_priorities(
-        student
+        student,
+        today=today
     )
 
+    print("\n========================================")
+    print("TASK 2 - COURSE PRIORITIES")
+    print("========================================")
 
-    display_priorities(
-        student
-    )
+    for course_name, course in student["courses"].items():
+
+        print(f"\n{course_name}")
+
+        print(
+            f"Personal Difficulty: "
+            f"{course['personal_difficulty']:.2f}"
+        )
+
+        print(
+            f"Difficulty: "
+            f"{course['difficulty_normalized']:.3f}"
+        )
+
+        print(
+            f"Weakness: "
+            f"{course['weakness']:.3f}"
+        )
+
+        print(
+            f"Urgency: "
+            f"{course['urgency']:.3f}"
+        )
+
+        print(
+            f"Remaining Material: "
+            f"{course['remaining_material_ratio']:.3f}"
+        )
+
+        print(
+            f"FINAL PRIORITY: "
+            f"{course['priority']:.3f}"
+        )
+
+# if __name__ == "__main__":
+
+#     username = input("Username: ")
+#     password = input("Password: ")
+
+#     authenticated_user = (
+#         auth_service.authenticate(
+#             username,
+#             password
+#         )
+#     )
+
+#     student_id = authenticated_user[
+#         "student_id"
+#     ]
+
+#     print(
+#         f"\nLogged in as: "
+#         f"{authenticated_user['name']}"
+#     )
+
+#     print(
+#         f"Student ID: "
+#         f"{student_id}"
+#     )
+
+#     student = calculate_student_priorities_by_id(
+#         student_id
+#     )
+
+#     display_priorities(
+#         student
+#     )
