@@ -9,7 +9,7 @@ The authenticated student's ID is passed to Task 2 so the
 correct student's data is used throughout the pipeline.
 """
 
-import Priority_Calculation
+from study_planner import Priority_Calculation
 
 # ============================================================
 # STUDY-HOUR ALLOCATION
@@ -189,6 +189,119 @@ def generate_study_hour_allocations(
     )
 
     return student, allocations
+
+# ============================================================
+# REAL-DATA INTEGRATION
+# ============================================================
+#
+# generate_study_hour_allocations() above is Group A's original Task 3
+# code: it pulls student_id -> dummy_data.json's "study_preferences"
+# dict (weekday_hours_per_day / weekend_hours_per_day already split).
+#
+# The real Student record (Login_systemV2.auth_service / model.py)
+# instead stores availability as daily_study_hours: a dict keyed by
+# exact day name ("Sunday": 3, "Monday": 2, ...). The functions below
+# adapt that shape without touching dummy_data.json.
+
+WEEKDAY_NAMES = (
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+)
+WEEKEND_NAMES = (
+    "Friday", "Saturday",
+)
+
+
+def _get_field(student, field, default=None):
+    if isinstance(student, dict):
+        return student.get(field, default)
+
+    return getattr(student, field, default)
+
+
+def split_weekday_weekend_hours(daily_study_hours):
+    """
+    This pipeline (Task 3/4/5, inherited from Group A) is built around a
+    single weekday rate + a single weekend rate, not per-day granularity.
+    Average the real per-day availability (Sunday-Thursday / Friday-Saturday,
+    the Egypt academic week) into that shape.
+    """
+
+    daily_study_hours = daily_study_hours or {}
+
+    weekday_values = [
+        float(daily_study_hours.get(day, 0) or 0)
+        for day in WEEKDAY_NAMES
+    ]
+    weekend_values = [
+        float(daily_study_hours.get(day, 0) or 0)
+        for day in WEEKEND_NAMES
+    ]
+
+    weekday_hours = (
+        sum(weekday_values) / len(WEEKDAY_NAMES)
+        if WEEKDAY_NAMES else 0.0
+    )
+    weekend_hours = (
+        sum(weekend_values) / len(WEEKEND_NAMES)
+        if WEEKEND_NAMES else 0.0
+    )
+
+    return weekday_hours, weekend_hours
+
+
+def generate_study_hour_allocations_from_real_data(
+    student,
+    courses,
+    academic_events,
+    min_hours=1,
+    today=None,
+    semester_start=None,
+):
+    """
+    Real-data equivalent of generate_study_hour_allocations(): Task 2's
+    priorities + Task 3's allocation, driven by the authenticated
+    student's real daily_study_hours instead of dummy_data.json.
+
+    Returns (priorities, allocations).
+    """
+
+    from datetime import date as _date
+
+    if semester_start is None:
+        semester_start = _date(2026, 9, 1)
+
+    priorities = Priority_Calculation.calculate_priorities_for_real_student(
+        student,
+        courses,
+        academic_events,
+        today=today,
+        semester_start=semester_start,
+    )
+
+    courses_for_allocation = [
+        {
+            "course": priority["course_id"],
+            "priority": priority["priority"],
+        }
+        for priority in priorities
+    ]
+
+    daily_study_hours = _get_field(student, "daily_study_hours", {})
+    weekday_hours, weekend_hours = split_weekday_weekend_hours(
+        daily_study_hours
+    )
+
+    allocations = allocate_study_hours(
+        courses_for_allocation,
+        weekday_hours,
+        len(WEEKDAY_NAMES),
+        weekend_hours,
+        len(WEEKEND_NAMES),
+        min_hours,
+    )
+
+    return priorities, allocations
+
 
 # ============================================================
 # TEST

@@ -17,7 +17,7 @@ Optimization criteria:
 """
 
 import json
-import Schedule_Generation
+from study_planner import Schedule_Generation
 
 
 # ============================================================
@@ -736,6 +736,71 @@ def run_task5(student_id):
     )
 
     return best_schedule
+
+# ==========================================================
+# REAL-DATA INTEGRATION
+# ==========================================================
+#
+# run_task5() above is Group A's original Task 5 entry point, chained to
+# run_task4()'s student_id lookup in data/schedule.json. The function
+# below is the single public entry point the Streamlit app calls: it
+# runs Tasks 1-5 end to end on the authenticated student + shared
+# catalog and returns the best weekly schedule, without touching
+# dummy_data.json or Group A's sample student_assignments.
+
+def run_task5_from_real_data(
+    student,
+    courses,
+    academic_events,
+    number_of_schedules=5,
+    min_hours=1,
+    today=None,
+    semester_start=None,
+    university_schedule=None,
+):
+    """
+    Runs the full pipeline (Difficulty -> Priority -> Study-Hour
+    Allocation -> Schedule Generation -> Schedule Optimization) for a
+    real, authenticated student.
+
+    Returns None if no feasible schedule could be generated (e.g. not
+    enough available hours), otherwise a dict:
+        {"schedule", "score", "schedule_number", "priorities", "allocations"}
+    """
+
+    pseudo_student, schedules, allocations, priorities = (
+        Schedule_Generation.run_task4_from_real_data(
+            student,
+            courses,
+            academic_events,
+            number_of_schedules=number_of_schedules,
+            min_hours=min_hours,
+            today=today,
+            semester_start=semester_start,
+            university_schedule=university_schedule,
+        )
+    )
+
+    if not schedules:
+        return None
+
+    if university_schedule is None:
+        university_schedule = (
+            Schedule_Generation.load_default_university_schedule()
+        )
+
+    best = optimize_schedules(
+        schedules,
+        pseudo_student,
+        university_schedule,
+        allocations,
+    )
+
+    best["priorities"] = priorities
+    best["allocations"] = allocations
+
+    return best
+
 
 # ==========================================================
 # MAIN TEST

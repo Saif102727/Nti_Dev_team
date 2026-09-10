@@ -1,4 +1,4 @@
-import Difficulty_Estimation
+from study_planner import Difficulty_Estimation
 from datetime import datetime, date, timedelta
 
 
@@ -398,6 +398,135 @@ def calculate_student_priorities_by_id(
     )
 
     return student
+
+# ==========================================================
+# REAL-DATA INTEGRATION
+# ==========================================================
+#
+# calculate_student_priorities()/_by_id() above are Group A's original
+# Task 2 code, built around dummy_data.json's per-student "courses" dict
+# (with total_material, per-course grades, and events already attached).
+#
+# The functions below calculate the same priorities from the data the
+# live app actually has: the authenticated student
+# (Login_systemV2.auth_service), the shared course catalog
+# (loader.load_courses_and_events -> list[Course]), and the shared
+# academic-events calendar (list[AcademicEvent]) — no dummy_data.json.
+
+EVENT_TYPE_KEYWORDS = (
+    ("final", "final"),
+    ("midterm", "midterm"),
+    ("mid-term", "midterm"),
+    ("quiz", "quiz"),
+    ("project", "project"),
+)
+
+
+def infer_event_type(event_name):
+    """
+    AcademicEvent (model.py) only has a free-text name, not the
+    assignment/quiz/project/midterm/final "type" dummy_data.json events
+    carry. Guess the type from keywords in the name; default to the
+    lowest-priority "assignment" bucket when nothing matches.
+    """
+
+    name = (event_name or "").lower()
+
+    for keyword, event_type in EVENT_TYPE_KEYWORDS:
+        if keyword in name:
+            return event_type
+
+    return "assignment"
+
+
+def _get_field(student, field, default=None):
+    if isinstance(student, dict):
+        return student.get(field, default)
+
+    return getattr(student, field, default)
+
+
+def calculate_priorities_for_real_student(
+    student,
+    courses,
+    academic_events,
+    today=None,
+    semester_start=date(2026, 9, 1),
+):
+    """
+    Real-data equivalent of calculate_student_priorities_by_id().
+
+    Returns a list of dicts (one per course the student hasn't already
+    completed): course_id, course (name), personal_difficulty, difficulty,
+    weakness, urgency, remaining_material, priority.
+    """
+
+    if today is None:
+        today = date.today()
+
+    difficulties = Difficulty_Estimation.estimate_difficulties_for_real_student(
+        student,
+        courses,
+    )
+
+    completed_course_ids = set(
+        _get_field(student, "completed_courses", []) or []
+    )
+
+    results = []
+
+    for course in courses:
+
+        # No need to plan study time for courses already completed.
+        if course.course_id in completed_course_ids:
+            continue
+
+        diff_info = difficulties.get(course.course_id, {})
+
+        personalized_difficulty = diff_info.get(
+            "difficulty",
+            course.difficulty_level * 2,
+        )
+
+        # The students table doesn't track a running grade per course,
+        # so there's no real signal for "weakness" yet — 50 keeps that
+        # term neutral (calculate_weakness(50) == 0.5) rather than
+        # inventing a grade.
+        current_grade = 50
+
+        course_events = [
+            {
+                "week": event.week_number,
+                "type": infer_event_type(event.event_name),
+            }
+            for event in academic_events
+            if event.course_id == course.course_id
+        ]
+
+        # No per-course "material covered" tracking exists yet either;
+        # treat every upcoming course as fully remaining.
+        total_material = max(1, len(course_events))
+        completed_material = 0
+
+        result = calculate_course_priority(
+            personalized_difficulty,
+            current_grade,
+            total_material,
+            completed_material,
+            course_events,
+            today,
+            semester_start,
+        )
+
+        results.append({
+            "course_id": course.course_id,
+            "course": course.name,
+            "personal_difficulty": personalized_difficulty,
+            **result,
+        })
+
+    return results
+
 
 # ==========================================
 # TEST

@@ -36,8 +36,9 @@ select the best one.
 
 
 import json
-import Priority_Calculation
-import Studyhour_Allocation
+from pathlib import Path
+from study_planner import Priority_Calculation
+from study_planner import Studyhour_Allocation
 
 
 # ==========================================================
@@ -1159,6 +1160,167 @@ def run_task4(student_id, number_of_schedules=10):
     )
 
     return student, schedules
+
+# ==========================================================
+# REAL-DATA INTEGRATION
+# ==========================================================
+#
+# run_task4() above is Group A's original Task 4 entry point: it looks
+# a student_id up in data/schedule.json's "student_assignments" map,
+# which only lists Group A's own sample students (STU-2026-001, ...).
+# Real accounts created through Login_systemV2 get a fresh
+# STU-<uuid> id that was never assigned a schedule there, and their
+# study preferences live on the real Student record, not
+# dummy_data.json's "study_preferences" dict.
+#
+# The functions below reuse every scheduling function above unchanged
+# (time math, constraint checks, the MRV backtracking search) and only
+# replace how the *inputs* to that search are built.
+
+DEFAULT_UNIVERSITY_SCHEDULE_FILE = (
+    Path(__file__).resolve().parent.parent / "data" / "schedule.json"
+)
+
+
+def load_default_university_schedule(schedule_file=None):
+    """
+    Real accounts aren't assigned one of Group A's sample schedules, so —
+    the same way loader.load_courses_and_events() treats the course
+    catalog as shared across every student — fall back to the first
+    shared class timetable in data/schedule.json.
+    """
+
+    path = schedule_file or DEFAULT_UNIVERSITY_SCHEDULE_FILE
+
+    with open(path, "r", encoding="utf-8") as file:
+        university_data = json.load(file)
+
+    schedules = university_data.get("schedules", [])
+
+    return schedules[0] if schedules else None
+
+
+def infer_study_place(student):
+    """
+    The real Student record stores a free-text preferred_study_location
+    (e.g. "Home", "Library"), not this pipeline's "University Only" /
+    "Home Only" / "Either" categories. Map it with a simple keyword
+    guess and fall back to the neutral "Either".
+    """
+
+    if isinstance(student, dict):
+        location = student.get("preferred_study_location", "") or ""
+    else:
+        location = getattr(student, "preferred_study_location", "") or ""
+
+    location = location.lower()
+
+    if any(word in location for word in ("univ", "campus", "college", "faculty")):
+        return "University Only"
+
+    if any(word in location for word in ("home", "house", "dorm")):
+        return "Home Only"
+
+    return "Either"
+
+
+def build_pseudo_student(student, weekday_hours, weekend_hours):
+    """
+    generate_multiple_schedules()/optimize_schedules() expect a
+    student["study_preferences"] dict (Group A's shape). Build a minimal
+    one from real data so the rest of the pipeline doesn't need to
+    change.
+    """
+
+    student_id = (
+        student.get("student_id", "")
+        if isinstance(student, dict)
+        else getattr(student, "student_id", "")
+    )
+
+    return {
+        "student_id": student_id,
+        "study_preferences": {
+            "weekday_hours_per_day": weekday_hours,
+            "weekend_hours_per_day": weekend_hours,
+            "preferred_session_minutes": 90,
+            # No time-of-day or study-place preference is collected by
+            # the login/registration forms yet, beyond
+            # preferred_study_location -> infer_study_place().
+            "preferred_study_times": [],
+            "study_place": infer_study_place(student),
+        },
+        # No "unavailable periods" (personal commitments) are collected
+        # yet either; only real hard constraint is the university
+        # timetable itself, already handled via `university_schedule`.
+        "unavailable_periods": {
+            "hard_constraints": [],
+            "soft_constraints": [],
+        },
+    }
+
+
+def run_task4_from_real_data(
+    student,
+    courses,
+    academic_events,
+    number_of_schedules=5,
+    min_hours=1,
+    today=None,
+    semester_start=None,
+    university_schedule=None,
+):
+    """
+    Real-data equivalent of run_task4(): Task 3's allocations feed the
+    same MRV backtracking search generate_multiple_schedules() uses,
+    driven by the authenticated student + shared catalog instead of
+    dummy_data.json / a student_id lookup.
+
+    Returns (pseudo_student, schedules, allocations, priorities).
+    """
+
+    priorities, allocations = (
+        Studyhour_Allocation
+        .generate_study_hour_allocations_from_real_data(
+            student,
+            courses,
+            academic_events,
+            min_hours=min_hours,
+            today=today,
+            semester_start=semester_start,
+        )
+    )
+
+    daily_study_hours = (
+        student.get("daily_study_hours", {})
+        if isinstance(student, dict)
+        else getattr(student, "daily_study_hours", {})
+    )
+
+    weekday_hours, weekend_hours = (
+        Studyhour_Allocation.split_weekday_weekend_hours(
+            daily_study_hours
+        )
+    )
+
+    pseudo_student = build_pseudo_student(
+        student,
+        weekday_hours,
+        weekend_hours,
+    )
+
+    if university_schedule is None:
+        university_schedule = load_default_university_schedule()
+
+    schedules = generate_multiple_schedules(
+        pseudo_student,
+        university_schedule,
+        allocations,
+        number_of_schedules=number_of_schedules,
+    )
+
+    return pseudo_student, schedules, allocations, priorities
+
 
 # ==========================================================
 # MAIN TEST

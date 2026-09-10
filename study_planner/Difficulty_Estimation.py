@@ -11,7 +11,10 @@ The student is selected using the student_id received from authentication.
 """
 
 import json
+from pathlib import Path
 from Login_systemV2 import auth_service
+
+DEFAULT_DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "dummy_data.json"
 
 def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     """
@@ -72,12 +75,14 @@ def estimate_student_difficulties(student):
     return courses
 
 
-def load_students(filename=r"data\dummy_data.json"):
+def load_students(filename=None):
     """
     Load Group A's student data.
     """
 
-    with open(filename, "r", encoding="utf-8") as file:
+    path = filename or DEFAULT_DATA_FILE
+
+    with open(path, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
@@ -116,39 +121,133 @@ def estimate_difficulties_for_student(student_id):
 
     return student, difficulties
 
-username = input("Username: ")
-password = input("Password: ")
+# ==========================================================
+# REAL-DATA INTEGRATION
+# ==========================================================
+#
+# Everything above this point is Group A's original Task 1 code,
+# built around data/dummy_data.json (one student_id -> a "courses"
+# dict with base_difficulty / completed_prerequisites per course).
+#
+# The live app doesn't have that per-student shape: real students
+# come from Login_systemV2.auth_service (a SQLite row -> completed
+# course IDs only, no personal grade per prerequisite), and the
+# course catalog comes from loader.load_courses_and_events() (a list
+# of model.py Course objects shared by every student). The functions
+# below adapt that real shape to calculate_difficulty() without
+# touching dummy_data.json.
 
-authenticated_user = auth_service.authenticate(
-    username,
-    password
-)
+def _get_field(student, field, default=None):
+    """Works whether `student` is an auth_service dict or a model.py-style object."""
 
-student_id = authenticated_user["student_id"]
+    if isinstance(student, dict):
+        return student.get(field, default)
 
-student, difficulties = estimate_difficulties_for_student(
-    student_id
-)
+    return getattr(student, field, default)
 
-print("\nDifficulty Estimation")
-print("=====================")
 
-print(f"Student: {student['name']}")
-print(f"Student ID: {student['student_id']}")
+def build_course_difficulty_inputs(course, completed_course_ids):
+    """
+    Build the (base_difficulty, prerequisites) pair calculate_difficulty()
+    expects, from a real Course (model.py) instead of a dummy_data.json
+    course dict.
 
-for course, data in difficulties.items():
+    Course.difficulty_level is 1-5 (see loader.py); calculate_difficulty()
+    was designed around a 0-10 scale, so it's doubled here to match.
 
-    print(
-        f"{course}: "
-        f"{data['difficulty']:.2f}/10"
+    There's no historical per-prerequisite grade for real students (the
+    students table doesn't track one), so a completed prerequisite's
+    "personal_difficulty" falls back to that prerequisite's own catalog
+    difficulty, with equal influence across all completed prerequisites.
+    """
+
+    base_difficulty = course.difficulty_level * 2
+
+    prerequisites = {}
+
+    for prereq_id in course.prerequisites:
+
+        if prereq_id in completed_course_ids:
+            prerequisites[prereq_id] = {
+                "personal_difficulty": base_difficulty,
+                "influence": 1.0,
+            }
+
+    return base_difficulty, prerequisites
+
+
+def estimate_difficulties_for_real_student(student, courses):
+    """
+    Real-data equivalent of estimate_difficulties_for_student(): takes the
+    authenticated student (dict from Login_systemV2.auth_service.authenticate)
+    and the shared course catalog (list[Course] from
+    loader.load_courses_and_events), and returns
+    {course_id: {"course_id", "name", "base_difficulty", "difficulty"}}.
+    """
+
+    completed_course_ids = set(
+        _get_field(student, "completed_courses", []) or []
     )
 
-if __name__ == "__main__":
-    student_id = "STU-2026-001"
+    difficulties = {}
+
+    for course in courses:
+
+        base_difficulty, prerequisites = build_course_difficulty_inputs(
+            course,
+            completed_course_ids,
+        )
+
+        difficulty = calculate_difficulty(
+            base_difficulty,
+            prerequisites,
+        )
+
+        difficulties[course.course_id] = {
+            "course_id": course.course_id,
+            "name": course.name,
+            "base_difficulty": base_difficulty,
+            "difficulty": difficulty,
+        }
+
+    return difficulties
+
+
+def _run_cli():
+    """
+    Manual/interactive test entry point. This only runs when the file is
+    executed directly (`python Difficulty_Estimation.py`) — it must NOT run
+    on import, otherwise importing this module (e.g. from main.py) would
+    block waiting for terminal input.
+    """
+
+    username = input("Username: ")
+    password = input("Password: ")
+
+    authenticated_user = auth_service.authenticate(
+        username,
+        password
+    )
+
+    student_id = authenticated_user["student_id"]
 
     student, difficulties = estimate_difficulties_for_student(
         student_id
     )
 
-    for course_name, course in difficulties.items():
-        print(course_name, course["difficulty"])
+    print("\nDifficulty Estimation")
+    print("=====================")
+
+    print(f"Student: {student['name']}")
+    print(f"Student ID: {student['student_id']}")
+
+    for course, data in difficulties.items():
+
+        print(
+            f"{course}: "
+            f"{data['difficulty']:.2f}/10"
+        )
+
+
+if __name__ == "__main__":
+    _run_cli()

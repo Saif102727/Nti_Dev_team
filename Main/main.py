@@ -186,6 +186,11 @@ def initialize_session_state():
 
         "selected_study_day": None,
 
+        # Cached result of the full Task 1-5 pipeline
+        # (study_planner/Schedule_Optimization.run_task5_from_real_data),
+        # so it survives reruns until the user asks to regenerate it.
+        "weekly_schedule_result": None,
+
         # IMPORTANT:
         # Never initialize this as None because it is later
         # used by number_input and formatted as a float.
@@ -1643,6 +1648,176 @@ with tab2:
                 st.info(
                     "No study recommendations "
                     "could be generated."
+                )
+
+    # =====================================================
+    # AI-OPTIMIZED WEEKLY SCHEDULE
+    # =====================================================
+    #
+    # Runs the full study_planner pipeline — Difficulty Estimation ->
+    # Priority Calculation -> Study-Hour Allocation -> Schedule
+    # Generation -> Schedule Optimization — on the signed-in student's
+    # real data (courses, completed courses, daily study hours) instead
+    # of the simple equal/difficulty-weighted split above, and places
+    # every session around the shared class timetable
+    # (data/schedule.json).
+
+    st.divider()
+
+    st.subheader(
+        "AI-Optimized Weekly Schedule"
+    )
+
+    st.caption(
+        "Generates a full week of study sessions around your class "
+        "timetable, ranked by course difficulty, upcoming deadlines, "
+        "and your daily study-hour availability."
+    )
+
+    if not course_list:
+
+        st.info(
+            "No courses available."
+        )
+
+    else:
+
+        if st.button(
+            "Generate Weekly Schedule",
+            width="stretch",
+            key="generate_weekly_schedule_button",
+        ):
+
+            with st.spinner(
+                "Building your optimized weekly schedule..."
+            ):
+
+                try:
+                    from study_planner.Schedule_Optimization import (
+                        run_task5_from_real_data,
+                    )
+
+                    weekly_result = run_task5_from_real_data(
+                        student,
+                        course_list,
+                        academic_events,
+                        number_of_schedules=5,
+                        min_hours=1,
+                    )
+
+                except ValueError as error:
+
+                    st.session_state.weekly_schedule_result = None
+
+                    st.warning(
+                        f"Couldn't fit a full weekly schedule: {error}"
+                    )
+
+                except Exception as error:
+
+                    st.session_state.weekly_schedule_result = None
+
+                    st.error(
+                        "Something went wrong while generating "
+                        "the weekly schedule."
+                    )
+
+                    st.exception(error)
+
+                else:
+
+                    if weekly_result is None:
+
+                        st.session_state.weekly_schedule_result = None
+
+                        st.warning(
+                            "No feasible weekly schedule could be "
+                            "found with your current study hours."
+                        )
+
+                    else:
+
+                        st.session_state.weekly_schedule_result = (
+                            weekly_result
+                        )
+
+        weekly_result = st.session_state.get(
+            "weekly_schedule_result"
+        )
+
+        if weekly_result:
+
+            st.success(
+                f"Optimization score: "
+                f"{weekly_result['score']:.1f}/100"
+            )
+
+            schedule = weekly_result.get("schedule", [])
+
+            week_days = [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+            ]
+
+            any_sessions = False
+
+            for day in week_days:
+
+                day_sessions = [
+                    session
+                    for session in schedule
+                    if session.get("day") == day
+                ]
+
+                if not day_sessions:
+                    continue
+
+                any_sessions = True
+
+                day_sessions.sort(
+                    key=lambda session: session.get("start", "")
+                )
+
+                with st.expander(
+                    day,
+                    icon="🗓️",
+                ):
+
+                    for session in day_sessions:
+
+                        is_study_session = session.get(
+                            "study_session",
+                            False,
+                        )
+
+                        if is_study_session:
+
+                            st.write(
+                                f"📖 {session.get('start')} - "
+                                f"{session.get('end')} | "
+                                f"**{session.get('course')}** "
+                                f"(Study)"
+                            )
+
+                        else:
+
+                            st.write(
+                                f"🏫 {session.get('start')} - "
+                                f"{session.get('end')} | "
+                                f"**{session.get('course')}** "
+                                f"({session.get('type', 'Class')})"
+                            )
+
+            if not any_sessions:
+
+                st.info(
+                    "The generated schedule has no sessions "
+                    "to display."
                 )
 
 # =========================================================
