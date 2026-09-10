@@ -11,7 +11,7 @@ The student is selected using the student_id received from authentication.
 """
 
 import json
-# from Login_systemV2 import auth_service
+from Login_systemV2 import auth_service
 
 def calculate_difficulty(base_difficulty, prerequisites, w=0.6):
     """
@@ -116,53 +116,29 @@ def estimate_difficulties_for_student(student_id):
 
     return student, difficulties
 
-if __name__ == "__main__":
+username = input("Username: ")
+password = input("Password: ")
 
-    students = load_students()
+authenticated_user = auth_service.authenticate(
+    username,
+    password
+)
 
-    student = get_student(
-        students,
-        "STU-2026-001"
+student_id = authenticated_user["student_id"]
+
+student, difficulties = estimate_difficulties_for_student(
+    student_id
+)
+
+print("\nDifficulty Estimation")
+print("=====================")
+
+print(f"Student: {student['name']}")
+print(f"Student ID: {student['student_id']}")
+
+for course, data in difficulties.items():
+
+    print(
+        f"{course}: "
+        f"{data['difficulty']:.2f}/10"
     )
-
-    difficulties = estimate_student_difficulties(student)
-
-    print("\nDifficulty Estimation")
-    print("=====================")
-
-    for course, data in difficulties.items():
-
-        print(
-            f"{course}: "
-            f"{data['difficulty']:.2f}/10"
-        )
-
-
-# if __name__ == "__main__":
-
-#     username = input("Username: ")
-#     password = input("Password: ")
-
-#     authenticated_user = auth_service.authenticate(
-#         username,
-#         password
-#     )
-
-#     student_id = authenticated_user["student_id"]
-
-#     student, difficulties = estimate_difficulties_for_student(
-#         student_id
-#     )
-
-#     print("\nDifficulty Estimation")
-#     print("=====================")
-
-#     print(f"Student: {student['name']}")
-#     print(f"Student ID: {student['student_id']}")
-
-#     for course, data in difficulties.items():
-
-#         print(
-#             f"{course}: "
-#             f"{data['difficulty']:.2f}/10"
-#         )

@@ -240,9 +240,9 @@ if __name__ == "__main__":
     weekday_hours = student["study_preferences"]["weekday_hours_per_day"]
     weekend_hours = student["study_preferences"]["weekend_hours_per_day"]
 
-    # There are 4 weekdays and 3 weekend days
-    weekdays = 4
-    weekend_days = 3
+    # There are 5 weekdays and 2 weekend days
+    weekdays = 5
+    weekend_days = 2
 
     # Minimum study hours for each course
     min_hours = 2

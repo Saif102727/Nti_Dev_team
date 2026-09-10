@@ -34,16 +34,15 @@ Task 5 will evaluate the generated schedules and
 select the best one.
 """
 
-import json
 
+import json
 import Priority_Calculation
 import Studyhour_Allocation
 
 
-# ============================================================
+# ==========================================================
 # CONSTANTS
-# ============================================================
-
+# ==========================================================
 WEEKDAYS = 5
 WEEKEND_DAYS = 2
 
@@ -54,7 +53,7 @@ DAYS = [
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday"
+    "Saturday",
 ]
 
 WEEKDAY_NAMES = [
@@ -62,739 +61,618 @@ WEEKDAY_NAMES = [
     "Monday",
     "Tuesday",
     "Wednesday",
-    "Thursday"
+    "Thursday",
 ]
 
 WEEKEND_NAMES = [
     "Friday",
-    "Saturday"
+    "Saturday",
 ]
 
+DAY_START = 8 * 60
+DAY_END = 22 * 60
 
-# ============================================================
-# TIME HELPERS
-# ============================================================
+# This is a safety limit only.  It prevents an accidental infinite search.
+MAX_SEARCH_NODES = 20000
+DAILY_FLEXIBILITY_MINUTES = 60
 
+# ==========================================================
+# TIME FUNCTIONS
+# ==========================================================
 def time_to_minutes(time_string):
-
-    hours, minutes = map(
-        int,
-        time_string.split(":")
-    )
-
+    hours, minutes = map(int, time_string.split(":"))
     return hours * 60 + minutes
 
 
 def minutes_to_time(minutes):
-
     hours = minutes // 60
     mins = minutes % 60
-
     return f"{hours:02d}:{mins:02d}"
 
 
 def overlaps(start1, end1, start2, end2):
-
     return start1 < end2 and start2 < end1
 
 
-# ============================================================
+# ==========================================================
 # HARD CONSTRAINTS
-# ============================================================
-
-def is_slot_available(
-    day,
-    start,
-    end,
-    unavailable
-):
-
-    for period in unavailable:
-
-        if period["day"] != day:
+# ==========================================================
+def is_slot_available(day, start, end, unavailable):
+    for constraint in unavailable:
+        if constraint["day"] != day:
             continue
 
-        blocked_start = time_to_minutes(
-            period["start"]
-        )
-
-        blocked_end = time_to_minutes(
-            period["end"]
-        )
+        constraint_start = time_to_minutes(constraint["start"])
+        constraint_end = time_to_minutes(constraint["end"])
 
         if overlaps(
             start,
             end,
-            blocked_start,
-            blocked_end
+            constraint_start,
+            constraint_end,
         ):
             return False
 
     return True
 
 
-def is_slot_free(
-    day,
-    start,
-    end,
-    schedule
-):
-
+def is_slot_free(day, start, end, schedule):
     for session in schedule:
-
         if session["day"] != day:
             continue
 
-        existing_start = time_to_minutes(
-            session["start"]
-        )
-
-        existing_end = time_to_minutes(
-            session["end"]
-        )
+        session_start = time_to_minutes(session["start"])
+        session_end = time_to_minutes(session["end"])
 
         if overlaps(
             start,
             end,
-            existing_start,
-            existing_end
+            session_start,
+            session_end,
         ):
             return False
 
     return True
 
 
-# ============================================================
+# ==========================================================
 # UNIVERSITY SCHEDULE
-# ============================================================
+# ==========================================================
+def get_student_schedule(student_id, university_data):
+    """
+    Group A's schedule.json uses:
 
-def get_student_schedule(
-    student_id,
-    university_data
-):
+        "student_assignments": {
+            "STUDENT_ID": "SCHEDULE_ID"
+        }
 
-    assignments = university_data[
-        "student_assignments"
-    ]
-
-    schedule_id = assignments.get(
+    Return the schedule assigned to the requested student.
+    """
+    schedule_id = university_data.get("student_assignments", {}).get(
         student_id
     )
 
     if schedule_id is None:
+        return None
 
-        raise ValueError(
-            f"No university schedule found "
-            f"for student {student_id}"
-        )
-
-    for schedule in university_data[
-        "schedules"
-    ]:
-
-        if schedule["schedule_id"] == schedule_id:
-
+    for schedule in university_data.get("schedules", []):
+        if schedule.get("schedule_id") == schedule_id:
             return schedule
 
-    raise ValueError(
-        f"Schedule {schedule_id} "
-        f"was not found."
-    )
+    return None
 
 
-def get_university_sessions(
-    university_schedule
-):
+def get_university_sessions(university_schedule):
+    """
+    Convert Group A's format into Task 4's internal format.
 
+    Group A:
+        course_id
+        session_type
+        start_time
+        end_time
+
+    Task 4:
+        course
+        type
+        start
+        end
+    """
     sessions = []
 
-    for session in university_schedule[
-        "sessions"
-    ]:
+    if university_schedule is None:
+        return sessions
 
-        sessions.append({
-            "day": session["day"],
-            "start": session["start_time"],
-            "end": session["end_time"],
-            "course": session["course_id"],
-            "type": session["session_type"]
-        })
+    for session in university_schedule.get("sessions", []):
+        sessions.append(
+            {
+                "day": session["day"],
+                "start": session["start_time"],
+                "end": session["end_time"],
+                "course": session["course_id"],
+                "type": session["session_type"],
+                "study_session": False,
+            }
+        )
 
     return sessions
 
 
-# ============================================================
-# CREATE HARD CONSTRAINT LIST
-# ============================================================
-
-def build_hard_constraints(
-    student,
-    university_schedule
-):
-
+# ==========================================================
+# BUILD HARD CONSTRAINTS
+# ==========================================================
+def build_hard_constraints(student, university_schedule):
     hard_constraints = []
 
-    # --------------------------------------------------------
-    # Student hard constraints
-    # --------------------------------------------------------
-
-    unavailable_periods = student[
-        "unavailable_periods"
-    ].get(
-        "hard_constraints",
-        []
+    student_constraints = (
+        student.get("unavailable_periods", {})
+        .get("hard_constraints", [])
     )
 
-    for period in unavailable_periods:
+    for constraint in student_constraints:
+        hard_constraints.append(
+            {
+                "day": constraint["day"],
+                "start": constraint["start"],
+                "end": constraint["end"],
+                "reason": constraint.get("reason", "Unavailable"),
+            }
+        )
 
-        hard_constraints.append({
-            "day": period["day"],
-            "start": period["start"],
-            "end": period["end"],
-            "reason": period.get(
-                "reason",
-                "Student unavailable"
+    # University classes are hard constraints too.
+    if university_schedule is not None:
+        for session in university_schedule.get("sessions", []):
+            hard_constraints.append(
+                {
+                    "day": session["day"],
+                    "start": session["start_time"],
+                    "end": session["end_time"],
+                    "reason": "University class",
+                }
             )
-        })
-
-    # --------------------------------------------------------
-    # University classes
-    # --------------------------------------------------------
-
-    for session in university_schedule[
-        "sessions"
-    ]:
-
-        hard_constraints.append({
-            "day": session["day"],
-            "start": session["start_time"],
-            "end": session["end_time"],
-            "reason": (
-                f"University "
-                f"{session['session_type']}: "
-                f"{session['course_id']}"
-            )
-        })
 
     return hard_constraints
 
 
-# ============================================================
+# ==========================================================
 # SOFT CONSTRAINT SCORE
-# ============================================================
-
+# ==========================================================
 def calculate_soft_penalty(
     day,
     start,
     end,
-    soft_constraints
+    soft_constraints,
 ):
-
     penalty = 0
 
-    for period in soft_constraints:
-
-        if period["day"] != day:
+    for constraint in soft_constraints:
+        if constraint["day"] != day:
             continue
 
-        blocked_start = time_to_minutes(
-            period["start"]
-        )
-
-        blocked_end = time_to_minutes(
-            period["end"]
-        )
+        constraint_start = time_to_minutes(constraint["start"])
+        constraint_end = time_to_minutes(constraint["end"])
 
         if overlaps(
             start,
             end,
-            blocked_start,
-            blocked_end
+            constraint_start,
+            constraint_end,
         ):
-
-            penalty += 1
+            penalty += 3
 
     return penalty
 
 
-# ============================================================
-# PREFERRED STUDY TIME
-# ============================================================
-
+# ==========================================================
+# STUDY TIME PREFERENCE SCORE
+# ==========================================================
 def calculate_preference_score(
     day,
     start,
     end,
-    preferred_times
+    preferred_times,
 ):
-
-    if not preferred_times:
-        return 0
-
     score = 0
 
-    preferred_ranges = {
+    if not preferred_times:
+        return score
 
-        "Morning": (
-            8 * 60,
-            12 * 60
-        ),
-
-        "Afternoon": (
-            12 * 60,
-            17 * 60
-        ),
-
-        "Evening": (
-            17 * 60,
-            21 * 60
-        ),
-
-        "Night": (
-            21 * 60,
-            24 * 60
-        )
-    }
+    if start >= 8 * 60 and end <= 12 * 60:
+        current_time = "Morning"
+    elif start >= 12 * 60 and end <= 17 * 60:
+        current_time = "Afternoon"
+    elif start >= 17 * 60 and end <= 21 * 60:
+        current_time = "Evening"
+    elif start >= 21 * 60 and end <= 24 * 60:
+        current_time = "Night"
+    else:
+        current_time = None
 
     for preference in preferred_times:
-
-        if preference["day"] != day:
-            continue
-
-        preferred_time = preference["time"]
-
-        if preferred_time not in preferred_ranges:
-            continue
-
-        preferred_start, preferred_end = (
-            preferred_ranges[preferred_time]
-        )
-
         if (
-            start >= preferred_start
-            and end <= preferred_end
+            preference["day"] == day
+            and preference["time"] == current_time
         ):
-
             score += 2
 
     return score
 
 
-# ============================================================
+# ==========================================================
 # STUDY PLACE SCORE
-# ============================================================
-
+# ==========================================================
 def calculate_study_place_score(
     day,
     start,
     end,
     study_place,
-    university_schedule
+    university_schedule,
 ):
+    if study_place in ("Either", "Both"):
+        return 1
 
     university_gap = False
 
-    for gap in university_schedule.get(
-        "gaps",
-        []
-    ):
+    if university_schedule is not None:
+        day_sessions = []
 
-        if gap["day"] != day:
-            continue
+        for session in university_schedule.get("sessions", []):
+            if session["day"] == day:
+                day_sessions.append(
+                    {
+                        "start": time_to_minutes(session["start_time"]),
+                        "end": time_to_minutes(session["end_time"]),
+                    }
+                )
 
-        gap_start = time_to_minutes(
-            gap["start_time"]
-        )
+        day_sessions.sort(key=lambda x: x["start"])
 
-        gap_end = time_to_minutes(
-            gap["end_time"]
-        )
+        previous_end = DAY_START
 
-        if (
-            start >= gap_start
-            and end <= gap_end
-        ):
+        for session in day_sessions:
+            if start >= previous_end and end <= session["start"]:
+                university_gap = True
+                break
 
+            previous_end = max(previous_end, session["end"])
+
+        if start >= previous_end and end <= DAY_END:
             university_gap = True
-            break
-
-    # --------------------------------------------------------
-    # University Only
-    # --------------------------------------------------------
 
     if study_place == "University Only":
-
-        if university_gap:
-            return 3
-
-        return -3
-
-    # --------------------------------------------------------
-    # Home Only
-    # --------------------------------------------------------
+        return 3 if university_gap else -3
 
     if study_place == "Home Only":
-
-        if university_gap:
-            return -1
-
-        return 2
-
-    # --------------------------------------------------------
-    # University or Home
-    # --------------------------------------------------------
-
-    if study_place in [
-        "University or Home",
-        "Both",
-        "Either"
-    ]:
-
-        return 1
+        return -1 if university_gap else 2
 
     return 0
 
 
-# ============================================================
-# SESSION SPLITTING
-# ============================================================
+# ==========================================================
+# SPLIT ALLOCATION INTO STUDY SESSIONS
+# ==========================================================
+def split_into_sessions(hours, session_minutes=90):
+    """
+    Split a course allocation into sessions.
 
-def split_into_sessions(
-    hours,
-    session_minutes=90
-):
-
-    total_minutes = int(
-        round(hours * 60)
-    )
-
+    The preferred session length is a preference, not a hard requirement.
+    The final session may therefore be shorter.
+    """
+    total_minutes = round(hours * 60)
     sessions = []
 
     while total_minutes > 0:
-
-        current_minutes = min(
-            session_minutes,
-            total_minutes
-        )
-
-        sessions.append(
-            current_minutes
-        )
-
-        total_minutes -= current_minutes
+        current_session = min(session_minutes, total_minutes)
+        sessions.append(current_session)
+        total_minutes -= current_session
 
     return sessions
 
 
-# ============================================================
-# DAILY TARGET HOURS
-# ============================================================
-
-def calculate_daily_targets(
-    student,
-    allocations
-):
-
+# ==========================================================
+# DAILY STUDY TARGETS
+# ==========================================================
+def calculate_daily_targets(student, allocations):
     total_allocated_hours = sum(
         allocation["allocated_hours"]
         for allocation in allocations
     )
 
-    weekday_hours_per_day = student[
-        "study_preferences"
-    ]["weekday_hours_per_day"]
+    weekday_hours_per_day = student["study_preferences"][
+        "weekday_hours_per_day"
+    ]
+    weekend_hours_per_day = student["study_preferences"][
+        "weekend_hours_per_day"
+    ]
 
-    # --------------------------------------------------------
-    # Egypt:
-    # Sunday -> Thursday = weekdays
-    # Friday + Saturday = weekend
-    # --------------------------------------------------------
+    weekday_capacity = weekday_hours_per_day * WEEKDAYS
+    weekend_capacity = weekend_hours_per_day * WEEKEND_DAYS
 
-    weekday_capacity = (
-        weekday_hours_per_day
-        * WEEKDAYS
-    )
-
+    # Use weekday capacity first, then weekend capacity.
     weekday_hours = min(
         total_allocated_hours,
-        weekday_capacity
+        weekday_capacity,
     )
 
-    weekend_hours = (
-        total_allocated_hours
-        - weekday_hours
+    remaining_hours = total_allocated_hours - weekday_hours
+
+    weekend_hours = min(
+        remaining_hours,
+        weekend_capacity,
     )
 
-    friday_hours = weekend_hours / 2
-    saturday_hours = weekend_hours / 2
+    daily_targets = {}
 
-    daily_targets = {
+    weekday_daily_hours = (
+        weekday_hours / WEEKDAYS
+        if WEEKDAYS > 0
+        else 0
+    )
 
-        "Sunday":
-            weekday_hours / WEEKDAYS,
+    for day in WEEKDAY_NAMES:
+        daily_targets[day] = weekday_daily_hours
 
-        "Monday":
-            weekday_hours / WEEKDAYS,
+    weekend_daily_hours = (
+        weekend_hours / WEEKEND_DAYS
+        if WEEKEND_DAYS > 0
+        else 0
+    )
 
-        "Tuesday":
-            weekday_hours / WEEKDAYS,
-
-        "Wednesday":
-            weekday_hours / WEEKDAYS,
-
-        "Thursday":
-            weekday_hours / WEEKDAYS,
-
-        "Friday":
-            friday_hours,
-
-        "Saturday":
-            saturday_hours
-    }
+    for day in WEEKEND_NAMES:
+        daily_targets[day] = weekend_daily_hours
 
     return daily_targets
 
 
-# ============================================================
+# ==========================================================
 # CREATE BASE SCHEDULE
-# ============================================================
-
-def create_base_schedule(
-    university_schedule
-):
-
-    schedule = []
-
-    for session in university_schedule[
-        "sessions"
-    ]:
-
-        schedule.append({
-
-            "day":
-                session["day"],
-
-            "start":
-                session["start_time"],
-
-            "end":
-                session["end_time"],
-
-            "course":
-                session["course_id"],
-
-            "type":
-                session["session_type"],
-
-            "study_session":
-                False
-        })
-
-    return schedule
+# ==========================================================
+def create_base_schedule(university_schedule):
+    return get_university_sessions(university_schedule)
 
 
-# ============================================================
-# FIND CANDIDATE SLOTS
-# ============================================================
+# ==========================================================
+# FREE INTERVALS
+# ==========================================================
+def get_free_intervals(day, schedule, hard_constraints):
+    """
+    Return continuous free intervals between 08:00 and 22:00.
 
+    University classes and hard unavailable periods are treated as occupied.
+    """
+    occupied = []
+
+    for session in schedule:
+        if session["day"] != day:
+            continue
+
+        occupied.append(
+            (
+                time_to_minutes(session["start"]),
+                time_to_minutes(session["end"]),
+            )
+        )
+
+    for constraint in hard_constraints:
+        if constraint["day"] != day:
+            continue
+
+        occupied.append(
+            (
+                time_to_minutes(constraint["start"]),
+                time_to_minutes(constraint["end"]),
+            )
+        )
+
+    occupied = [
+        (
+            max(start, DAY_START),
+            min(end, DAY_END),
+        )
+        for start, end in occupied
+        if end > DAY_START and start < DAY_END
+    ]
+
+    occupied.sort()
+
+    # Merge overlapping occupied intervals.
+    merged = []
+
+    for start, end in occupied:
+        if not merged or start > merged[-1][1]:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+
+    free_intervals = []
+    current = DAY_START
+
+    for start, end in merged:
+        if current < start:
+            free_intervals.append((current, start))
+        current = max(current, end)
+
+    if current < DAY_END:
+        free_intervals.append((current, DAY_END))
+
+    return free_intervals
+
+
+# ==========================================================
+# FIND CANDIDATE STUDY SLOTS
+# ==========================================================
 def find_candidate_slots(
     student,
     university_schedule,
     schedule,
     duration,
     daily_allocated,
-    daily_targets
+    daily_targets,
 ):
+    """
+    Generate a SMALL but useful set of candidate positions.
 
+    The old version tested every 30-minute start from 08:00 to 22:00.
+    That created a huge recursive search tree.
+
+    This version works with actual free intervals and checks only useful
+    packing positions inside those intervals.
+    """
     candidates = []
 
     hard_constraints = build_hard_constraints(
         student,
-        university_schedule
+        university_schedule,
     )
 
-    soft_constraints = student[
-        "unavailable_periods"
-    ].get(
-        "soft_constraints",
-        []
+    soft_constraints = (
+        student.get("unavailable_periods", {})
+        .get("soft_constraints", [])
     )
 
-    preferred_times = student[
-        "study_preferences"
-    ].get(
-        "preferred_study_times",
-        []
+    preferred_times = (
+        student.get("study_preferences", {})
+        .get("preferred_study_times", [])
     )
 
-    study_place = student[
-        "study_preferences"
-    ].get(
-        "study_place",
-        ""
+    study_place = (
+        student.get("study_preferences", {})
+        .get("study_place", "Either")
     )
-
-    day_start = 8 * 60
-    day_end = 22 * 60
-
-    duration_hours = duration / 60
 
     for day in DAYS:
 
-        remaining_target = (
-            daily_targets[day]
-            - daily_allocated[day]
+        preferred_remaining = (
+            daily_targets[day] - daily_allocated[day]
         )
 
-        if duration_hours > remaining_target:
+        # Daily study hours are preferences, not hard constraints.
+        # Allow Task 4 to borrow up to a small amount of time from
+        # another day when necessary to make a feasible schedule.
+        maximum_daily_hours = (
+            daily_targets[day]
+            + DAILY_FLEXIBILITY_MINUTES / 60
+        )
+
+        remaining_daily_capacity = (
+            maximum_daily_hours - daily_allocated[day]
+        )
+
+        if duration > remaining_daily_capacity * 60 + 1e-9:
             continue
 
-        current = day_start
+        free_intervals = get_free_intervals(
+            day,
+            schedule,
+            hard_constraints,
+        )
 
-        while current + duration <= day_end:
+        for interval_start, interval_end in free_intervals:
+            interval_length = interval_end - interval_start
 
-            start = current
-            end = current + duration
-
-            # ------------------------------------------------
-            # HARD CONSTRAINT
-            # ------------------------------------------------
-
-            if not is_slot_available(
-                day,
-                start,
-                end,
-                hard_constraints
-            ):
-
-                current += 30
+            if duration > interval_length:
                 continue
 
-            # ------------------------------------------------
-            # HARD CONSTRAINT:
-            # no overlap with existing schedule
-            # ------------------------------------------------
+            # Always consider the beginning and end of the free interval.
+            possible_starts = {
+                interval_start,
+                interval_end - duration,
+            }
 
-            if not is_slot_free(
-                day,
-                start,
-                end,
-                schedule
-            ):
+            # Add 30-minute positions inside the interval, but only when
+            # useful.  This keeps the search small while still allowing
+            # alternative schedules.
+            start = interval_start
+            while start + duration <= interval_end:
+                possible_starts.add(start)
+                start += 30
 
-                current += 30
-                continue
+            for start in sorted(possible_starts):
+                end = start + duration
 
-            # ------------------------------------------------
-            # SOFT CONSTRAINT
-            # ------------------------------------------------
+                if end > interval_end:
+                    continue
 
-            soft_penalty = (
-                calculate_soft_penalty(
+                if not is_slot_available(
                     day,
                     start,
                     end,
-                    soft_constraints
-                )
-            )
+                    hard_constraints,
+                ):
+                    continue
 
-            # ------------------------------------------------
-            # PREFERRED TIME
-            # ------------------------------------------------
-
-            preference_score = (
-                calculate_preference_score(
+                if not is_slot_free(
                     day,
                     start,
                     end,
-                    preferred_times
+                    schedule,
+                ):
+                    continue
+
+                preference_score = calculate_preference_score(
+                    day,
+                    start,
+                    end,
+                    preferred_times,
                 )
-            )
 
-            # ------------------------------------------------
-            # STUDY PLACE
-            # ------------------------------------------------
-
-            study_place_score = (
-                calculate_study_place_score(
+                place_score = calculate_study_place_score(
                     day,
                     start,
                     end,
                     study_place,
-                    university_schedule
-                )
-            )
-
-            # ------------------------------------------------
-            # BALANCE
-            # ------------------------------------------------
-
-            target = daily_targets[day]
-
-            if target > 0:
-
-                usage_ratio = (
-                    daily_allocated[day]
-                    / target
+                    university_schedule,
                 )
 
-            else:
+                soft_penalty = calculate_soft_penalty(
+                    day,
+                    start,
+                    end,
+                    soft_constraints,
+                )
 
-                usage_ratio = 1
+                # Prefer using days with more remaining target capacity,
+                # but only as a soft preference.
+                balance_score = (
+                    daily_targets[day] - daily_allocated[day]
+                )
 
-            balance_score = (
-                2 * (1 - usage_ratio)
-            )
+                # Prefer earlier positions when scores are otherwise equal.
+                early_slot_score = -start / 10000
 
-            # ------------------------------------------------
-            # LOCAL SLOT SCORE
-            #
-            # Task 4 only uses this to order candidates.
-            # Task 5 makes the FINAL decision.
-            # ------------------------------------------------
+                total_score = (
+                    preference_score
+                    + place_score
+                    + balance_score
+                    - soft_penalty
+                    + early_slot_score
+                )
 
-            local_score = (
-                preference_score
-                + study_place_score
-                + balance_score
-                - soft_penalty
-            )
-
-            candidates.append({
-
-                "day": day,
-
-                "start": start,
-
-                "end": end,
-
-                "score": local_score
-            })
-
-            current += 30
+                candidates.append(
+                    {
+                        "day": day,
+                        "start": start,
+                        "end": end,
+                        "score": total_score,
+                    }
+                )
 
     candidates.sort(
         key=lambda x: x["score"],
-        reverse=True
+        reverse=True,
     )
 
     return candidates
 
 
-# ============================================================
+# ==========================================================
 # SCHEDULE SIGNATURE
-# ============================================================
-
+# ==========================================================
 def schedule_signature(schedule):
-
     study_sessions = []
 
     for session in schedule:
-
-        if not session.get(
-            "study_session",
-            False
-        ):
+        if not session.get("study_session", False):
             continue
 
         study_sessions.append(
@@ -802,128 +680,126 @@ def schedule_signature(schedule):
                 session["day"],
                 session["start"],
                 session["end"],
-                session["course"]
+                session["course"],
             )
         )
 
-    return tuple(
-        sorted(study_sessions)
-    )
+    return tuple(sorted(study_sessions))
 
 
-# ============================================================
-# GENERATE ONE FEASIBLE SCHEDULE USING BACKTRACKING
-# ============================================================
-
+# ==========================================================
+# MOST CONSTRAINED SESSION FIRST SEARCH
+# ==========================================================
 def _search_schedule(
     student,
     university_schedule,
     sessions_to_place,
-    index,
+    remaining_indices,
     schedule,
     daily_allocated,
     daily_targets,
     generated_schedules,
     signatures,
     max_schedules,
-    search_state
+    search_state,
 ):
-    # ========================================================
-    # STOP CONDITIONS
-    # ========================================================
+    """Backtracking search using MRV (Most Restricted Variable)."""
 
-    # We already have enough schedules
+    # Enough schedules already generated.
     if len(generated_schedules) >= max_schedules:
         return True
 
-    # Safety limit so the algorithm can NEVER run forever
+    # Safety stop.  This guarantees that the search cannot run forever.
     if search_state["nodes"] >= search_state["max_nodes"]:
         return False
 
     search_state["nodes"] += 1
 
-    # ========================================================
-    # ALL SESSIONS HAVE BEEN PLACED
-    # ========================================================
-
-    if index >= len(sessions_to_place):
-
+    # ------------------------------------------------------
+    # BASE CASE
+    # ------------------------------------------------------
+    if not remaining_indices:
         signature = schedule_signature(schedule)
 
         if signature not in signatures:
             signatures.add(signature)
-
             generated_schedules.append(
                 [session.copy() for session in schedule]
             )
 
-        return (
-            len(generated_schedules) >= max_schedules
+        return len(generated_schedules) >= max_schedules
+
+    # ------------------------------------------------------
+    # TOTAL REMAINING CAPACITY PRUNING
+    # ------------------------------------------------------
+    remaining_session_minutes = sum(
+        sessions_to_place[i][1]
+        for i in remaining_indices
+    )
+
+    remaining_capacity_minutes = sum(
+    max(
+        0,
+        (
+            daily_targets[day]
+            + DAILY_FLEXIBILITY_MINUTES / 60
+        )
+        - daily_allocated[day],
+    ) * 60
+    for day in DAYS
+)
+
+    if remaining_capacity_minutes + 1e-9 < remaining_session_minutes:
+        return False
+
+    # ------------------------------------------------------
+    # MRV: FIND THE SESSION WITH FEWEST CANDIDATES
+    # ------------------------------------------------------
+    selected_index = None
+    selected_candidates = []
+
+    for session_index in remaining_indices:
+        course_name, duration = sessions_to_place[session_index]
+
+        candidates = find_candidate_slots(
+            student,
+            university_schedule,
+            schedule,
+            duration,
+            daily_allocated,
+            daily_targets,
         )
 
-    # ========================================================
-    # CURRENT SESSION
-    # ========================================================
+        # No legal slot means this branch is impossible.
+        if not candidates:
+            return False
 
-    course_name, duration = sessions_to_place[index]
+        if (
+            selected_index is None
+            or len(candidates) < len(selected_candidates)
+        ):
+            selected_index = session_index
+            selected_candidates = candidates
 
-    # ========================================================
-    # FIND FEASIBLE CANDIDATES
-    # ========================================================
+    if selected_index is None or not selected_candidates:
+        return False
 
-    candidates = find_candidate_slots(
-        student,
-        university_schedule,
-        schedule,
-        duration,
-        daily_allocated,
-        daily_targets
-    )
+    course_name, duration = sessions_to_place[selected_index]
+    duration_hours = duration / 60
 
-    if not candidates:
-        print(
-            f"\nNO CANDIDATES:"
-            f" {course_name}"
-            f" - {duration} minutes"
-            f" - session {index + 1}/"
-            f"{len(sessions_to_place)}"
-    )
-    # ========================================================
-    # IMPORTANT:
-    # Don't explore hundreds of possible slots.
-    # Only try the best few.
-    # ========================================================
-
-    MAX_CANDIDATES_PER_SESSION = 8
-
-    candidates = candidates[
-        :MAX_CANDIDATES_PER_SESSION
-    ]
-
-    # ========================================================
-    # TRY EACH CANDIDATE
-    # ========================================================
-
-    for candidate in candidates:
-
+    # ------------------------------------------------------
+    # TRY CANDIDATES
+    # ------------------------------------------------------
+    for candidate in selected_candidates:
         if len(generated_schedules) >= max_schedules:
             return True
 
-        if (
-            search_state["nodes"]
-            >= search_state["max_nodes"]
-        ):
+        if search_state["nodes"] >= search_state["max_nodes"]:
             return False
 
         day = candidate["day"]
         start = candidate["start"]
         end = candidate["end"]
-
-        duration_hours = duration / 60
-
-        # ====================================================
-        # CREATE STUDY SESSION
-        # ====================================================
 
         study_session = {
             "day": day,
@@ -931,41 +807,34 @@ def _search_schedule(
             "end": minutes_to_time(end),
             "course": course_name,
             "type": "Study",
-            "study_session": True
+            "study_session": True,
         }
 
-        # ====================================================
-        # ADD SESSION
-        # ====================================================
-
         schedule.append(study_session)
-
         daily_allocated[day] += duration_hours
 
-        # ====================================================
-        # RECURSIVE SEARCH
-        # ====================================================
+        new_remaining_indices = [
+            i
+            for i in remaining_indices
+            if i != selected_index
+        ]
 
         stop_search = _search_schedule(
             student,
             university_schedule,
             sessions_to_place,
-            index + 1,
+            new_remaining_indices,
             schedule,
             daily_allocated,
             daily_targets,
             generated_schedules,
             signatures,
             max_schedules,
-            search_state
+            search_state,
         )
 
-        # ====================================================
-        # BACKTRACK
-        # ====================================================
-
+        # Backtrack.
         daily_allocated[day] -= duration_hours
-
         schedule.pop()
 
         if stop_search:
@@ -974,560 +843,377 @@ def _search_schedule(
     return False
 
 
-# ============================================================
-# GENERATE MULTIPLE FEASIBLE SCHEDULES
-# ============================================================
-
+# ==========================================================
+# GENERATE MULTIPLE SCHEDULES
+# ==========================================================
 def generate_multiple_schedules(
     student,
-    allocations,
     university_schedule,
-    number_of_schedules=10
+    allocations,
+    number_of_schedules=10,
 ):
-
-    # --------------------------------------------------------
-    # Daily target hours
-    # --------------------------------------------------------
-
+    # ------------------------------------------------------
+    # Calculate daily study targets.
+    # ------------------------------------------------------
     daily_targets = calculate_daily_targets(
         student,
-        allocations
+        allocations,
     )
 
-    # --------------------------------------------------------
-    # Start with university classes.
-    # --------------------------------------------------------
-
+    # ------------------------------------------------------
+    # Create university-only base schedule.
+    # ------------------------------------------------------
     base_schedule = create_base_schedule(
         university_schedule
     )
 
-    # --------------------------------------------------------
-    # Sort courses by priority.
-    #
-    # Higher priority courses are placed first because
-    # they are more important and should get the first
-    # opportunity to obtain available slots.
-    # --------------------------------------------------------
-
-    sorted_allocations = sorted(
-        allocations,
-        key=lambda x: x["priority"],
-        reverse=True
-    )
-
-    # --------------------------------------------------------
-    # Convert course allocations into study sessions.
-    # --------------------------------------------------------
-
-    sessions_to_place = []
-
-    session_minutes = student[
-        "study_preferences"
-    ].get(
-        "preferred_session_minutes",
-        90
-    )
-
-    for allocation in sorted_allocations:
-
-        course_name = allocation[
-            "course"
-        ]
-
-        allocated_hours = allocation[
-            "allocated_hours"
-        ]
-
-        session_lengths = split_into_sessions(
-            allocated_hours,
-            session_minutes
-        )
-
-        for duration in session_lengths:
-
-            sessions_to_place.append(
-                (
-                    course_name,
-                    duration
-                )
-            )
-
-    # --------------------------------------------------------
-    # Generate multiple schedules.
-    # --------------------------------------------------------
-
-    generated_schedules = []
-
-    signatures = set()
-
+    # ------------------------------------------------------
+    # Track daily study allocation.
+    # ------------------------------------------------------
     daily_allocated = {
-        day: 0
+        day: 0.0
         for day in DAYS
     }
 
+    # ------------------------------------------------------
+    # Courses are initially sorted by priority.
+    # MRV will decide the actual search order later.
+    # ------------------------------------------------------
+    sorted_allocations = sorted(
+        allocations,
+        key=lambda x: x["priority"],
+        reverse=True,
+    )
+
+    # ------------------------------------------------------
+    # Determine session length.
+    # ------------------------------------------------------
+    preferred_session_minutes = (
+        student["study_preferences"]
+        .get("preferred_session_minutes", 90)
+    )
+
+    weekday_hours = (
+        student["study_preferences"]
+        .get("weekday_hours_per_day", 0)
+    )
+
+    max_weekday_session_minutes = int(
+        weekday_hours * 60
+    )
+
+    # Preferred length is NOT a hard constraint.
+    # If 90 minutes cannot fit into a normal weekday, use the
+    # available weekday length (60 minutes in the current test).
+    session_minutes = min(
+        preferred_session_minutes,
+        max_weekday_session_minutes,
+    )
+
+    if session_minutes <= 0:
+        session_minutes = min(
+            preferred_session_minutes,
+            int(
+                student["study_preferences"].get(
+                    "weekend_hours_per_day",
+                    1,
+                )
+                * 60
+            ),
+        )
+
+    if session_minutes <= 0:
+        session_minutes = 60
+
+    # ------------------------------------------------------
+    # Create individual study sessions.
+    # ------------------------------------------------------
+    sessions_to_place = []
+
+    for allocation in sorted_allocations:
+        course_name = allocation["course"]
+        allocated_hours = allocation["allocated_hours"]
+
+        course_sessions = split_into_sessions(
+            allocated_hours,
+            session_minutes,
+        )
+
+        for duration in course_sessions:
+            sessions_to_place.append(
+                (
+                    course_name,
+                    duration,
+                )
+            )
+
+    # Largest sessions first gives MRV a useful tie-break order.
+    sessions_to_place.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    # ------------------------------------------------------
+    # Search state.
+    # ------------------------------------------------------
     search_state = {
         "nodes": 0,
-        "max_nodes": 5000
+        "max_nodes": MAX_SEARCH_NODES,
     }
 
+    generated_schedules = []
+    signatures = set()
+
+    remaining_indices = list(
+        range(len(sessions_to_place))
+    )
+
+    # ------------------------------------------------------
+    # Start MRV backtracking search.
+    # ------------------------------------------------------
     _search_schedule(
         student,
         university_schedule,
         sessions_to_place,
-        0,
+        remaining_indices,
         base_schedule.copy(),
         daily_allocated,
         daily_targets,
         generated_schedules,
         signatures,
         number_of_schedules,
-        search_state
+        search_state,
     )
-
-    print("\nDAILY TARGETS:")
-
-    for day, hours in daily_targets.items():
-        print(f"{day}: {hours:.2f} hours")
-
-    print(
-        f"\nTOTAL ALLOCATED: "
-        f"{sum(a['allocated_hours'] for a in allocations):.2f} hours"
-    )
-
-
-    # --------------------------------------------------------
-    # If no schedule exists, return empty list.
-    # --------------------------------------------------------
 
     return generated_schedules
 
 
-# ============================================================
-# BACKWARD-COMPATIBLE SINGLE SCHEDULE FUNCTION
-# ============================================================
-
+# ==========================================================
+# GENERATE ONE SCHEDULE
+# ==========================================================
 def generate_schedule(
     student,
+    university_schedule,
     allocations,
-    university_schedule
 ):
-
     schedules = generate_multiple_schedules(
         student,
-        allocations,
         university_schedule,
-        number_of_schedules=1
+        allocations,
+        number_of_schedules=1,
     )
 
-    if not schedules:
+    if schedules:
+        return schedules[0]
 
-        raise ValueError(
-            "No feasible schedule could be generated."
-        )
-
-    return schedules[0]
+    return None
 
 
-# ============================================================
-# PRINT ONE SCHEDULE
-# ============================================================
-
-def print_schedule(schedule):
-
-    print("\n")
-    print("=" * 65)
-    print("GENERATED WEEKLY STUDY SCHEDULE")
-    print("=" * 65)
-
-    current_day = None
-
-    for session in schedule:
-
-        if session["day"] != current_day:
-
-            current_day = session["day"]
-
-            print(
-                f"\n--- {current_day} ---"
-            )
-
-        session_type = session[
-            "type"
-        ]
-
-        print(
-            f"{session['start']} - "
-            f"{session['end']} | "
-            f"{session['course']} "
-            f"({session_type})"
-        )
-
-    print("\n" + "=" * 65)
-
-
-# ============================================================
-# PRINT MULTIPLE SCHEDULES
-# ============================================================
-
-def print_multiple_schedules(
-    schedules
-):
-
-    for index, schedule in enumerate(
-        schedules,
-        start=1
-    ):
-
-        print("\n")
-        print("#" * 70)
-        print(
-            f"FEASIBLE SCHEDULE #{index}"
-        )
-        print("#" * 70)
-
-        print_schedule(
-            schedule
-        )
-
-
-# ============================================================
-# PREPARE TASK 3 ALLOCATIONS
-# ============================================================
-
-def get_allocations_from_task3(
-    student
-):
-
-    # --------------------------------------------------------
-    # Task 2
-    # --------------------------------------------------------
-
-    student = (
+# ==========================================================
+# GET ALLOCATIONS FROM TASK 3
+# ==========================================================
+def get_allocations_from_task3(student):
+    # ------------------------------------------------------
+    # Task 2: calculate all course priorities.
+    # ------------------------------------------------------
+    student_with_priorities = (
         Priority_Calculation
-        .calculate_student_priorities(
-            student
-        )
+        .calculate_student_priorities(student)
     )
 
-    # --------------------------------------------------------
-    # Prepare courses for Task 3
-    # --------------------------------------------------------
+    # ------------------------------------------------------
+    # Prepare Task 3 input.
+    # ------------------------------------------------------
+    courses_for_allocation = []
 
-    courses = (
-        Studyhour_Allocation
-        .prepare_courses_from_Priority_Calculation(
-            student
+    for course_name, course in (
+        student_with_priorities["courses"].items()
+    ):
+        courses_for_allocation.append(
+            {
+                "course": course_name,
+                "priority": course["priority"],
+            }
         )
+
+    # ------------------------------------------------------
+    # Student study hours.
+    # ------------------------------------------------------
+    weekday_hours = (
+        student["study_preferences"]
+        ["weekday_hours_per_day"]
     )
 
-    weekday_hours = student[
-        "study_preferences"
-    ][
-        "weekday_hours_per_day"
-    ]
+    weekend_hours = (
+        student["study_preferences"]
+        ["weekend_hours_per_day"]
+    )
 
-    weekend_hours = student[
-        "study_preferences"
-    ][
-        "weekend_hours_per_day"
-    ]
-
-    # --------------------------------------------------------
-    # Egypt:
-    # Sunday -> Thursday = 5 weekdays
-    # Friday + Saturday = 2 weekend days
-    # --------------------------------------------------------
-
-    weekdays = 5
-    weekend_days = 2
-
-    # Algorithm parameter.
-    min_hours = 1
-
+    # ------------------------------------------------------
+    # Task 3.
+    # IMPORTANT: positional arguments match the actual
+    # allocate_study_hours() interface used by the project.
+    # ------------------------------------------------------
     allocations = (
         Studyhour_Allocation
         .allocate_study_hours(
-
-            courses,
-
+            courses_for_allocation,
             weekday_hours,
-
-            weekdays,
-
+            WEEKDAYS,
             weekend_hours,
-
-            weekend_days,
-
-            min_hours
+            WEEKEND_DAYS,
+            1,
         )
     )
 
-    return student, allocations
+    return allocations
 
 
-# ============================================================
-# TEST 1
-# FIRST STUDENT
-# ============================================================
+# ==========================================================
+# PRINT SCHEDULE
+# ==========================================================
+def print_schedule(schedule):
+    if schedule is None:
+        print("\nNo feasible schedule found.")
+        return
 
+    print("\n==============================")
+    print("GENERATED STUDY SCHEDULE")
+    print("==============================")
+
+    for day in DAYS:
+        day_sessions = [
+            session
+            for session in schedule
+            if session["day"] == day
+        ]
+
+        day_sessions.sort(
+            key=lambda x: time_to_minutes(x["start"])
+        )
+
+        print(f"\n{day}:")
+
+        for session in day_sessions:
+            if session.get("study_session", False):
+                print(
+                    f"  {session['start']} - "
+                    f"{session['end']} | "
+                    f"{session['course']} | STUDY"
+                )
+            else:
+                print(
+                    f"  {session['start']} - "
+                    f"{session['end']} | "
+                    f"{session['course']} | "
+                    f"{session['type']}"
+                )
+
+
+# ==========================================================
+# MAIN TEST
+# ==========================================================
+
+# ==========================================================
+# MAIN TEST
+# ==========================================================
 if __name__ == "__main__":
 
-    print("\n")
-    print("=" * 65)
-    print("TEST 1 - FIRST STUDENT")
-    print("=" * 65)
-
-    # --------------------------------------------------------
-    # Load student data
-    # --------------------------------------------------------
-
-    with open(
-        "data/dummy_data.json",
-        "r"
-    ) as file:
-
+    # ------------------------------------------------------
+    # Load dummy student data
+    # ------------------------------------------------------
+    with open("data/dummy_data.json", "r", encoding="utf-8") as file:
         students = json.load(file)
 
+    # First student from dummy_data.json
     student = students[0]
 
-    # --------------------------------------------------------
+    print("\n========================================")
+    print("TASK 4 - SCHEDULE GENERATION")
+    print("========================================")
+
+    print(f"Student: {student['name']}")
+    print(f"Student ID: {student['student_id']}")
+
+    # ------------------------------------------------------
     # Task 2 -> Task 3
-    # --------------------------------------------------------
+    # ------------------------------------------------------
+    allocations = get_allocations_from_task3(student)
 
-    student, allocations = (
-        get_allocations_from_task3(
-            student
-        )
-    )
-
-    # --------------------------------------------------------
-    # Load university schedule
-    # --------------------------------------------------------
-
-    with open(
-        "data/schedule.json",
-        "r"
-    ) as file:
-
-        university_data = json.load(file)
-
-    # --------------------------------------------------------
-    # Find student's university schedule
-    # --------------------------------------------------------
-
-    university_schedule = (
-        get_student_schedule(
-            student["student_id"],
-            university_data
-        )
-    )
-
-    print(
-        f"\nStudent: "
-        f"{student['name']}"
-    )
-
-    print(
-        f"Student ID: "
-        f"{student['student_id']}"
-    )
-
-    print(
-        f"University Schedule: "
-        f"{university_schedule['schedule_id']}"
-    )
-
-    # --------------------------------------------------------
-    # Task 3 allocations
-    # --------------------------------------------------------
-
-    print(
-        "\nALLOCATED STUDY HOURS"
-    )
+    print("\nALLOCATIONS:")
+    print("----------------------------------------")
 
     for allocation in allocations:
+        print(
+            f"{allocation['course']} | "
+            f"Priority: {allocation['priority']:.3f} | "
+            f"Allocated: "
+            f"{allocation['allocated_hours']:.2f} hours"
+        )
+
+    # ------------------------------------------------------
+    # Load university schedule
+    # ------------------------------------------------------
+    with open("data/schedule.json", "r", encoding="utf-8") as file:
+        university_data = json.load(file)
+
+    # ------------------------------------------------------
+    # Get the university schedule assigned to this student
+    # ------------------------------------------------------
+    university_schedule = get_student_schedule(
+        student["student_id"],
+        university_data
+    )
+
+    if university_schedule is None:
 
         print(
-            f"{allocation['course']}: "
-            f"{allocation['allocated_hours']:.2f} "
-            f"hours "
-            f"(Priority: "
-            f"{allocation['priority']:.3f})"
+            "\nNo university schedule found for "
+            f"{student['student_id']}."
         )
 
-    # --------------------------------------------------------
-    # Task 4
-    # Generate multiple feasible schedules
-    # --------------------------------------------------------
+    else:
 
-    schedules = (
-        generate_multiple_schedules(
+        print("\nUNIVERSITY SCHEDULE:")
+        print("----------------------------------------")
+        print(
+            f"Schedule ID: "
+            f"{university_schedule['schedule_id']}"
+        )
 
+        # --------------------------------------------------
+        # Generate multiple schedules
+        # --------------------------------------------------
+        schedules = generate_multiple_schedules(
             student,
-
-            allocations,
-
             university_schedule,
-
-            number_of_schedules=1
+            allocations,
+            number_of_schedules=10
         )
-    )
 
-    print(
-        f"\nGenerated "
-        f"{len(schedules)} "
-        f"feasible schedules."
-    )
+        print("\n========================================")
+        print("SEARCH FINISHED")
+        print("========================================")
 
-    print_multiple_schedules(
-        schedules
-    )
+        print(
+            f"Number of schedules generated: "
+            f"{len(schedules)}"
+        )
 
+        # --------------------------------------------------
+        # Display generated schedules
+        # --------------------------------------------------
+        for index, schedule in enumerate(
+            schedules,
+            start=1
+        ):
 
-# ============================================================
-# TEST 2
-# AUTHENTICATION
-# ============================================================
+            print(
+                "\n========================================"
+            )
+            print(f"SCHEDULE {index}")
+            print(
+                "========================================"
+            )
 
-# if __name__ == "__main__":
-
-#     print("\n")
-#     print("=" * 65)
-#     print("TEST 2 - AUTHENTICATED STUDENT")
-#     print("=" * 65)
-
-#     # --------------------------------------------------------
-#     # TEST LOGIN CREDENTIALS
-#     # --------------------------------------------------------
-#     #
-#     # Replace these with a test account that exists
-#     # in your authentication database.
-#     #
-
-#     username = input(
-#         "\nEnter username: "
-#     )
-
-#     password = input(
-#         "Enter password: "
-#     )
-
-#     # --------------------------------------------------------
-#     # AUTHENTICATE
-#     # --------------------------------------------------------
-
-#     authenticated_data = (
-#         auth_service.authenticate(
-#             username,
-#             password
-#         )
-#     )
-
-#     # --------------------------------------------------------
-#     # Check login
-#     # --------------------------------------------------------
-
-#     if not authenticated_data:
-
-#         print(
-#             "\nAuthentication failed."
-#         )
-
-#     else:
-
-#         student_id = authenticated_data[
-#             "student_id"
-#         ]
-
-#         print(
-#             f"\nAuthenticated student: "
-#             f"{authenticated_data['name']}"
-#         )
-
-#         print(
-#             f"Student ID: {student_id}"
-#         )
-
-#         # ----------------------------------------------------
-#         # Load Group A dummy data
-#         # ----------------------------------------------------
-
-#         with open(
-#             "data/dummy_data.json",
-#             "r"
-#         ) as file:
-
-#             students = json.load(file)
-
-#         # ----------------------------------------------------
-#         # Find the authenticated student's actual
-#         # Group A record using student_id.
-#         # ----------------------------------------------------
-
-#         student = None
-
-#         for record in students:
-
-#             if record["student_id"] == student_id:
-
-#                 student = record
-#                 break
-
-#         if student is None:
-
-#             print(
-#                 f"\nStudent {student_id} "
-#                 f"was not found in dummy_data.json."
-#             )
-
-#         else:
-
-#             # ----------------------------------------------
-#             # Task 2 -> Task 3
-#             # ----------------------------------------------
-
-#             student, allocations = (
-#                 get_allocations_from_task3(
-#                     student
-#                 )
-#             )
-
-#             # ----------------------------------------------
-#             # Load university schedule
-#             # ----------------------------------------------
-
-#             with open(
-#                 "data/university_schedule.json",
-#                 "r"
-#             ) as file:
-
-#                 university_data = json.load(file)
-
-#             # ----------------------------------------------
-#             # Get student's assigned schedule
-#             # ----------------------------------------------
-
-#             university_schedule = (
-#                 get_student_schedule(
-#                     student_id,
-#                     university_data
-#                 )
-#             )
-
-#             print(
-#                 f"\nUniversity Schedule: "
-#                 f"{university_schedule['schedule_id']}"
-#             )
-
-#             # ----------------------------------------------
-#             # Generate Task 4 schedule
-#             # ----------------------------------------------
-
-#             schedule = generate_schedule(
-#                 student,
-#                 allocations,
-#                 university_schedule
-#             )
-
-#             print_schedule(schedule)
+            print_schedule(schedule)
