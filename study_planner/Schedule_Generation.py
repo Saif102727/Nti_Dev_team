@@ -1110,110 +1110,66 @@ def print_schedule(schedule):
                 )
 
 
-# ==========================================================
-# MAIN TEST
-# ==========================================================
-
-# ==========================================================
-# MAIN TEST
-# ==========================================================
-if __name__ == "__main__":
+def run_task4(student_id, number_of_schedules=10):
 
     # ------------------------------------------------------
-    # Load dummy student data
+    # Task 3: calculate study-hour allocations
     # ------------------------------------------------------
-    with open("data/dummy_data.json", "r", encoding="utf-8") as file:
-        students = json.load(file)
+    min_hours = 1
 
-    # First student from dummy_data.json
-    student = students[0]
-
-    print("\n========================================")
-    print("TASK 4 - SCHEDULE GENERATION")
-    print("========================================")
-
-    print(f"Student: {student['name']}")
-    print(f"Student ID: {student['student_id']}")
-
-    # ------------------------------------------------------
-    # Task 2 -> Task 3
-    # ------------------------------------------------------
-    allocations = get_allocations_from_task3(student)
-
-    print("\nALLOCATIONS:")
-    print("----------------------------------------")
-
-    for allocation in allocations:
-        print(
-            f"{allocation['course']} | "
-            f"Priority: {allocation['priority']:.3f} | "
-            f"Allocated: "
-            f"{allocation['allocated_hours']:.2f} hours"
+    student, allocations = (
+        Studyhour_Allocation
+        .generate_study_hour_allocations(
+            student_id,
+            min_hours
         )
+    )
 
     # ------------------------------------------------------
-    # Load university schedule
+    # Load university schedule data
     # ------------------------------------------------------
-    with open("data/schedule.json", "r", encoding="utf-8") as file:
+    with open(
+        "data/schedule.json",
+        "r",
+        encoding="utf-8"
+    ) as file:
         university_data = json.load(file)
 
     # ------------------------------------------------------
-    # Get the university schedule assigned to this student
+    # Get this student's university schedule
     # ------------------------------------------------------
     university_schedule = get_student_schedule(
-        student["student_id"],
+        student_id,
         university_data
     )
 
     if university_schedule is None:
-
-        print(
-            "\nNo university schedule found for "
-            f"{student['student_id']}."
+        raise ValueError(
+            f"No university schedule found for {student_id}."
         )
 
-    else:
+    # ------------------------------------------------------
+    # Generate multiple schedules
+    # ------------------------------------------------------
+    schedules = generate_multiple_schedules(
+        student,
+        university_schedule,
+        allocations,
+        number_of_schedules=number_of_schedules
+    )
 
-        print("\nUNIVERSITY SCHEDULE:")
-        print("----------------------------------------")
-        print(
-            f"Schedule ID: "
-            f"{university_schedule['schedule_id']}"
-        )
+    return student, schedules
 
-        # --------------------------------------------------
-        # Generate multiple schedules
-        # --------------------------------------------------
-        schedules = generate_multiple_schedules(
-            student,
-            university_schedule,
-            allocations,
-            number_of_schedules=10
-        )
+# ==========================================================
+# MAIN TEST
+# ==========================================================
 
-        print("\n========================================")
-        print("SEARCH FINISHED")
-        print("========================================")
+if __name__ == "__main__":
+    student_id = "STU-2026-001"
 
-        print(
-            f"Number of schedules generated: "
-            f"{len(schedules)}"
-        )
+    student, schedules = run_task4(
+        student_id,
+        number_of_schedules=10
+    )
 
-        # --------------------------------------------------
-        # Display generated schedules
-        # --------------------------------------------------
-        for index, schedule in enumerate(
-            schedules,
-            start=1
-        ):
-
-            print(
-                "\n========================================"
-            )
-            print(f"SCHEDULE {index}")
-            print(
-                "========================================"
-            )
-
-            print_schedule(schedule)
+    print(f"Generated {len(schedules)} schedules.")

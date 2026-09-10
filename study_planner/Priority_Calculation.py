@@ -1,5 +1,4 @@
 import Difficulty_Estimation
-# from Login_systemV2 import auth_service
 from datetime import datetime, date, timedelta
 
 
@@ -380,30 +379,36 @@ def calculate_student_priorities(
 
     return student
 
+def calculate_student_priorities_by_id(
+    student_id,
+    today=None,
+    semester_start=date(2026, 10, 4)
+):
+
+    student, difficulties = (
+        Difficulty_Estimation.estimate_difficulties_for_student(
+            student_id
+        )
+    )
+
+    student = calculate_student_priorities(
+        student,
+        today=today,
+        semester_start=semester_start
+    )
+
+    return student
 
 # ==========================================
 # TEST
 # ==========================================
 
 if __name__ == "__main__":
+    student_id = "STU-2026-001"
 
-    import json
-
-    with open(
-        "data/dummy_data.json",
-        "r"
-    ) as file:
-
-        students = json.load(file)
-
-    student = students[0]
-
-    # Example testing date
-    today = date(2026, 12, 5)
-
-    student = calculate_student_priorities(
-        student,
-        today=today
+    student = calculate_student_priorities_by_id(
+        student_id,
+        today=date(2026, 12, 5)
     )
 
     print("\n========================================")
@@ -411,69 +416,10 @@ if __name__ == "__main__":
     print("========================================")
 
     for course_name, course in student["courses"].items():
-
         print(f"\n{course_name}")
-
-        print(
-            f"Personal Difficulty: "
-            f"{course['personal_difficulty']:.2f}"
-        )
-
-        print(
-            f"Difficulty: "
-            f"{course['difficulty_normalized']:.3f}"
-        )
-
-        print(
-            f"Weakness: "
-            f"{course['weakness']:.3f}"
-        )
-
-        print(
-            f"Urgency: "
-            f"{course['urgency']:.3f}"
-        )
-
-        print(
-            f"Remaining Material: "
-            f"{course['remaining_material_ratio']:.3f}"
-        )
-
-        print(
-            f"FINAL PRIORITY: "
-            f"{course['priority']:.3f}"
-        )
-
-# if __name__ == "__main__":
-
-#     username = input("Username: ")
-#     password = input("Password: ")
-
-#     authenticated_user = (
-#         auth_service.authenticate(
-#             username,
-#             password
-#         )
-#     )
-
-#     student_id = authenticated_user[
-#         "student_id"
-#     ]
-
-#     print(
-#         f"\nLogged in as: "
-#         f"{authenticated_user['name']}"
-#     )
-
-#     print(
-#         f"Student ID: "
-#         f"{student_id}"
-#     )
-
-#     student = calculate_student_priorities_by_id(
-#         student_id
-#     )
-
-#     display_priorities(
-#         student
-#     )
+        print(f"Personal Difficulty: {course['personal_difficulty']:.2f}")
+        print(f"Difficulty: {course['difficulty_normalized']:.3f}")
+        print(f"Weakness: {course['weakness']:.3f}")
+        print(f"Urgency: {course['urgency']:.3f}")
+        print(f"Remaining Material: {course['remaining_material_ratio']:.3f}")
+        print(f"FINAL PRIORITY: {course['priority']:.3f}")

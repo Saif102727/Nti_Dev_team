@@ -142,3 +142,13 @@ for course, data in difficulties.items():
         f"{course}: "
         f"{data['difficulty']:.2f}/10"
     )
+
+if __name__ == "__main__":
+    student_id = "STU-2026-001"
+
+    student, difficulties = estimate_difficulties_for_student(
+        student_id
+    )
+
+    for course_name, course in difficulties.items():
+        print(course_name, course["difficulty"])
