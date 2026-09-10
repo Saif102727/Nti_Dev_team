@@ -1,0 +1,517 @@
+{
+  "schedules": [
+    {
+      "schedule_id": "SCHED-UNI",
+      "gap_count": 4,
+      "capacity": 25,
+      "sessions": [
+        {
+          "course_id": "Data Structures",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Data Structures",
+          "session_type": "Section",
+          "day": "Sunday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Lecture",
+          "day": "Monday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Lecture",
+          "day": "Tuesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Section",
+          "day": "Tuesday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Lecture",
+          "day": "Wednesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Section",
+          "day": "Wednesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Lecture",
+          "day": "Thursday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Section",
+          "day": "Thursday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        }
+      ],
+      "gaps": [
+        {
+          "day": "Sunday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "day": "Monday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "day": "Tuesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "day": "Tuesday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        }
+      ]
+    },
+    {
+      "schedule_id": "SCHED-BOTH-1",
+      "gap_count": 2,
+      "capacity": 25,
+      "sessions": [
+        {
+          "course_id": "Data Structures",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Data Structures",
+          "session_type": "Section",
+          "day": "Sunday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Lecture",
+          "day": "Monday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Lecture",
+          "day": "Tuesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Section",
+          "day": "Tuesday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Lecture",
+          "day": "Wednesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Section",
+          "day": "Wednesday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Lecture",
+          "day": "Thursday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Section",
+          "day": "Thursday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        }
+      ],
+      "gaps": [
+        {
+          "day": "Tuesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "day": "Wednesday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        }
+      ]
+    },
+    {
+      "schedule_id": "SCHED-BOTH-2",
+      "gap_count": 2,
+      "capacity": 25,
+      "sessions": [
+        {
+          "course_id": "Data Structures",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Data Structures",
+          "session_type": "Section",
+          "day": "Sunday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Lecture",
+          "day": "Monday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Section",
+          "day": "Tuesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Lecture",
+          "day": "Tuesday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Section",
+          "day": "Tuesday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Lecture",
+          "day": "Wednesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Section",
+          "day": "Wednesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Lecture",
+          "day": "Thursday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Section",
+          "day": "Thursday",
+          "start_time": "14:30",
+          "end_time": "16:30"
+        }
+      ],
+      "gaps": [
+        {
+          "day": "Monday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "day": "Monday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        }
+      ]
+    },
+    {
+      "schedule_id": "SCHED-HOME",
+      "gap_count": 0,
+      "capacity": 25,
+      "sessions": [
+        {
+          "course_id": "Data Structures",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Data Structures",
+          "session_type": "Section",
+          "day": "Sunday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Lecture",
+          "day": "Sunday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Digital System Design",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Lecture",
+          "day": "Monday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Electronics",
+          "session_type": "Section",
+          "day": "Monday",
+          "start_time": "12:30",
+          "end_time": "14:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Lecture",
+          "day": "Tuesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Linear Algebra",
+          "session_type": "Section",
+          "day": "Tuesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Lecture",
+          "day": "Wednesday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Statistics & Probability",
+          "session_type": "Section",
+          "day": "Wednesday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Lecture",
+          "day": "Thursday",
+          "start_time": "08:30",
+          "end_time": "10:30"
+        },
+        {
+          "course_id": "Communication Skills",
+          "session_type": "Section",
+          "day": "Thursday",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        }
+      ],
+      "gaps": []
+    }
+  ],
+  "student_assignments": {
+    "STU-2026-001": "SCHED-UNI",
+    "STU-2026-002": "SCHED-UNI",
+    "STU-2026-003": "SCHED-UNI",
+    "STU-2026-004": "SCHED-UNI",
+    "STU-2026-005": "SCHED-UNI",
+    "STU-2026-006": "SCHED-UNI",
+    "STU-2026-007": "SCHED-UNI",
+    "STU-2026-008": "SCHED-UNI",
+    "STU-2026-009": "SCHED-UNI",
+    "STU-2026-010": "SCHED-UNI",
+    "STU-2026-011": "SCHED-UNI",
+    "STU-2026-012": "SCHED-UNI",
+    "STU-2026-013": "SCHED-UNI",
+    "STU-2026-014": "SCHED-UNI",
+    "STU-2026-015": "SCHED-UNI",
+    "STU-2026-016": "SCHED-UNI",
+    "STU-2026-017": "SCHED-UNI",
+    "STU-2026-018": "SCHED-UNI",
+    "STU-2026-019": "SCHED-UNI",
+    "STU-2026-020": "SCHED-UNI",
+    "STU-2026-021": "SCHED-UNI",
+    "STU-2026-022": "SCHED-UNI",
+    "STU-2026-023": "SCHED-UNI",
+    "STU-2026-024": "SCHED-UNI",
+    "STU-2026-025": "SCHED-UNI",
+    "STU-2026-026": "SCHED-BOTH-1",
+    "STU-2026-027": "SCHED-BOTH-1",
+    "STU-2026-028": "SCHED-BOTH-1",
+    "STU-2026-029": "SCHED-BOTH-1",
+    "STU-2026-030": "SCHED-BOTH-1",
+    "STU-2026-031": "SCHED-BOTH-1",
+    "STU-2026-032": "SCHED-BOTH-1",
+    "STU-2026-033": "SCHED-BOTH-1",
+    "STU-2026-034": "SCHED-BOTH-1",
+    "STU-2026-035": "SCHED-BOTH-1",
+    "STU-2026-036": "SCHED-BOTH-1",
+    "STU-2026-037": "SCHED-BOTH-1",
+    "STU-2026-038": "SCHED-BOTH-1",
+    "STU-2026-039": "SCHED-BOTH-1",
+    "STU-2026-040": "SCHED-BOTH-1",
+    "STU-2026-041": "SCHED-BOTH-1",
+    "STU-2026-042": "SCHED-BOTH-1",
+    "STU-2026-043": "SCHED-BOTH-1",
+    "STU-2026-044": "SCHED-BOTH-1",
+    "STU-2026-045": "SCHED-BOTH-1",
+    "STU-2026-046": "SCHED-BOTH-1",
+    "STU-2026-047": "SCHED-BOTH-1",
+    "STU-2026-048": "SCHED-BOTH-1",
+    "STU-2026-049": "SCHED-BOTH-1",
+    "STU-2026-050": "SCHED-BOTH-1",
+    "STU-2026-051": "SCHED-BOTH-2",
+    "STU-2026-052": "SCHED-BOTH-2",
+    "STU-2026-053": "SCHED-BOTH-2",
+    "STU-2026-054": "SCHED-BOTH-2",
+    "STU-2026-055": "SCHED-BOTH-2",
+    "STU-2026-056": "SCHED-BOTH-2",
+    "STU-2026-057": "SCHED-BOTH-2",
+    "STU-2026-058": "SCHED-BOTH-2",
+    "STU-2026-059": "SCHED-BOTH-2",
+    "STU-2026-060": "SCHED-BOTH-2",
+    "STU-2026-061": "SCHED-BOTH-2",
+    "STU-2026-062": "SCHED-BOTH-2",
+    "STU-2026-063": "SCHED-BOTH-2",
+    "STU-2026-064": "SCHED-BOTH-2",
+    "STU-2026-065": "SCHED-BOTH-2",
+    "STU-2026-066": "SCHED-BOTH-2",
+    "STU-2026-067": "SCHED-BOTH-2",
+    "STU-2026-068": "SCHED-BOTH-2",
+    "STU-2026-069": "SCHED-BOTH-2",
+    "STU-2026-070": "SCHED-BOTH-2",
+    "STU-2026-071": "SCHED-BOTH-2",
+    "STU-2026-072": "SCHED-BOTH-2",
+    "STU-2026-073": "SCHED-BOTH-2",
+    "STU-2026-074": "SCHED-BOTH-2",
+    "STU-2026-075": "SCHED-BOTH-2",
+    "STU-2026-076": "SCHED-HOME",
+    "STU-2026-077": "SCHED-HOME",
+    "STU-2026-078": "SCHED-HOME",
+    "STU-2026-079": "SCHED-HOME",
+    "STU-2026-080": "SCHED-HOME",
+    "STU-2026-081": "SCHED-HOME",
+    "STU-2026-082": "SCHED-HOME",
+    "STU-2026-083": "SCHED-HOME",
+    "STU-2026-084": "SCHED-HOME",
+    "STU-2026-085": "SCHED-HOME",
+    "STU-2026-086": "SCHED-HOME",
+    "STU-2026-087": "SCHED-HOME",
+    "STU-2026-088": "SCHED-HOME",
+    "STU-2026-089": "SCHED-HOME",
+    "STU-2026-090": "SCHED-HOME",
+    "STU-2026-091": "SCHED-HOME",
+    "STU-2026-092": "SCHED-HOME",
+    "STU-2026-093": "SCHED-HOME",
+    "STU-2026-094": "SCHED-HOME",
+    "STU-2026-095": "SCHED-HOME",
+    "STU-2026-096": "SCHED-HOME",
+    "STU-2026-097": "SCHED-HOME",
+    "STU-2026-098": "SCHED-HOME",
+    "STU-2026-099": "SCHED-HOME",
+    "STU-2026-100": "SCHED-HOME"
+  }
+}

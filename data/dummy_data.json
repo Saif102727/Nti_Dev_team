@@ -13,7 +13,8 @@
           "day": "Tuesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -502,7 +503,8 @@
           "day": "Wednesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -996,7 +998,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -1497,7 +1500,8 @@
           "day": "Monday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -1972,7 +1976,8 @@
           "day": "Monday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -2473,7 +2478,8 @@
           "day": "Friday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -2980,7 +2986,8 @@
           "day": "Sunday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -3462,7 +3469,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -3951,7 +3959,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -4439,7 +4448,8 @@
           "day": "Monday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -4952,7 +4962,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -5446,7 +5457,8 @@
           "day": "Wednesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -5941,7 +5953,8 @@
           "day": "Saturday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -6436,7 +6449,8 @@
           "day": "Sunday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -6943,7 +6957,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -7425,7 +7440,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -7920,7 +7936,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -8414,7 +8431,8 @@
           "day": "Friday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -8903,7 +8921,8 @@
           "day": "Sunday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -9404,7 +9423,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -9911,7 +9931,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -10393,7 +10414,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -10888,7 +10910,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -11382,7 +11405,8 @@
           "day": "Sunday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -11870,7 +11894,8 @@
           "day": "Friday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "University Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -12377,7 +12402,8 @@
           "day": "Monday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -12859,7 +12885,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -13360,7 +13387,8 @@
           "day": "Monday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -13848,7 +13876,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -14336,7 +14365,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -14811,7 +14841,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -15318,7 +15349,8 @@
           "day": "Friday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -15819,7 +15851,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -16301,7 +16334,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -16802,7 +16836,8 @@
           "day": "Sunday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -17296,7 +17331,8 @@
           "day": "Wednesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -17791,7 +17827,8 @@
           "day": "Friday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -18286,7 +18323,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -18781,7 +18819,8 @@
           "day": "Friday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -19288,7 +19327,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -19789,7 +19829,8 @@
           "day": "Thursday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -20283,7 +20324,8 @@
           "day": "Monday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -20796,7 +20838,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -21297,7 +21340,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -21791,7 +21835,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -22285,7 +22330,8 @@
           "day": "Thursday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -22780,7 +22826,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -23287,7 +23334,8 @@
           "day": "Thursday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -23776,7 +23824,8 @@
           "day": "Friday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -24265,7 +24314,8 @@
           "day": "Monday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -24753,7 +24803,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -25254,7 +25305,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -25755,7 +25807,8 @@
           "day": "Monday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -26237,7 +26290,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -26738,7 +26792,8 @@
           "day": "Monday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -27227,7 +27282,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -27709,7 +27765,8 @@
           "day": "Sunday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -28191,7 +28248,8 @@
           "day": "Monday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -28686,7 +28744,8 @@
           "day": "Saturday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -29181,7 +29240,8 @@
           "day": "Tuesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -29676,7 +29736,8 @@
           "day": "Friday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -30151,7 +30212,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -30645,7 +30707,8 @@
           "day": "Thursday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -31133,7 +31196,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -31615,7 +31679,8 @@
           "day": "Monday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -32116,7 +32181,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -32610,7 +32676,8 @@
           "day": "Thursday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -33085,7 +33152,8 @@
           "day": "Wednesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -33567,7 +33635,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -34074,7 +34143,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -34568,7 +34638,8 @@
           "day": "Sunday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -35075,7 +35146,8 @@
           "day": "Wednesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -35588,7 +35660,8 @@
           "day": "Monday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -36082,7 +36155,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -36571,7 +36645,8 @@
           "day": "Friday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home & University"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -37066,7 +37141,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -37567,7 +37643,8 @@
           "day": "Tuesday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -38055,7 +38132,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -38550,7 +38628,8 @@
           "day": "Thursday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -39045,7 +39124,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -39546,7 +39626,8 @@
           "day": "Monday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -40034,7 +40115,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -40516,7 +40598,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -40991,7 +41074,8 @@
           "day": "Thursday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -41498,7 +41582,8 @@
           "day": "Tuesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -41986,7 +42071,8 @@
           "day": "Tuesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -42487,7 +42573,8 @@
           "day": "Saturday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -42981,7 +43068,8 @@
           "day": "Thursday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -43482,7 +43570,8 @@
           "day": "Sunday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -43983,7 +44072,8 @@
           "day": "Monday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -44477,7 +44567,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -44965,7 +45056,8 @@
           "day": "Wednesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -45466,7 +45558,8 @@
           "day": "Saturday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -45967,7 +46060,8 @@
           "day": "Saturday",
           "time": "Afternoon"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -46455,7 +46549,8 @@
           "day": "Wednesday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -46937,7 +47032,8 @@
           "day": "Sunday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -47412,7 +47508,8 @@
           "day": "Tuesday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -47900,7 +47997,8 @@
           "day": "Thursday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
@@ -48401,7 +48499,8 @@
           "day": "Friday",
           "time": "Night"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [],
@@ -48876,7 +48975,8 @@
           "day": "Friday",
           "time": "Morning"
         }
-      ]
+      ],
+      "study_place": "Home Only"
     },
     "unavailable_periods": {
       "hard_constraints": [
