@@ -21,8 +21,9 @@ Nti_Dev_team/
 │   ├── db.py                   # SQLite database setup (app_data.db)
 │   ├── login_page.py           # Streamlit login/registration UI
 │   ├── security.py             # Password encryption (salt + hash)
-│   └── bulk_register.py, cli_test.py, diagnose_login.py 
-│                               # Utilities & testing tools
+│   └── bulk_register.py, │
+│   └── cli_test.py,      ├──── # Utilities & testing tools
+│   └── diagnose_login.py │                 
 │
 ├── dataclass/
 │   ├── schedule.py             # Schedule logic: conflict checks, prerequisite checks, free-time gaps
