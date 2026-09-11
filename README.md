@@ -21,7 +21,8 @@ Nti_Dev_team/
 │   ├── db.py                   # SQLite database setup (app_data.db)
 │   ├── login_page.py           # Streamlit login/registration UI
 │   ├── security.py             # Password encryption (salt + hash)
-│   └── bulk_register.py, cli_test.py, diagnose_login.py # Utilities & testing tools
+│   └── bulk_register.py, cli_test.py, diagnose_login.py 
+│                               # Utilities & testing tools
 │
 ├── dataclass/
 │   ├── schedule.py             # Schedule logic: conflict checks, prerequisite checks, free-time gaps
@@ -29,7 +30,7 @@ Nti_Dev_team/
 │
 ├── study_planner/              # The "Smart Pipeline" Engine (Fully Implemented)
 │   ├── Difficulty_Estimation.py# Calculates personalized course difficulty
-│   ├── Notifications.py# Sending Alert to email
+│   ├── Notifications.py        # Sending Alert to email
 │   ├── Priority_Calculation.py # Calculates study priority (AHP: deadline, weakness, etc.)
 │   ├── Studyhour_Allocation.py # Allocates available hours based on course priority
 │   ├── Schedule_Generation.py  # Backtracking algorithm to slot sessions without conflicts
