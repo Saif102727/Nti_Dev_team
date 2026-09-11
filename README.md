@@ -29,6 +29,7 @@ Nti_Dev_team/
 │
 ├── study_planner/              # The "Smart Pipeline" Engine (Fully Implemented)
 │   ├── Difficulty_Estimation.py# Calculates personalized course difficulty
+│   ├── Notifications.py# Sending Alert to email
 │   ├── Priority_Calculation.py # Calculates study priority (AHP: deadline, weakness, etc.)
 │   ├── Studyhour_Allocation.py # Allocates available hours based on course priority
 │   ├── Schedule_Generation.py  # Backtracking algorithm to slot sessions without conflicts
