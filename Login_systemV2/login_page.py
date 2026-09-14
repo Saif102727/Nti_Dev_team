@@ -7,14 +7,9 @@ and stores the authenticated student in Streamlit session state.
 """
 
 import sys
-import json
 from pathlib import Path
 
 LOGIN_SYSTEM_DIR = Path(__file__).resolve().parent
-
-# dummy_data.json is expected to be in the project root (one folder above
-# Login_systemV2). If your file is somewhere else, change this path.
-DUMMY_DATA_PATH = LOGIN_SYSTEM_DIR.parent / "dummy_data.json"
 
 if str(LOGIN_SYSTEM_DIR) not in sys.path:
     sys.path.insert(0, str(LOGIN_SYSTEM_DIR))
@@ -38,27 +33,6 @@ DAYS = [
 ]
 
 STUDY_LOCATIONS = ["Home", "University", "Library", "Cafe"]
-
-
-def get_dummy_student_id(student_name: str):
-    """Return the student_id from dummy_data.json for the given name."""
-
-    if not DUMMY_DATA_PATH.exists():
-        raise FileNotFoundError(
-            f"dummy_data.json was not found at: {DUMMY_DATA_PATH}"
-        )
-
-    with open(DUMMY_DATA_PATH, "r", encoding="utf-8") as file:
-        students = json.load(file)
-
-    for student in students:
-        if (
-            student.get("name", "").strip().lower()
-            == student_name.strip().lower()
-        ):
-            return student.get("student_id")
-
-    return None
 
 
 # =========================================================
@@ -317,17 +291,6 @@ def _render_register_form():
 
     try:
 
-        # Use the ID already assigned to this student in dummy_data.json
-        # instead of generating a random UUID.
-        student_id = get_dummy_student_id(name)
-
-        if not student_id:
-            st.error(
-                "This student name was not found in dummy_data.json. "
-                "Please enter the exact student name from the dummy data."
-            )
-            return
-
         student_id = register(
             username=username,
             password=password,
@@ -337,7 +300,6 @@ def _render_register_form():
             faculty=faculty,
             certificate=certificate,
             email=email,
-            student_id=student_id,
             daily_study_hours=daily_hours,
             free_days=free_days,
             preferred_study_location=preferred_location,
